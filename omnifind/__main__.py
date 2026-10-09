@@ -9,7 +9,7 @@ from .core import Index
 
 
 def main():
-    parser = argparse.ArgumentParser(description="OmniFind Local retrieval core (no GUI yet)")
+    parser = argparse.ArgumentParser(description="OmniFind Local retrieval core")
     parser.add_argument("--db", type=Path, default=Path(os.environ.get("LOCALAPPDATA", Path.home())) / "OmniFindLocal" / "index.sqlite")
     parser.add_argument("--model", type=Path, default=Path("models/minilm"))
     sub = parser.add_subparsers(dest="command", required=True)
@@ -20,6 +20,9 @@ def main():
     remove = sub.add_parser("remove-folder")
     remove.add_argument("root_id", type=int)
     sub.add_parser("status")
+    clear = sub.add_parser("clear-index")
+    clear.add_argument("--yes", action="store_true", required=True,
+                       help="Forget selected folders and derived index data; preserve originals and models")
     search = sub.add_parser("search")
     search.add_argument("query")
     search.add_argument("--mode", choices=["filename", "lexical", "semantic", "hybrid"], default="hybrid")
@@ -43,6 +46,8 @@ def main():
             result = {"removed": args.root_id, "original_files_preserved": True}
         elif args.command == "status":
             result = {"folders": index.roots(), "coverage": index.coverage(), "storage": "plaintext-local-index"}
+        elif args.command == "clear-index":
+            result = index.clear()
         else:
             result = index.search_response(args.query, args.mode, args.root_id, args.suffix, show_weak=args.show_weak)
             result["notice"] = "Verify source evidence. Weak-match thresholds are experimental, not confidence."

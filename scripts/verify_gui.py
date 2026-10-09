@@ -159,6 +159,20 @@ def main():
         assert window.query.text() == "INV-2048" and window.search_button.isEnabled()
         window.model = model
         window.navigate(1)
+        # Settings cleanup requires explicit confirmation and works without model loading.
+        window.navigate(2)
+        with patch.object(QMessageBox, "question", return_value=QMessageBox.StandardButton.No):
+            QTest.mouseClick(window.clear_button, Qt.MouseButton.LeftButton)
+        assert window.folder_list.count() == 1
+        with patch.object(QMessageBox, "question", return_value=QMessageBox.StandardButton.Yes):
+            QTest.mouseClick(window.clear_button, Qt.MouseButton.LeftButton)
+        settle()
+        assert window.folder_list.count() == 0 and "Index cleared" in window.status.text()
+        assert original.exists() and receipt.exists()
+        window.add_folder(corpus)
+        window.navigate(1)
+        QTest.mouseClick(window.refresh_button, Qt.MouseButton.LeftButton)
+        settle()
         # Removing scope remains available while background work runs.
         QTest.mouseClick(window.refresh_button, Qt.MouseButton.LeftButton)
         assert window.remove_button.isEnabled()
@@ -178,7 +192,8 @@ def main():
                              "light/dark/narrow/large-text rendering", "Ctrl+K Enter and result-arrow keyboard controls",
                              "cancel preserves query and committed index", "filter invalidation preserves query",
                              "no-strong-match and weak-match recovery", "stale open rejected", "manual refresh",
-                             "restart persistence", "missing-model failure and lexical recovery", "folder revocation during work preserves originals"],
+                             "restart persistence", "missing-model failure and lexical recovery", "clear-index confirmation and rebuild preserve originals",
+                             "folder revocation during work preserves originals"],
                   "python_socket_connect_attempts": len(attempts),
                   "limits": ["Offscreen QtTest, not manual Windows usability or screen-reader validation",
                              "Native picker response was supplied by the test", "OS viewer and Explorer launches intercepted after path authorization",

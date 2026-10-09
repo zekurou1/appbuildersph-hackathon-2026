@@ -57,6 +57,8 @@ The index stores plaintext extracted text and vectors under `%LOCALAPPDATA%\Omni
 
 Refresh manually after changes. Stale/missing files are excluded until refreshed. Search results include the original path, excerpt and page/line reference. Ranking scores are not confidence probabilities; inspect the source before opening it. Semantic/hybrid search uses an experimental model-specific weak-match gate. Pass `--show-weak` after the search subcommand to reveal weaker candidates. A candidate does not guarantee a matching file exists.
 
+Settings → Clear index forgets all selected folders and removes derived index data after confirmation; originals and downloaded models are preserved. CLI equivalent: `python -m omnifind clear-index --yes` using the project's virtual environment. Competing refresh/add/clear operations receive a retry message. SQLite 3.42 or newer is required for secure FTS deletion. See [reliability and cleanup checks](docs/RELIABILITY_PHASE.md) for tested crash recovery and privacy limits.
+
 For alternate synthetic test storage, pass `--db path/to/index.sqlite` **before** the subcommand. `--model` is also a global option. Lexical and filename search do not load model assets; indexing and semantic/hybrid search require them. Search does not execute retrieved content or automatically open files.
 
 ## Verification

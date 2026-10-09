@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 from .extract import MAX_FILE_BYTES, SUPPORTED
+from .locking import writer_lease
 
 
 class ScopeError(ValueError):
@@ -40,6 +41,7 @@ class Index:
         self.db.row_factory = sqlite3.Row
         self.db.execute("PRAGMA foreign_keys=ON")
         self.db.execute("PRAGMA secure_delete=ON")
+        self.db.execute("PRAGMA temp_store=MEMORY")
         self.db.executescript("""
             CREATE TABLE IF NOT EXISTS metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS roots(id INTEGER PRIMARY KEY, path TEXT UNIQUE NOT NULL);
@@ -56,6 +58,15 @@ class Index:
                 DELETE FROM chunk_fts WHERE rowid=old.id;
             END;
         """)
+        # SQLite core secure_delete alone does not erase old FTS index segments.
+        # Rebuild existing segments once when upgrading this privacy setting.
+        if sqlite3.sqlite_version_info < (3, 42, 0):
+            self.db.close()
+            raise ValueError("sqlite-upgrade-required")
+        secure_fts = self.db.execute("SELECT v FROM chunk_fts_config WHERE k='secure-delete'").fetchone()
+        if not secure_fts or secure_fts[0] != 1:
+            self.db.execute("INSERT INTO chunk_fts(chunk_fts,rank) VALUES('secure-delete',1)")
+            self.db.execute("INSERT INTO chunk_fts(chunk_fts) VALUES('rebuild')")
         version = self.db.execute("SELECT value FROM metadata WHERE key='schema'").fetchone()
         if version and version[0] != "1":
             raise ValueError("unsupported-index-schema")
@@ -69,6 +80,10 @@ class Index:
         return [dict(row) for row in self.db.execute("SELECT * FROM roots ORDER BY id")]
 
     def add_root(self, path):
+        with writer_lease(self.path):
+            return self._add_root(path)
+
+    def _add_root(self, path):
         path = ordinary_path(path)
         if not path.is_dir():
             raise ScopeError("folder-required")
@@ -102,6 +117,23 @@ class Index:
         with self.db:
             self.db.execute("DELETE FROM roots WHERE id=?", (root_id,))
 
+    def clear(self):
+        """Forget all selected folders and derived records, retaining originals/assets."""
+        with writer_lease(self.path):
+            with self.db:
+                self.db.execute("BEGIN IMMEDIATE")
+                self.db.execute("DELETE FROM roots")
+                # Recreate FTS, including shadow tables; DELETE alone retains old segments.
+                self.db.execute("DROP TABLE chunk_fts")
+                self.db.execute("CREATE VIRTUAL TABLE chunk_fts USING fts5(filename, content)")
+                self.db.execute("INSERT INTO chunk_fts(chunk_fts,rank) VALUES('secure-delete',1)")
+            # Logical deletion is already durable if compaction fails (e.g. low disk).
+            try:
+                self.db.execute("VACUUM")
+            except sqlite3.Error:
+                return {"cleared": True, "compacted": False, "original_files_preserved": True}
+        return {"cleared": True, "compacted": True, "original_files_preserved": True}
+
     def _record_error(self, root_id, path, status, error):
         with self.db:
             if not self.db.execute("SELECT 1 FROM roots WHERE id=?", (root_id,)).fetchone():
@@ -111,6 +143,10 @@ class Index:
                 (root_id, str(path), path.suffix.lower(), status, error))
 
     def refresh(self, root_id, cancel=None, progress=None):
+        with writer_lease(self.path):
+            return self._refresh(root_id, cancel, progress)
+
+    def _refresh(self, root_id, cancel=None, progress=None):
         if not self.embedder:
             raise ValueError("local-model-required-for-indexing")
         root = self._root(root_id)
@@ -336,7 +372,7 @@ class Index:
                 current = self.db.execute("SELECT * FROM files WHERE id=?", (file_id,)).fetchone()
                 if not current or (current["size"], current["mtime"], current["path"]) != (row["size"], row["mtime"], row["path"]):
                     continue
-                self.source_path(file_id)
+                self.source_path(file_id, row["digest"])
             except (OSError, ScopeError):
                 continue
             results.append({"file_id": file_id, "path": row["path"], "root_id": row["root_id"],

@@ -16,6 +16,7 @@
     "manual refresh",
     "restart persistence",
     "missing-model failure and lexical recovery",
+    "clear-index confirmation and rebuild preserve originals",
     "folder revocation during work preserves originals"
   ],
   "python_socket_connect_attempts": 0,

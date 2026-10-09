@@ -22,6 +22,7 @@ def error_copy(error):
     code = str(error) if isinstance(error, ValueError) and re.fullmatch(r"[a-z-]{1,80}", str(error)) else "local-operation-failed"
     messages = {
         "folder-not-authorized": "This folder has been removed. Choose another folder.",
+        "index-busy-retry-after-refresh": "Another window is refreshing this index. Wait for it to finish, then retry.",
         "source-changed-refresh-required": "This file changed. Refresh its folder before opening it.",
         "overlapping-roots": "That folder overlaps a selected folder. Choose one parent folder or separate folders.",
         "link-or-cloud-placeholder": "Choose an available local folder. Links and cloud-only placeholders are excluded.",
@@ -58,6 +59,8 @@ class Task(QThread):
             index = Index(self.database, self.model)
             if self.operation == "refresh":
                 result = index.refresh(self.parameters["root_id"], self.cancel, self.progress.emit)
+            elif self.operation == "clear":
+                result = index.clear()
             else:
                 result = index.search_response(**self.parameters)
             if self.cancel.is_set():
@@ -275,6 +278,9 @@ class Window(QMainWindow):
         layout.addWidget(label("The index contains extracted text, paths and embeddings in plaintext. Local storage is not encryption. "
                                "Query history is off. Removing a folder removes its searchable derivatives and preserves originals.", wrap=True))
         layout.addWidget(label(str(self.database.resolve()), "secondary", True))
+        self.clear_button = QPushButton("Clear index…")
+        self.clear_button.clicked.connect(self.confirm_clear)
+        layout.addWidget(self.clear_button)
         layout.addWidget(label("Prototype scope", "section"))
         layout.addWidget(label("English-first digital PDF/TXT/MD. OCR, scanned PDFs, installers and large-corpus performance are not verified. "
                                "Weak-match thresholds were tuned on synthetic development examples; verify evidence before opening a file.", wrap=True))
@@ -302,6 +308,19 @@ class Window(QMainWindow):
     def change_text_size(self):
         self.text_scale = self.text_size.currentData()
         self.set_theme(self.dark.isChecked())
+
+    def confirm_clear(self):
+        if self.task and self.task.isRunning():
+            self.status.setText("Wait for the current operation to finish before clearing the index.")
+            return
+        response = QMessageBox.question(self, "Clear the entire index?",
+            "Forget all selected folders and remove their searchable text, paths and embeddings. "
+            "Original files and downloaded models stay untouched. Add folders again to rebuild.",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No)
+        if response == QMessageBox.StandardButton.Yes:
+            self.invalidate_results()
+            self.start_task("clear", {})
 
     def set_theme(self, dark):
         canvas, surface, text, secondary, accent, action, border, selected, focus = (
@@ -469,13 +488,14 @@ class Window(QMainWindow):
         generation = self.generation
         self.invalidate_results()
         self.busy.show()
-        self.cancel_button.show()
+        self.cancel_button.setVisible(operation != "clear")
         self.cancel_button.setEnabled(True)
         self.set_busy(True)
-        self.status.setText("Preparing local search…" if self.model is None and parameters.get("mode", "hybrid") in {"hybrid", "semantic"} else "Working locally…")
+        self.status.setText("Clearing local index…" if operation == "clear" else
+                           "Preparing local search…" if self.model is None and parameters.get("mode", "hybrid") in {"hybrid", "semantic"} else "Working locally…")
         self.task = Task(self.database, self.model_directory, self.model, operation, parameters, self)
         self.task.model_ready.connect(lambda model: setattr(self, "model", model))
-        callback = self.search_done if operation == "search" else self.refresh_done
+        callback = {"search": self.search_done, "refresh": self.refresh_done, "clear": self.clear_done}[operation]
         self.task.result.connect(lambda result: callback(result) if self.generation == generation else None)
         self.task.problem.connect(lambda message: self.show_problem(message) if self.generation == generation else None)
         self.task.progress.connect(lambda info: self.status.setText(f'Processing file {info["processed"]} · {info["coverage"]["searchable"]} searchable so far') if self.generation == generation else None)
@@ -484,11 +504,11 @@ class Window(QMainWindow):
 
     def set_busy(self, busy):
         for widget in [self.query, self.search_button, self.type_filter, self.folder_filter, self.mode,
-                       self.weak, self.add_button, self.refresh_button]:
+                       self.weak, self.add_button, self.refresh_button, self.clear_button]:
             widget.setEnabled(not busy)
 
     def cancel_work(self):
-        if self.task and self.task.isRunning():
+        if self.task and self.task.isRunning() and self.task.operation != "clear":
             self.task.cancel.set()
             self.generation += 1
             self.cancel_requested = True
@@ -512,6 +532,12 @@ class Window(QMainWindow):
     def refresh_done(self, coverage):
         self.status.setText(f'Refresh complete: {coverage["searchable"]} searchable, {coverage["failed"]} failed, {coverage["unsupported"]} unsupported.')
         self.update_folders()
+
+    def clear_done(self, result):
+        self.invalidate_results()
+        self.update_folders()
+        self.status.setText("Index cleared. Original files and models are kept. Add folders to start again." if result["compacted"]
+                            else "Index cleared; storage compaction could not finish. Original files and models are kept.")
 
     def search_done(self, response):
         index = None

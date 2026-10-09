@@ -8,9 +8,9 @@ Main repository: [zekurou1/appbuildersph-hackathon-2026](https://github.com/zeku
 | --- | --- | --- |
 | WP1 | Real CPU embeddings and digital PDF extraction; asset manifest | Passed for text tier; screenshot OCR not tested |
 | WP2 | Labeled development queries, four retrieval baselines, grouped source evidence | MiniLM/BGE comparison and experimental weak-match gates completed on development data; frozen holdout remains |
-| WP3 | Atomic state, restart, refresh, root revocation | Basic implementation and fault tests passed; comprehensive crash/concurrency/recovery work remains |
+| WP3 | Atomic state, restart, refresh, root revocation | Cross-process refresh guard, killed embedding/commit/clear recovery and real Windows junction checks passed; parser process-tree and resource recovery remain |
 | WP4 | Select folder → index → search → inspect → open/reveal through UI | Working PySide6 desktop prototype; real inference and offscreen controls verified, native viewer/picker behavior still unverified |
-| WP5 | Fresh offline file/query, egress, boundaries, cleanup and recovery | Python socket-guarded fresh file/query passed; full OS egress/privacy audit pending |
+| WP5 | Fresh offline file/query, egress, boundaries, cleanup and recovery | Python socket-guarded fresh file/query and synthetic database cleanup checks passed; full OS egress/privacy audit pending |
 | WP6 | Holdout evaluation, clean setup and demo evidence | Pending |
 
 ## Verified runtime
@@ -39,7 +39,7 @@ Twenty absent-target probes now support an experimental model-specific weak-matc
 
 The desktop prototype connects folder selection, background indexing, search/evidence and deliberate file actions. Cancellation preserves committed content, removal revokes scope while work runs, and queued responses are suppressed when their scope changes. Preview/open also validate the expected indexed fingerprint. Native OS launches were intercepted during tests; offscreen verification is not manual usability or screen-reader validation. See [GUI report](gui-verification.json).
 
-WP3 process termination/concurrent refresh, actual junction tests, parser memory limits, consented larger-corpus performance and cleanup audits remain. The host does not permit symbolic-link creation, so that test is skipped.
+The next reliability phase adds a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed embedding/commit/clear workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. Nineteen tests pass; one symbolic-link test remains skipped. See [reliability and cleanup evidence](RELIABILITY_PHASE.md). Parser process-tree/memory limits, consented larger-corpus performance and complete OS privacy audits remain.
 
 ## UI contract
 
