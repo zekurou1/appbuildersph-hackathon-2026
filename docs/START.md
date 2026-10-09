@@ -7,9 +7,9 @@ Main repository: [zekurou1/appbuildersph-hackathon-2026](https://github.com/zeku
 | Package | Completion gate | Current state |
 | --- | --- | --- |
 | WP1 | Real CPU embeddings and digital PDF extraction; asset manifest | Passed for text tier; screenshot OCR not tested |
-| WP2 | Labeled development queries, four retrieval baselines, grouped source evidence | Working CLI core; 50 synthetic development queries evaluated. Model comparison and no-match calibration remain |
+| WP2 | Labeled development queries, four retrieval baselines, grouped source evidence | MiniLM/BGE comparison and experimental weak-match gates completed on development data; frozen holdout remains |
 | WP3 | Atomic state, restart, refresh, root revocation | Basic implementation and fault tests passed; comprehensive crash/concurrency/recovery work remains |
-| WP4 | Select folder → index → search → inspect → open/reveal through UI | Next implementation package; no GUI yet |
+| WP4 | Select folder → index → search → inspect → open/reveal through UI | Working PySide6 desktop prototype; real inference and offscreen controls verified, native viewer/picker behavior still unverified |
 | WP5 | Fresh offline file/query, egress, boundaries, cleanup and recovery | Python socket-guarded fresh file/query passed; full OS egress/privacy audit pending |
 | WP6 | Holdout evaluation, clean setup and demo evidence | Pending |
 
@@ -35,7 +35,11 @@ Manual refresh handles changed/new/deleted files and records unsupported/failed 
 
 See [retrieval development results](RETRIEVAL_RESULTS.md) and the machine-readable [evaluation report](retrieval-evaluation.json). Fifty present-target queries over ten synthetic documents compare filename, lexical, semantic and hybrid modes. This deliberately includes misleading filenames; it does not establish general superiority over filename search or production accuracy. Labels were authored with the corpus, not inferred from model winners.
 
-Absent-target queries currently return candidates; they are labeled as requiring source verification. Before GUI release, add more absent/ambiguous queries, calibrate weak-match handling, compare an alternative embedding model, and validate on a frozen holdout. Also finish WP3 process termination/concurrent refresh, actual junction tests, parser memory limits, consented larger-corpus performance and cleanup audits. Current tests simulate transaction failure and revocation; they do not prove every crash state. The host does not permit symbolic-link creation, so that test is skipped.
+Twenty absent-target probes now support an experimental model-specific weak-match gate, with Show weaker matches recovery. MiniLM and BGE were compared in isolated indexes; MiniLM stays the compatible desktop default. See [desktop phase](DESKTOP_PHASE.md) and [comparison report](model-comparison.json). The fitted threshold rejects 19/20 absent MiniLM probes but also hides 6/50 present queries in development data. A frozen holdout, ambiguous/multi-relevant queries and consented user validation remain before release.
+
+The desktop prototype connects folder selection, background indexing, search/evidence and deliberate file actions. Cancellation preserves committed content, removal revokes scope while work runs, and queued responses are suppressed when their scope changes. Preview/open also validate the expected indexed fingerprint. Native OS launches were intercepted during tests; offscreen verification is not manual usability or screen-reader validation. See [GUI report](gui-verification.json).
+
+WP3 process termination/concurrent refresh, actual junction tests, parser memory limits, consented larger-corpus performance and cleanup audits remain. The host does not permit symbolic-link creation, so that test is skipped.
 
 ## UI contract
 

@@ -189,6 +189,41 @@ class CoreTests(unittest.TestCase):
         counts = self.index.refresh(self.root_id)
         self.assertEqual(counts["searchable"], 0)
 
+    def test_cancel_preserves_committed_index(self):
+        import threading
+        from omnifind.core import WorkCancelled
+        self.write("file.txt", "deposit conditions")
+        self.index.refresh(self.root_id)
+        cancel = threading.Event()
+        cancel.set()
+        with self.assertRaises(WorkCancelled):
+            self.index.refresh(self.root_id, cancel=cancel)
+        self.assertEqual(len(self.index.search("deposit", "lexical")), 1)
+
+    def test_old_evidence_revision_cannot_open_updated_file(self):
+        source = self.write("file.txt", "original deposit conditions")
+        self.index.refresh(self.root_id)
+        old = self.index.search("deposit", "lexical")[0]
+        source.write_text("updated receipt", encoding="utf-8")
+        self.index.refresh(self.root_id)
+        with self.assertRaises(ScopeError):
+            self.index.source_path(old["file_id"], old["revision"])
+
+    def test_weak_match_recovery_and_missing_calibration(self):
+        import json
+        self.write("file.txt", "deposit conditions")
+        self.index.refresh(self.root_id)
+        policy = self.directory / "policy.json"
+        policy.write_text(json.dumps({"models": {self.model.identity: {"minimum_similarity": 0.5}}}))
+        with patch.object(self.model, "encode", return_value=-self.model.encode(["query"])):
+            response = self.index.search_response("unknown", policy_path=policy)
+            self.assertEqual(response["status"], "no-strong-match")
+            self.assertEqual(response["results"], [])
+            revealed = self.index.search_response("unknown", show_weak=True, policy_path=policy)
+            self.assertEqual(len(revealed["results"]), 1)
+            self.assertTrue(revealed["results"][0]["weak_match"])
+        self.assertEqual(self.index.search_response("deposit", policy_path=self.directory / "missing")["status"], "uncalibrated-candidates")
+
 
 if __name__ == "__main__":
     unittest.main()

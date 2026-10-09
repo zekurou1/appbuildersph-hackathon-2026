@@ -25,6 +25,7 @@ def main():
     search.add_argument("--mode", choices=["filename", "lexical", "semantic", "hybrid"], default="hybrid")
     search.add_argument("--type", dest="suffix")
     search.add_argument("--folder", dest="root_id", type=int)
+    search.add_argument("--show-weak", action="store_true", help="Reveal candidates below the experimental threshold")
     args = parser.parse_args()
     index = None
     try:
@@ -43,8 +44,8 @@ def main():
         elif args.command == "status":
             result = {"folders": index.roots(), "coverage": index.coverage(), "storage": "plaintext-local-index"}
         else:
-            result = {"results": index.search(args.query, args.mode, args.root_id, args.suffix),
-                      "notice": "Matches require source verification. Ranking is not confidence."}
+            result = index.search_response(args.query, args.mode, args.root_id, args.suffix, show_weak=args.show_weak)
+            result["notice"] = "Verify source evidence. Weak-match thresholds are experimental, not confidence."
         print(json.dumps(result, indent=2, ensure_ascii=False))
     except (ValueError, OSError, ImportError, RuntimeError, sqlite3.Error) as error:
         # Avoid leaking private paths/content/tracebacks in diagnostics.

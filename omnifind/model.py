@@ -19,14 +19,20 @@ class LocalEmbedder:
             with path.open("rb") as stream:
                 if hashlib.file_digest(stream, "sha256").hexdigest() != entry["sha256"]:
                     raise ValueError("Model asset checksum mismatch")
-        if manifest["model_id"] != "sentence-transformers/all-MiniLM-L6-v2":
+        if manifest["model_id"] not in {"sentence-transformers/all-MiniLM-L6-v2", "BAAI/bge-small-en-v1.5"}:
             raise ValueError("unsupported-model-pooling")
+        self.bge = manifest["model_id"] == "BAAI/bge-small-en-v1.5"
+        self.max_tokens = 512 if self.bge else 256
         from transformers import AutoModel, AutoTokenizer
+        import torch
+        # Small CPU batches do not benefit from an unbounded per-worker thread pool.
+        torch.set_num_threads(min(4, os.cpu_count() or 1))
         self.model = AutoModel.from_pretrained(str(directory), local_files_only=True,
                                                trust_remote_code=False, use_safetensors=True).to("cpu").eval()
         self.tokenizer = AutoTokenizer.from_pretrained(str(directory), local_files_only=True,
                                                        trust_remote_code=False, use_fast=True)
-        self.identity = f'{manifest["model_id"]}@{manifest["revision"]}:mean-normalized-v1'
+        pooling = "cls-normalized-query-prefix-v1" if self.bge else "mean-normalized-v1"
+        self.identity = f'{manifest["model_id"]}@{manifest["revision"]}:{pooling}'
         self.dimensions = self.model.config.hidden_size
 
     def encode(self, texts):
@@ -36,18 +42,26 @@ class LocalEmbedder:
         for start in range(0, len(texts), 16):
             encoded = self.tokenizer(texts[start:start + 16], padding=True, truncation=False,
                                      return_tensors="pt")
-            if encoded["input_ids"].shape[1] > 256:
+            if encoded["input_ids"].shape[1] > self.max_tokens:
                 raise ValueError("model-token-limit-shorten-query")
             with torch.inference_mode():
                 tokens = self.model(**encoded).last_hidden_state
-                mask = encoded["attention_mask"].unsqueeze(-1).expand(tokens.size()).float()
-                pooled = (tokens * mask).sum(1) / mask.sum(1).clamp(min=1e-9)
+                if self.bge:
+                    pooled = tokens[:, 0]
+                else:
+                    mask = encoded["attention_mask"].unsqueeze(-1).expand(tokens.size()).float()
+                    pooled = (tokens * mask).sum(1) / mask.sum(1).clamp(min=1e-9)
                 batches.append(torch.nn.functional.normalize(pooled, p=2, dim=1).numpy())
         vectors = np.concatenate(batches) if batches else np.empty((0, self.dimensions))
         vectors = np.asarray(vectors, dtype="<f4")
         if vectors.shape != (len(texts), self.dimensions) or not np.isfinite(vectors).all():
             raise ValueError("Invalid embedding output")
         return vectors
+
+    def encode_query(self, query):
+        if self.bge:
+            query = "Represent this sentence for searching relevant passages: " + query
+        return self.encode([query])[0]
 
     def chunks(self, text, tokens=160, overlap=30):
         """Exact source slices, bounded by this model's tokenizer (no silent truncation)."""

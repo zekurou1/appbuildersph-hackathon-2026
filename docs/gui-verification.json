@@ -1,0 +1,29 @@
+{
+  "artifact": "working-offscreen-Qt-desktop-prototype",
+  "local_model": "sentence-transformers/all-MiniLM-L6-v2@1110a243fdf4706b3f48f1d95db1a4f5529b4d41:mean-normalized-v1",
+  "passed": [
+    "folder-picker control with synthetic selection",
+    "background inference and responsive navigation",
+    "real semantic search with PDF page evidence",
+    "original open/reveal dispatch",
+    "copy path",
+    "light/dark/narrow/large-text rendering",
+    "Ctrl+K Enter and result-arrow keyboard controls",
+    "cancel preserves query and committed index",
+    "filter invalidation preserves query",
+    "no-strong-match and weak-match recovery",
+    "stale open rejected",
+    "manual refresh",
+    "restart persistence",
+    "missing-model failure and lexical recovery",
+    "folder revocation during work preserves originals"
+  ],
+  "python_socket_connect_attempts": 0,
+  "limits": [
+    "Offscreen QtTest, not manual Windows usability or screen-reader validation",
+    "Native picker response was supplied by the test",
+    "OS viewer and Explorer launches intercepted after path authorization",
+    "Synthetic two-file corpus only",
+    "No OS-level network audit"
+  ]
+}

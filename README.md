@@ -4,7 +4,7 @@ Describe a file you remember, search selected folders locally, and inspect match
 
 Main repository: [zekurou1/appbuildersph-hackathon-2026](https://github.com/zekurou1/appbuildersph-hackathon-2026).
 
-**Current artifact: a working command-line retrieval core, not yet the desktop GUI.** Digital PDF/TXT/MD, local CPU embeddings, lexical/semantic/hybrid search, page/line evidence, SQLite persistence, manual refresh and folder removal are implemented. OCR, scanned PDFs, DOCX and a packaged installer are pending.
+**Current artifact: a native desktop prototype plus command-line retrieval core.** Digital PDF/TXT/MD, local CPU embeddings, lexical/semantic/hybrid search, page/line evidence, SQLite persistence, manual refresh and folder removal are implemented. OCR, scanned PDFs, DOCX and a packaged installer are pending.
 
 ## Setup
 
@@ -20,6 +20,27 @@ This existing workspace also has `.tools\uv\uv.exe`; it is a local convenience, 
 
 Setup needs internet for dependencies and about 92 MB of public model assets. The tested model revision is pinned by default; preparation records its file hashes. Runtime verifies those assets and uses local-only CPU inference. Model downloads are a separate explicit action. Windows Application Control can block native dependencies: use an approved runtime/environment; this project does not disable those controls.
 
+## Launch the desktop app
+
+```powershell
+& '.venv\Scripts\python.exe' -m omnifind.gui
+# Alternatively, from the project folder:
+& 'scripts\start-desktop.ps1'
+```
+
+Open Folders, choose a local folder, and select Refresh selected. Then describe a file in Search, inspect the original passage, and choose Open original or Show in folder. Search runs on Enter or Search; query/filter changes require another explicit Search. The first local model load runs in the background. Cancel stops after the current step; removing a folder revokes its scope and keeps original files. Settings includes light/dark appearance, larger text and plaintext-storage disclosure.
+
+If no strong match is found, revise the description or enable Show weaker matches and search again. Thresholds were fitted to synthetic development examples and can hide valid files; they are not confidence scores. Words only can search an existing index when model assets are missing. GUI verification used real inference and offscreen Qt controls; native picker responses and OS open/reveal launches were intercepted in the test. Manual Windows and screen-reader validation remain.
+
+See [desktop phase and model comparison](docs/DESKTOP_PHASE.md). The desktop default remains MiniLM. BGE is an explicit experiment requiring its own index:
+
+```powershell
+& '.venv\Scripts\python.exe' scripts/prepare_model.py --destination models/bge --model-id BAAI/bge-small-en-v1.5
+& '.venv\Scripts\python.exe' scripts/compare_models.py
+```
+
+The optional BGE setup downloads about 135 MB. To launch with it, pass `--model models/bge --db <separate-index-path>` to `omnifind.gui`; model vectors are not automatically migrated or mixed.
+
 ## Search a folder you explicitly choose
 
 The index stores plaintext extracted text and vectors under `%LOCALAPPDATA%\OmniFindLocal`; original files are preserved. Start with a small synthetic or consented folder. Commands must run from the repository root.
@@ -34,7 +55,7 @@ The index stores plaintext extracted text and vectors under `%LOCALAPPDATA%\Omni
 & '.venv\Scripts\python.exe' -m omnifind remove-folder 1
 ```
 
-Refresh manually after changes. Stale/missing files are excluded until refreshed. Search results include the original path, excerpt and page/line reference. Ranking scores are not confidence probabilities; inspect the source before opening it. Absent-target handling is still being calibrated, so candidate results do not guarantee a matching file exists.
+Refresh manually after changes. Stale/missing files are excluded until refreshed. Search results include the original path, excerpt and page/line reference. Ranking scores are not confidence probabilities; inspect the source before opening it. Semantic/hybrid search uses an experimental model-specific weak-match gate. Pass `--show-weak` after the search subcommand to reveal weaker candidates. A candidate does not guarantee a matching file exists.
 
 For alternate synthetic test storage, pass `--db path/to/index.sqlite` **before** the subcommand. `--model` is also a global option. Lexical and filename search do not load model assets; indexing and semantic/hybrid search require them. Search does not execute retrieved content or automatically open files.
 
@@ -43,9 +64,10 @@ For alternate synthetic test storage, pass `--db path/to/index.sqlite` **before*
 ```powershell
 & '.venv\Scripts\python.exe' -m unittest discover -s tests -v
 & '.venv\Scripts\python.exe' scripts/evaluate.py --model models/minilm
+& '.venv\Scripts\python.exe' scripts/verify_gui.py
 ```
 
-The evaluation generates ten synthetic documents from `fixtures/development.json`, runs 50 author-labeled development queries across all four baselines, and checks fresh-file indexing, restart and removal under a Python socket guard. It creates a fresh isolated run directory each time. These are development results, not a held-out product benchmark or complete network audit. Runtime fixtures/reports, local model assets and index databases are ignored by Git.
+The evaluation generates ten synthetic documents from `fixtures/development.json`, runs 50 author-labeled present-target queries and 20 absent-target probes, and checks fresh-file indexing, restart and removal under a Python socket guard. It evaluates raw ranking separately from the weak-match gate. Each run uses a fresh isolated directory. Desktop verification additionally drives the real Qt controls, background inference, evidence, weak-match recovery, stale-file safety and removal; screenshots go to `reports/runtime/gui`. These are development results, not a held-out product benchmark or complete network audit. Runtime fixtures/reports, local model assets and index databases are ignored by Git.
 
 See [current status and gates](docs/START.md), [measured development results](docs/RETRIEVAL_RESULTS.md), and [master plan](docs/OMNIFIND_LOCAL_MASTER_PLAN.md).
 

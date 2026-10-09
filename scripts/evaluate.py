@@ -65,7 +65,8 @@ def main():
                 elapsed = time.perf_counter() - started
                 names = [Path(result["path"]).name for result in results]
                 rank = names.index(target) + 1 if target in names else None
-                observations.append({"target": target, "query": query, "rank": rank, "seconds": elapsed})
+                observations.append({"target": target, "query": query, "rank": rank, "seconds": elapsed,
+                                     "best_similarity": max((r["similarity"] for r in results if r["similarity"] is not None), default=None)})
                 assert len(names) == len(set(names))
                 for result in results:
                     assert index.source_path(result["file_id"]).exists()
@@ -78,8 +79,11 @@ def main():
                 "observations": observations,
             }
         # Record absence behavior without turning similarity into calibrated confidence.
-        absent = [{"query": query, "candidates_returned": len(index.search(query, "hybrid", limit=5))}
-                  for query in data["absent_queries"]]
+        absent = []
+        for query in data["absent_queries"]:
+            results = index.search(query, "semantic", limit=5)
+            absent.append({"query": query, "candidates_returned": len(results),
+                           "best_similarity": max((r["similarity"] for r in results), default=None)})
         # Fresh post-setup file and query; then restart and root removal.
         fresh = corpus / "fresh.txt"
         fresh.write_text("Library card LIB-551 expires on January 31. Renew it at the circulation desk.", encoding="utf-8")
@@ -96,7 +100,7 @@ def main():
                   "model_load_seconds": load_seconds, "indexing_seconds": indexing_seconds,
                   "coverage": coverage, "metrics": metrics, "absent_target_observations": absent,
                   "fresh_file_restart_removal": "passed", "python_socket_connect_attempts": len(attempts),
-                  "limitations": ["Development data, not a frozen holdout", "No model comparison yet",
+                  "limitations": ["Development data, not a frozen holdout",
                                   "No calibrated no-match threshold; all results require verification",
                                   "Python-process guard only, not an OS/network audit", "Ten-file corpus is not a scale benchmark"]}
         (output / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")

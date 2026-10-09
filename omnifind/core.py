@@ -1,4 +1,4 @@
-"""Synchronous small-corpus retrieval core. UI/background orchestration comes later."""
+"""Small-corpus retrieval core; desktop worker orchestration lives in gui.py."""
 import hashlib
 import json
 import os
@@ -13,6 +13,10 @@ from .extract import MAX_FILE_BYTES, SUPPORTED
 
 
 class ScopeError(ValueError):
+    pass
+
+
+class WorkCancelled(RuntimeError):
     pass
 
 
@@ -106,7 +110,7 @@ class Index:
                 ON CONFLICT(path) DO UPDATE SET status=excluded.status,error=excluded.error""",
                 (root_id, str(path), path.suffix.lower(), status, error))
 
-    def refresh(self, root_id):
+    def refresh(self, root_id, cancel=None, progress=None):
         if not self.embedder:
             raise ValueError("local-model-required-for-indexing")
         root = self._root(root_id)
@@ -115,6 +119,11 @@ class Index:
             raise ValueError("model-mismatch-create-new-index")
         seen = set()
         traversal_errors = []
+        processed = 0
+        def checkpoint():
+            if cancel and cancel.is_set():
+                raise WorkCancelled("operation-cancelled")
+        checkpoint()
         for directory, subdirs, names in os.walk(root, followlinks=False,
                                                 onerror=lambda error: traversal_errors.append("folder-unreadable")):
             retained = []
@@ -126,10 +135,14 @@ class Index:
                     pass
             subdirs[:] = retained
             for name in names:
+                checkpoint()
                 path = Path(directory) / name
                 if path.is_relative_to(self.path.parent):
                     continue
                 seen.add(str(path))
+                processed += 1
+                if progress:
+                    progress({"processed": processed, "coverage": self.coverage(root_id)})
                 try:
                     path = self.authorize(root_id, path)
                     if path.suffix.lower() not in SUPPORTED:
@@ -154,6 +167,8 @@ class Index:
                     payload = json.loads(process.stdout)
                     if process.returncode:
                         raise ValueError(payload.get("error", "extraction-failed"))
+                    checkpoint()
+                    self.authorize(root_id, path)
                     chunks = []
                     for section in payload["sections"]:
                         text = section["text"]
@@ -162,7 +177,9 @@ class Index:
                                            text.count("\n", 0, end) + 1))
                     if not chunks:
                         raise ValueError("no-digital-text")
+                    checkpoint()
                     vectors = self.embedder.encode([chunk[0] for chunk in chunks])
+                    checkpoint()
                     self.authorize(root_id, path)
                     after = path.stat()
                     if (before.st_size, before.st_mtime_ns, before.st_ino) != (after.st_size, after.st_mtime_ns, after.st_ino):
@@ -182,6 +199,8 @@ class Index:
                                 VALUES (?,?,?,?,?,?,?)""", (file_id, *chunk, vector.tobytes(), self.embedder.identity))
                             self.db.execute("INSERT INTO chunk_fts(rowid,filename,content) VALUES (?,?,?)",
                                             (cursor.lastrowid, path.name, chunk[0]))
+                except WorkCancelled:
+                    raise
                 except ScopeError:
                     # Revocation terminates processing; unsafe files are visible as skipped.
                     self._root(root_id)
@@ -193,6 +212,7 @@ class Index:
                     self._record_error(root_id, path, "failed", code)
         if traversal_errors:
             raise OSError("folder-unreadable-refresh-incomplete")
+        checkpoint()
         with self.db:
             for row in self.db.execute("SELECT id,path FROM files WHERE root_id=?", (root_id,)).fetchall():
                 if row["path"] not in seen:
@@ -223,7 +243,7 @@ class Index:
         return counts
 
     def _eligible(self, root_id=None, suffix=None):
-        sql = """SELECT c.*,f.path,f.root_id,f.suffix,f.size,f.mtime FROM chunks c
+        sql = """SELECT c.*,f.path,f.root_id,f.suffix,f.size,f.mtime,f.digest FROM chunks c
             JOIN files f ON f.id=c.file_id JOIN roots r ON r.id=f.root_id WHERE f.status='searchable'"""
         parameters = []
         if root_id is not None:
@@ -274,7 +294,8 @@ class Index:
             if any(row["model"] != self.embedder.identity for row in rows):
                 raise ValueError("model-mismatch-create-new-index")
             import numpy as np
-            query_vector = self.embedder.encode([query])[0]
+            query_vector = (self.embedder.encode_query(query) if hasattr(self.embedder, "encode_query")
+                            else self.embedder.encode([query])[0])
             scored = []
             # Blockwise scoring avoids duplicating the entire vector matrix.
             for start in range(0, len(rows), 1024):
@@ -319,6 +340,7 @@ class Index:
             except (OSError, ScopeError):
                 continue
             results.append({"file_id": file_id, "path": row["path"], "root_id": row["root_id"],
+                            "revision": row["digest"],
                             "text": row["text"], "page": row["page"], "line_start": row["line_start"],
                             "line_end": row["line_end"], "rank_score": group["score"],
                             "similarity": semantic_scores.get(row["id"]),
@@ -327,10 +349,41 @@ class Index:
                 break
         return results
 
-    def source_path(self, file_id):
+    def search_response(self, query, mode="hybrid", root_id=None, suffix=None, limit=10,
+                        show_weak=False, policy_path=None):
+        """Experimental query-level abstention, separate from raw ranking evaluation."""
+        if not query.strip():
+            return {"status": "empty-query", "results": [], "weak_count": 0}
+        results = self.search(query, mode, root_id, suffix, limit)
+        if not results:
+            return {"status": "no-results", "results": [], "weak_count": 0}
+        if mode in {"filename", "lexical"}:
+            return {"status": "literal-candidates", "results": results, "weak_count": 0}
+        policy_path = policy_path or Path(__file__).resolve().parents[1] / "config/retrieval-policy.json"
+        try:
+            policy = json.loads(Path(policy_path).read_text(encoding="utf-8"))
+            threshold = float(policy["models"][self.embedder.identity]["minimum_similarity"])
+            if not -1 <= threshold <= 1:
+                raise ValueError("invalid-threshold")
+        except (OSError, ValueError, KeyError, TypeError):
+            return {"status": "uncalibrated-candidates", "results": results, "weak_count": 0}
+        best = self.search(query, "semantic", root_id, suffix, 1)
+        if not best:
+            return {"status": "no-results", "results": [], "weak_count": 0}
+        strong = best[0]["similarity"] >= threshold
+        for result in results:
+            result["weak_match"] = result["similarity"] < threshold
+        return {"status": "matches" if strong else "no-strong-match",
+                "results": results if strong or show_weak else [],
+                "weak_count": sum(result["weak_match"] for result in results),
+                "calibration": "experimental-development-only"}
+
+    def source_path(self, file_id, expected_revision=None):
         row = self.db.execute("SELECT * FROM files WHERE id=?", (file_id,)).fetchone()
         if not row:
             raise ScopeError("file-not-indexed")
+        if expected_revision is not None and row["digest"] != expected_revision:
+            raise ScopeError("source-changed-refresh-required")
         path = self.authorize(row["root_id"], row["path"])
         info = path.stat()
         if row["status"] != "searchable" or (info.st_size, info.st_mtime_ns) != (row["size"], row["mtime"]):

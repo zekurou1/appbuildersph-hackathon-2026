@@ -15,7 +15,7 @@ Ten synthetic digital PDF/TXT/MD documents, 50 author-labeled present-target dev
 
 Each query has one labeled relevant file, so HitRate@5 equals Recall@5 on this dataset only. MRR is truncated at five. Timing includes core query work and source freshness checks with the model already loaded; it excludes GUI and source-open time. These are 50 timing samples per mode with no dedicated warm-up, not a standardized performance benchmark. Model cold load in the final run was 12.56 seconds; initial indexing was 2.44 seconds. No peak-memory measurement or large-corpus capacity claim is made.
 
-Lexical search beats hybrid top-1 here. Semantic finds both targets missed by lexical in the top five; hybrid misses one target. Retain all modes and improve evidence/ranking using broader development data before claiming hybrid superiority. MiniLM remains the provisional baseline; a BGE comparison and frozen heldout evaluation are pending.
+Lexical search beats hybrid top-1 here. Semantic finds both targets missed by lexical in the top five; hybrid misses one target. Retain all modes and improve evidence/ranking using broader development data before claiming hybrid superiority. These initial WP2 results preceded the BGE comparison and weak-match gate; see [the later desktop-phase report](DESKTOP_PHASE.md) for those results. A frozen heldout evaluation remains pending.
 
 All five absent-target probes returned five hybrid candidates. There is no calibrated rejection threshold yet: results are candidates requiring source verification. This is a release gap, not successful absent-target recognition.
 

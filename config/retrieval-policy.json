@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "scope": "Synthetic development calibration; verify source evidence",
+  "models": {
+    "sentence-transformers/all-MiniLM-L6-v2@1110a243fdf4706b3f48f1d95db1a4f5529b4d41:mean-normalized-v1": {
+      "minimum_similarity": 0.3203275799751282,
+      "balanced_accuracy": 0.915,
+      "present_queries_retained": 44,
+      "present_queries": 50,
+      "absent_queries_rejected": 19,
+      "absent_queries": 20,
+      "calibration": "synthetic-development-only; not confidence or held-out validation"
+    },
+    "BAAI/bge-small-en-v1.5@5c38ec7c405ec4b44b94cc5a9bb96e735b38267a:cls-normalized-query-prefix-v1": {
+      "minimum_similarity": 0.6220985651016235,
+      "balanced_accuracy": 0.9,
+      "present_queries_retained": 40,
+      "present_queries": 50,
+      "absent_queries_rejected": 20,
+      "absent_queries": 20,
+      "calibration": "synthetic-development-only; not confidence or held-out validation"
+    }
+  }
+}
