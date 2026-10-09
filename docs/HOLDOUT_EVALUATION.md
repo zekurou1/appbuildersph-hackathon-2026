@@ -1,5 +1,7 @@
 # Frozen synthetic holdout evaluation
 
+Historical baseline, preserved unchanged in [holdout-evaluation.json](holdout-evaluation.json). The later exact-code fix and explicitly reused regression results are documented in [IDENTIFIER_RECOVERY.md](IDENTIFIER_RECOVERY.md).
+
 October 10, 2026. The current hybrid weak-match gate misses the plan's 85% Recall@5 target on this holdout: raw hybrid retrieval reaches 100%, while the unchanged gate reduces it to 84%. This is an observed prototype limitation, not a release pass.
 
 ## Freeze and method
@@ -41,6 +43,6 @@ Participating Python socket guards observed zero connection attempts. This is no
 & '.venv\Scripts\python.exe' -m unittest tests.test_holdout -v
 ```
 
-Use the implementation commit accompanying this report. Future core/policy edits intentionally fail the v1 freeze check; do not replace its hashes to advertise a new run as the original holdout. Keep it as historical/regression evidence and author a new frozen evaluation set for changed retrieval.
+Replay the original run using [e9a79aa](https://github.com/zekurou1/appbuildersph-hackathon-2026/commit/e9a79aa). Later core/policy edits intentionally fail the default v1 freeze check; do not replace its hashes to advertise a new run as the original holdout. On current code, `--regression` explicitly labels reuse and writes to a separate output directory. Author a new frozen evaluation set for changed retrieval.
 
 The warm-latency target passes only on this small host corpus; the current gated recall target does not. Clean installation, OS egress, native usability, consenting users, broader corpora, languages and OCR remain unverified. WP6 remains partial.

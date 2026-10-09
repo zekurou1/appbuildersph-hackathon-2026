@@ -7,11 +7,11 @@ Main repository: [zekurou1/appbuildersph-hackathon-2026](https://github.com/zeku
 | Package | Completion gate | Current state |
 | --- | --- | --- |
 | WP1 | Real CPU embeddings and digital PDF extraction; asset manifest | Passed for text tier; screenshot OCR not tested |
-| WP2 | Labeled development queries, four retrieval baselines, grouped source evidence | Development comparison and frozen synthetic holdout completed; unchanged hybrid gate hides 8/50 valid holdout queries |
+| WP2 | Labeled development queries, four retrieval baselines, grouped source evidence | Original holdout found identifier rejection; narrow exact-code route recovers all eight in regression; fresh validation remains |
 | WP3 | Atomic state, restart, refresh, root revocation | Cross-process guard, killed embedding/commit/clear recovery, junction boundaries and parser Job Object lifecycle/resource tests passed; low-resource device recovery remains |
 | WP4 | Select folder → index → search → inspect → open/reveal through UI | Working PySide6 desktop prototype; real inference and offscreen controls verified, native viewer/picker behavior still unverified |
 | WP5 | Fresh offline file/query, egress, boundaries, cleanup and recovery | Python socket-guarded inference, synthetic cleanup, bounded extraction and cross-window preview revocation passed; full OS egress/privacy audit pending |
-| WP6 | Holdout evaluation, clean setup and demo evidence | Frozen synthetic holdout measured; gated Recall@5 84% misses 85% target; clean setup/demo gates pending |
+| WP6 | Holdout evaluation, clean setup and demo evidence | Original holdout and post-fix regression recorded separately; fresh holdout, clean setup/demo gates pending |
 
 ## Verified runtime
 
@@ -37,11 +37,13 @@ See [retrieval development results](RETRIEVAL_RESULTS.md) and the machine-readab
 
 Twenty absent-target probes support an experimental model-specific weak-match gate, with Show weaker matches recovery. MiniLM and BGE were compared in isolated indexes; MiniLM stays the compatible desktop default. See [desktop phase](DESKTOP_PHASE.md) and [comparison report](model-comparison.json). The fitted threshold rejects 19/20 absent MiniLM probes but also hides 6/50 present queries in development data. Those measurements were followed by the frozen holdout below; independent consented user validation remains before release.
 
-The later [frozen synthetic holdout](HOLDOUT_EVALUATION.md) adds 20 new documents, 50 labeled queries (including filters and multiple relevant files) and 20 absent targets. Raw hybrid finds every labeled target, but the unchanged policy hides eight identifier queries: gated Recall@5 is 84%, with 18/20 absent queries rejected. Warm gated p95 is 174 ms on this small Windows host corpus. Policy/ranking were not retuned. These author-created labels are not independent user validation; the current gated recall misses the proposed 85% gate.
+The original [frozen synthetic holdout](HOLDOUT_EVALUATION.md) used 20 new documents, 50 labeled queries (including filters and multiple relevant files) and 20 absent targets. Raw hybrid found every labeled target, but the unchanged policy hid eight identifier queries: gated Recall@5 was 84%, with 18/20 absent queries rejected. Warm gated p95 was 174 ms on this small Windows host corpus. Policy/ranking were not retuned during that run. These author-created labels are not independent user validation; that historical gated recall missed the proposed 85% gate.
+
+That historical failure is now addressed by a narrow [exact-identifier route](IDENTIFIER_RECOVERY.md) in Meaning + words. It finds only literal standalone codes, preserves scope/freshness, returns no invented substitute for absent codes and works on committed content without a model. The reused regression set reaches 50/50 relevant successes with the same 18/20 absent rejections. Original frozen results/hashes are preserved; the improved result is not new held-out validation.
 
 The desktop prototype connects folder selection, background indexing, search/evidence and deliberate file actions. Cancellation preserves committed content, removal revokes scope while work runs, and queued responses are suppressed when their scope changes. Preview/open also validate the expected indexed fingerprint. Native OS launches were intercepted during tests; offscreen verification is not manual usability or screen-reader validation. See [GUI report](gui-verification.json).
 
-The reliability phase added a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. The later containment phase adds parser memory/process/output limits and persistent cross-window privacy invalidation. Twenty-nine tests now pass, including three evaluator checks; one symbolic-link test remains skipped. See [reliability evidence](RELIABILITY_PHASE.md) and [containment evidence](CONTAINMENT_PHASE.md). Consented larger-corpus performance, low-resource device recovery and complete OS privacy audits remain.
+The reliability phase added a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. The later containment phase adds parser memory/process/output limits and persistent cross-window privacy invalidation. Thirty-three tests now pass, including evaluator/identifier checks; one symbolic-link test remains skipped. See [reliability evidence](RELIABILITY_PHASE.md) and [containment evidence](CONTAINMENT_PHASE.md). Consented larger-corpus performance, low-resource device recovery and complete OS privacy audits remain.
 
 ## UI contract
 

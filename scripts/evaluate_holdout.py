@@ -23,11 +23,17 @@ def content_hash(path):
     return hashlib.sha256(Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
-def verify_freeze():
+def verify_freeze(regression=False):
     freeze = json.loads((PROJECT / "fixtures/holdout-v1.freeze.json").read_text(encoding="utf-8"))
+    changes = {}
     for name, expected in freeze["files"].items():
-        if content_hash(PROJECT / name) != expected:
-            raise ValueError("frozen-input-or-implementation-changed")
+        actual = content_hash(PROJECT / name)
+        if actual != expected:
+            if not regression or not name.startswith("omnifind/"):
+                raise ValueError("frozen-input-or-implementation-changed")
+            changes[name] = actual
+    if regression:
+        freeze = {**freeze, "regression_implementation_changes": changes}
     return freeze
 
 
@@ -78,12 +84,14 @@ def summarize(observations):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model", type=Path, default=PROJECT / "models/minilm")
-    parser.add_argument("--output", type=Path, default=PROJECT / "reports/runtime/holdout")
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--regression", action="store_true",
+                        help="Reuse the old holdout as regression data after implementation changes; never a new held-out claim")
     parser.add_argument("--repeats", type=int, default=3)
     args = parser.parse_args()
     if not 1 <= args.repeats <= 10:
         parser.error("repeats must be between 1 and 10")
-    freeze = verify_freeze()
+    freeze = verify_freeze(args.regression)
     data = json.loads((PROJECT / "fixtures/holdout-v1.json").read_text(encoding="utf-8"))
     queries = labeled_queries(data)
     attempts = []
@@ -97,7 +105,7 @@ def main():
     from reportlab.pdfgen import canvas
     from omnifind.core import Index
     from omnifind.model import LocalEmbedder
-    output = args.output.resolve()
+    output = (args.output or PROJECT / ("reports/runtime/identifier-regression" if args.regression else "reports/runtime/holdout")).resolve()
     output.mkdir(parents=True, exist_ok=True)
     run = Path(tempfile.mkdtemp(prefix="run-", dir=output))
     root_paths = {name: run / "corpus" / name for name in {doc["folder"] for doc in data["documents"]}}
@@ -192,9 +200,11 @@ def main():
             absent.append({"query": query, "status": response["status"],
                            "returned": [path_ids[result["path"]] for result in response["results"]],
                            "accepted": bool(response["results"])})
-        verify_freeze()
+        if verify_freeze(args.regression) != freeze:
+            raise ValueError("implementation-changed-during-evaluation")
         policy = json.loads((PROJECT / "config/retrieval-policy.json").read_text(encoding="utf-8"))
-        report = {"dataset": data["dataset"], "held_out_from_development_tuning": True,
+        report = {"dataset": data["dataset"], "held_out_from_development_tuning": not args.regression,
+                  "regression_after_reusing_holdout": args.regression,
                   "independent_or_blinded_validation": False, "freeze": freeze, "model": model.identity,
                   "policy": policy["models"][model.identity],
                   "device": {"os": platform.platform(), "python": platform.python_version(),
@@ -219,7 +229,7 @@ def main():
                   "limitations": ["Author-created synthetic labels, not independent users or blinded validation",
                                   "Twenty short documents, not a scale benchmark", "No language/OCR validation",
                                   "Python socket guard is not an OS egress audit", "No machine-cold cache or clean-install measurement",
-                                  "No policy/model/ranking changes permitted during this holdout run"]}
+                                  "No changes permitted during this run; regression reuse is not new held-out validation"]}
         (output / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
         print(json.dumps({key: value for key, value in report.items() if key not in {"observations", "absent_observations", "freeze", "by_kind"}}, indent=2))
     finally:

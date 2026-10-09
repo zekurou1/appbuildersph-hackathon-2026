@@ -5,7 +5,7 @@ import re
 import sqlite3
 from pathlib import Path
 
-from .core import Index
+from .core import Index, is_identifier_query
 
 
 def main():
@@ -33,7 +33,8 @@ def main():
     index = None
     try:
         embedder = None
-        if args.command == "refresh" or (args.command == "search" and args.mode in {"semantic", "hybrid"}):
+        if args.command == "refresh" or (args.command == "search" and
+            (args.mode == "semantic" or (args.mode == "hybrid" and not is_identifier_query(args.query)))):
             from .model import LocalEmbedder
             embedder = LocalEmbedder(args.model)
         index = Index(args.db, embedder)

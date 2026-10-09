@@ -153,6 +153,13 @@ def main():
         assert window.folder_list.count() == 1
         search("INV-2048", "lexical")
         assert window.results and window.model is None
+        search("INV-2048", "hybrid")
+        assert window.results and window.model is None
+        assert window.last_response["status"] == "exact-identifier-matches"
+        assert "Exact identifier" in window.status.text() and "INV-2048" in window.preview.toPlainText()
+        search("INV-9999", "hybrid")
+        assert not window.results and window.model is None
+        search("INV-2048", "hybrid")
         window.navigate(1)
         QTest.mouseClick(window.refresh_button, Qt.MouseButton.LeftButton)
         settle(expect_error=True)
@@ -209,6 +216,7 @@ def main():
                              "cancel preserves query and committed index", "filter invalidation preserves query",
                              "no-strong-match and weak-match recovery", "stale open rejected", "manual refresh",
                              "restart persistence", "missing-model failure and lexical recovery", "clear-index confirmation and rebuild preserve originals",
+                             "hybrid exact identifier works without model assets and rejects absent codes",
                              "cross-window revocation clears preview and actions without interaction",
                              "folder revocation during work preserves originals"],
                   "python_socket_connect_attempts": len(attempts),

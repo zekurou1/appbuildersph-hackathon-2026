@@ -17,6 +17,7 @@
     "restart persistence",
     "missing-model failure and lexical recovery",
     "clear-index confirmation and rebuild preserve originals",
+    "hybrid exact identifier works without model assets and rejects absent codes",
     "cross-window revocation clears preview and actions without interaction",
     "folder revocation during work preserves originals"
   ],

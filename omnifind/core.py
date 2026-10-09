@@ -20,6 +20,13 @@ class WorkCancelled(RuntimeError):
     pass
 
 
+def is_identifier_query(query):
+    """Recognize a standalone code, never ordinary prose or a plain number."""
+    query = query.strip()
+    return (2 <= len(query) <= 128 and re.fullmatch(r"\w+(?:[-.]\w+)*", query) is not None
+            and any(char.isalpha() for char in query) and any(char.isdecimal() for char in query))
+
+
 def ordinary_path(path):
     """Reject links, junctions and offline/recall placeholders, including ancestors."""
     path = Path(os.path.abspath(path))
@@ -394,11 +401,41 @@ class Index:
                 break
         return results
 
+    def _exact_identifier_results(self, query, root_id, suffix, limit):
+        if not 1 <= limit <= 100:
+            raise ValueError("query-or-result-limit")
+        pattern = re.compile(r"(?<!\w)(?<!\w[-.])" + re.escape(query.strip()) + r"(?!\w|[-.]\w)", re.IGNORECASE)
+        results = []
+        seen = set()
+        rows = sorted(self._eligible(root_id, suffix), key=lambda row: (row["path"].casefold(), row["id"]))
+        for row in rows:
+            if row["file_id"] in seen or not pattern.search(row["text"]):
+                continue
+            try:
+                path = self.source_path(row["file_id"], row["digest"])
+                if str(path) != row["path"]:
+                    continue
+            except (OSError, ScopeError):
+                continue
+            seen.add(row["file_id"])
+            results.append({"file_id": row["file_id"], "path": row["path"], "root_id": row["root_id"],
+                            "revision": row["digest"], "text": row["text"], "page": row["page"],
+                            "line_start": row["line_start"], "line_end": row["line_end"],
+                            "rank_score": None, "similarity": None, "weak_match": False,
+                            "status": "verify-source", "mode": "hybrid", "match_basis": "exact-identifier"})
+            if len(results) == limit:
+                break
+        return results
+
     def search_response(self, query, mode="hybrid", root_id=None, suffix=None, limit=10,
                         show_weak=False, policy_path=None):
         """Experimental query-level abstention, separate from raw ranking evaluation."""
         if not query.strip():
             return {"status": "empty-query", "results": [], "weak_count": 0}
+        if mode == "hybrid" and is_identifier_query(query):
+            results = self._exact_identifier_results(query, root_id, suffix, limit)
+            return {"status": "exact-identifier-matches" if results else "no-results", "results": results,
+                    "weak_count": 0, "retrieval": "exact-identifier", "calibration": "not-applied-literal"}
         results = self.search(query, mode, root_id, suffix, limit)
         if not results:
             return {"status": "no-results", "results": [], "weak_count": 0}

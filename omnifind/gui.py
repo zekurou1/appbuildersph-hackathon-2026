@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
     QPushButton, QSplitter, QStackedWidget, QTextBrowser, QVBoxLayout, QWidget, QScrollArea, QSizePolicy,
 )
 
-from .core import Index, ScopeError, WorkCancelled
+from .core import Index, ScopeError, WorkCancelled, is_identifier_query
 
 
 def error_copy(error):
@@ -49,7 +49,9 @@ class Task(QThread):
     def run(self):
         index = None
         try:
-            needs_model = self.operation == "refresh" or (self.operation == "search" and self.parameters["mode"] in {"semantic", "hybrid"})
+            needs_model = self.operation == "refresh" or (self.operation == "search" and
+                (self.parameters["mode"] == "semantic" or
+                 (self.parameters["mode"] == "hybrid" and not is_identifier_query(self.parameters["query"]))))
             if needs_model and self.model is None:
                 from .model import LocalEmbedder
                 self.model = LocalEmbedder(self.model_directory)
@@ -606,6 +608,7 @@ class Window(QMainWindow):
             "no-strong-match": "No strong match. Try another description or enable Show weaker matches and search again.",
             "no-results": "No matches in these folders and filters. Refresh your folders or broaden the search.",
             "literal-candidates": "Words-only or filename matches. Meaning search is not used in this mode.",
+            "exact-identifier-matches": "Exact identifier found in the source text. Meaning scoring is not used; verify the original passage.",
             "uncalibrated-candidates": "Candidate matches. Weak-match calibration is unavailable for this model.",
             "matches": "Check the original passage before opening. Ranking is not confidence.",
         }
