@@ -1,0 +1,1285 @@
+{
+  "dataset": "synthetic-development-v1",
+  "held_out": false,
+  "model": "sentence-transformers/all-MiniLM-L6-v2@1110a243fdf4706b3f48f1d95db1a4f5529b4d41:mean-normalized-v1",
+  "files": 10,
+  "queries": 50,
+  "model_load_seconds": 12.556231000002299,
+  "indexing_seconds": 2.4354759999987436,
+  "coverage": {
+    "searchable": 10,
+    "failed": 0,
+    "unsupported": 0,
+    "pending": 0,
+    "discovered": 10
+  },
+  "metrics": {
+    "filename": {
+      "queries": 50,
+      "top1": 0.0,
+      "hit_rate_at_5": 0.06,
+      "mrr_at_5": 0.026666666666666665,
+      "p95_seconds": 0.02394782000192208,
+      "observations": [
+        {
+          "target": "scan_0042.pdf",
+          "query": "How do I get my money back after leaving my apartment?",
+          "rank": null,
+          "seconds": 0.025688900001114234
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "security deposit refund thirty days",
+          "rank": null,
+          "seconds": 0.016912500002945308
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "rental agreement A17",
+          "rank": null,
+          "seconds": 0.015873899996222463
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "Which agreement deducts repairs from my deposit?",
+          "rank": null,
+          "seconds": 0.015877600002568215
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "Find the lease that requires written move-out notice",
+          "rank": null,
+          "seconds": 0.017198600005940534
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "lease B29",
+          "rank": null,
+          "seconds": 0.01614479999989271
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "Which apartment agreement keeps the deposit for an early departure?",
+          "rank": null,
+          "seconds": 0.019447099999524653
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "nonrefundable security deposit six months",
+          "rank": null,
+          "seconds": 0.015224800001305994
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "Find the rental document with separate damage charges",
+          "rank": null,
+          "seconds": 0.017254699996556155
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "I remember a minimum six-month stay to avoid losing my deposit",
+          "rank": 2,
+          "seconds": 0.023388599998725113
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "INV-2048",
+          "rank": null,
+          "seconds": 0.014960399996198248
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "receipt for a laptop power adapter",
+          "rank": null,
+          "seconds": 0.024255800002720207
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "Which purchase allows returning a faulty charger within a week?",
+          "rank": null,
+          "seconds": 0.025066700000024866
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "1250 pesos charger",
+          "rank": null,
+          "seconds": 0.016460599996207748
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "Find proof of purchase for my computer charger",
+          "rank": null,
+          "seconds": 0.0179885000034119
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "INV-2049",
+          "rank": null,
+          "seconds": 0.01533470000140369
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "wireless mouse receipt",
+          "rank": null,
+          "seconds": 0.014356600004248321
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "850 pesos mouse warranty",
+          "rank": null,
+          "seconds": 0.014755700001842342
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "Find the purchase with a one-year manufacturer guarantee",
+          "rank": null,
+          "seconds": 0.023571400000946596
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "Which receipt disallows change-of-mind returns?",
+          "rank": null,
+          "seconds": 0.014374600003066007
+        },
+        {
+          "target": "draft.md",
+          "query": "ENG-301",
+          "rank": null,
+          "seconds": 0.013390699998126365
+        },
+        {
+          "target": "draft.md",
+          "query": "Which instructions ask for a short talk on clean power?",
+          "rank": 3,
+          "seconds": 0.022432500001741573
+        },
+        {
+          "target": "draft.md",
+          "query": "renewable energy Friday presentation",
+          "rank": null,
+          "seconds": 0.014514900001813658
+        },
+        {
+          "target": "draft.md",
+          "query": "Find the assignment comparing solar and wind",
+          "rank": null,
+          "seconds": 0.01607759999751579
+        },
+        {
+          "target": "draft.md",
+          "query": "presentation three references ten minutes",
+          "rank": null,
+          "seconds": 0.017430500003683846
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "SCH-77",
+          "rank": null,
+          "seconds": 0.015190099999017548
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "What paperwork was needed for my education grant?",
+          "rank": null,
+          "seconds": 0.014017200002854224
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "scholarship income transcript recommendation",
+          "rank": null,
+          "seconds": 0.015400500000396278
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "November 15 application deadline",
+          "rank": null,
+          "seconds": 0.015248200004862156
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "Find the grant instructions that reject missing documents",
+          "rank": null,
+          "seconds": 0.016158200000063516
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "TR-88",
+          "rank": null,
+          "seconds": 0.01345710000168765
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "Which itinerary has an early morning flight to Cebu?",
+          "rank": null,
+          "seconds": 0.0168134999985341
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "Cebu December 2 flight",
+          "rank": null,
+          "seconds": 0.019294500001706183
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "Find the travel note asking for government photo identification",
+          "rank": null,
+          "seconds": 0.019170899999153335
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "check-in two hours before departure",
+          "rank": null,
+          "seconds": 0.01624450000235811
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "CL-51",
+          "rank": null,
+          "seconds": 0.013559500002884306
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "When was my teeth cleaning appointment?",
+          "rank": null,
+          "seconds": 0.014402900000277441
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "dental cleaning Tuesday 2 PM",
+          "rank": null,
+          "seconds": 0.017482100003689993
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "Find the appointment note with a day-before rescheduling rule",
+          "rank": 2,
+          "seconds": 0.02251090000208933
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "clinic appointment insurance card",
+          "rank": null,
+          "seconds": 0.014948299998650327
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "WS-19",
+          "rank": null,
+          "seconds": 0.014110199997958262
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "Find the weekend class where I need my camera",
+          "rank": null,
+          "seconds": 0.022219700003915932
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "photography Saturday Room 204",
+          "rank": null,
+          "seconds": 0.013634200004162267
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "charged battery workshop registration",
+          "rank": null,
+          "seconds": 0.014252900000428781
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "Which course costs 500 pesos and meets at ten in the morning?",
+          "rank": null,
+          "seconds": 0.017886599998746533
+        },
+        {
+          "target": "misc_13.md",
+          "query": "RC-23",
+          "rank": null,
+          "seconds": 0.014905399999406654
+        },
+        {
+          "target": "misc_13.md",
+          "query": "How long should the fruit loaf stay in the oven?",
+          "rank": null,
+          "seconds": 0.01659010000003036
+        },
+        {
+          "target": "misc_13.md",
+          "query": "banana bread 175 Celsius",
+          "rank": null,
+          "seconds": 0.01423849999991944
+        },
+        {
+          "target": "misc_13.md",
+          "query": "Find the recipe that uses overripe bananas",
+          "rank": null,
+          "seconds": 0.015782700000272598
+        },
+        {
+          "target": "misc_13.md",
+          "query": "forty minutes flour eggs brown sugar",
+          "rank": null,
+          "seconds": 0.015149099999689497
+        }
+      ]
+    },
+    "lexical": {
+      "queries": 50,
+      "top1": 0.92,
+      "hit_rate_at_5": 0.96,
+      "mrr_at_5": 0.94,
+      "p95_seconds": 0.024921380003070225,
+      "observations": [
+        {
+          "target": "scan_0042.pdf",
+          "query": "How do I get my money back after leaving my apartment?",
+          "rank": 1,
+          "seconds": 0.018241300000227056
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "security deposit refund thirty days",
+          "rank": 1,
+          "seconds": 0.01908009999897331
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "rental agreement A17",
+          "rank": 1,
+          "seconds": 0.017532800004119053
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "Which agreement deducts repairs from my deposit?",
+          "rank": 2,
+          "seconds": 0.017566000002261717
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "Find the lease that requires written move-out notice",
+          "rank": 1,
+          "seconds": 0.022169699994265102
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "lease B29",
+          "rank": 1,
+          "seconds": 0.01675729999988107
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "Which apartment agreement keeps the deposit for an early departure?",
+          "rank": 1,
+          "seconds": 0.023477099995943718
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "nonrefundable security deposit six months",
+          "rank": 1,
+          "seconds": 0.01937319999706233
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "Find the rental document with separate damage charges",
+          "rank": 1,
+          "seconds": 0.02302139999665087
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "I remember a minimum six-month stay to avoid losing my deposit",
+          "rank": 2,
+          "seconds": 0.02213309999933699
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "INV-2048",
+          "rank": 1,
+          "seconds": 0.014926000003470108
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "receipt for a laptop power adapter",
+          "rank": 1,
+          "seconds": 0.022651500003121328
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "Which purchase allows returning a faulty charger within a week?",
+          "rank": 1,
+          "seconds": 0.022078800000599585
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "1250 pesos charger",
+          "rank": 1,
+          "seconds": 0.018680499997572042
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "Find proof of purchase for my computer charger",
+          "rank": 1,
+          "seconds": 0.024444300004688557
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "INV-2049",
+          "rank": 1,
+          "seconds": 0.018304199998965487
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "wireless mouse receipt",
+          "rank": 1,
+          "seconds": 0.017813799997384194
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "850 pesos mouse warranty",
+          "rank": 1,
+          "seconds": 0.019340799997735303
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "Find the purchase with a one-year manufacturer guarantee",
+          "rank": 1,
+          "seconds": 0.02372060000197962
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "Which receipt disallows change-of-mind returns?",
+          "rank": 1,
+          "seconds": 0.018035400004009716
+        },
+        {
+          "target": "draft.md",
+          "query": "ENG-301",
+          "rank": 1,
+          "seconds": 0.015832299999601673
+        },
+        {
+          "target": "draft.md",
+          "query": "Which instructions ask for a short talk on clean power?",
+          "rank": 1,
+          "seconds": 0.022850900000776164
+        },
+        {
+          "target": "draft.md",
+          "query": "renewable energy Friday presentation",
+          "rank": 1,
+          "seconds": 0.015865599998505786
+        },
+        {
+          "target": "draft.md",
+          "query": "Find the assignment comparing solar and wind",
+          "rank": 1,
+          "seconds": 0.0248215000028722
+        },
+        {
+          "target": "draft.md",
+          "query": "presentation three references ten minutes",
+          "rank": 1,
+          "seconds": 0.021969699999317527
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "SCH-77",
+          "rank": 1,
+          "seconds": 0.01499100000364706
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "What paperwork was needed for my education grant?",
+          "rank": null,
+          "seconds": 0.01858660000289092
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "scholarship income transcript recommendation",
+          "rank": 1,
+          "seconds": 0.016005800003767945
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "November 15 application deadline",
+          "rank": 1,
+          "seconds": 0.015816899998753797
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "Find the grant instructions that reject missing documents",
+          "rank": null,
+          "seconds": 0.02271610000025248
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "TR-88",
+          "rank": 1,
+          "seconds": 0.015833799996471498
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "Which itinerary has an early morning flight to Cebu?",
+          "rank": 1,
+          "seconds": 0.017452700005378574
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "Cebu December 2 flight",
+          "rank": 1,
+          "seconds": 0.018372600003203843
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "Find the travel note asking for government photo identification",
+          "rank": 1,
+          "seconds": 0.022170500000356697
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "check-in two hours before departure",
+          "rank": 1,
+          "seconds": 0.022625199999311008
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "CL-51",
+          "rank": 1,
+          "seconds": 0.015504499999224208
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "When was my teeth cleaning appointment?",
+          "rank": 1,
+          "seconds": 0.017053999996278435
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "dental cleaning Tuesday 2 PM",
+          "rank": 1,
+          "seconds": 0.01727690000552684
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "Find the appointment note with a day-before rescheduling rule",
+          "rank": 1,
+          "seconds": 0.02219399999739835
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "clinic appointment insurance card",
+          "rank": 1,
+          "seconds": 0.01570940000237897
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "WS-19",
+          "rank": 1,
+          "seconds": 0.01595439999800874
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "Find the weekend class where I need my camera",
+          "rank": 1,
+          "seconds": 0.02223470000171801
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "photography Saturday Room 204",
+          "rank": 1,
+          "seconds": 0.017958900003577583
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "charged battery workshop registration",
+          "rank": 1,
+          "seconds": 0.016218899996601976
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "Which course costs 500 pesos and meets at ten in the morning?",
+          "rank": 1,
+          "seconds": 0.022649400001682807
+        },
+        {
+          "target": "misc_13.md",
+          "query": "RC-23",
+          "rank": 1,
+          "seconds": 0.015957499999785796
+        },
+        {
+          "target": "misc_13.md",
+          "query": "How long should the fruit loaf stay in the oven?",
+          "rank": 1,
+          "seconds": 0.037314699999114964
+        },
+        {
+          "target": "misc_13.md",
+          "query": "banana bread 175 Celsius",
+          "rank": 1,
+          "seconds": 0.025003100003232248
+        },
+        {
+          "target": "misc_13.md",
+          "query": "Find the recipe that uses overripe bananas",
+          "rank": 1,
+          "seconds": 0.03266319999966072
+        },
+        {
+          "target": "misc_13.md",
+          "query": "forty minutes flour eggs brown sugar",
+          "rank": 1,
+          "seconds": 0.019717499999387655
+        }
+      ]
+    },
+    "semantic": {
+      "queries": 50,
+      "top1": 0.84,
+      "hit_rate_at_5": 1.0,
+      "mrr_at_5": 0.9133333333333333,
+      "p95_seconds": 0.04568783999930019,
+      "observations": [
+        {
+          "target": "scan_0042.pdf",
+          "query": "How do I get my money back after leaving my apartment?",
+          "rank": 1,
+          "seconds": 0.043612899993604515
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "security deposit refund thirty days",
+          "rank": 1,
+          "seconds": 0.03666450000309851
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "rental agreement A17",
+          "rank": 2,
+          "seconds": 0.03402440000354545
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "Which agreement deducts repairs from my deposit?",
+          "rank": 2,
+          "seconds": 0.03732460000173887
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "Find the lease that requires written move-out notice",
+          "rank": 1,
+          "seconds": 0.03692129999399185
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "lease B29",
+          "rank": 1,
+          "seconds": 0.03272830000059912
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "Which apartment agreement keeps the deposit for an early departure?",
+          "rank": 2,
+          "seconds": 0.03752640000311658
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "nonrefundable security deposit six months",
+          "rank": 1,
+          "seconds": 0.035088600001472514
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "Find the rental document with separate damage charges",
+          "rank": 1,
+          "seconds": 0.03458829999726731
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "I remember a minimum six-month stay to avoid losing my deposit",
+          "rank": 2,
+          "seconds": 0.036020399995322805
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "INV-2048",
+          "rank": 1,
+          "seconds": 0.03778339999553282
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "receipt for a laptop power adapter",
+          "rank": 1,
+          "seconds": 0.04435479999665404
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "Which purchase allows returning a faulty charger within a week?",
+          "rank": 1,
+          "seconds": 0.04372069999953965
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "1250 pesos charger",
+          "rank": 1,
+          "seconds": 0.04197130000102334
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "Find proof of purchase for my computer charger",
+          "rank": 1,
+          "seconds": 0.046063499998126645
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "INV-2049",
+          "rank": 3,
+          "seconds": 0.04214930000307504
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "wireless mouse receipt",
+          "rank": 1,
+          "seconds": 0.04778660000010859
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "850 pesos mouse warranty",
+          "rank": 1,
+          "seconds": 0.045228700000734534
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "Find the purchase with a one-year manufacturer guarantee",
+          "rank": 1,
+          "seconds": 0.04442900000140071
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "Which receipt disallows change-of-mind returns?",
+          "rank": 2,
+          "seconds": 0.04806989999633515
+        },
+        {
+          "target": "draft.md",
+          "query": "ENG-301",
+          "rank": 1,
+          "seconds": 0.03345640000043204
+        },
+        {
+          "target": "draft.md",
+          "query": "Which instructions ask for a short talk on clean power?",
+          "rank": 1,
+          "seconds": 0.03528859999642009
+        },
+        {
+          "target": "draft.md",
+          "query": "renewable energy Friday presentation",
+          "rank": 1,
+          "seconds": 0.03440549999504583
+        },
+        {
+          "target": "draft.md",
+          "query": "Find the assignment comparing solar and wind",
+          "rank": 1,
+          "seconds": 0.033102200002758764
+        },
+        {
+          "target": "draft.md",
+          "query": "presentation three references ten minutes",
+          "rank": 1,
+          "seconds": 0.0370930999997654
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "SCH-77",
+          "rank": 1,
+          "seconds": 0.03439960000105202
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "What paperwork was needed for my education grant?",
+          "rank": 1,
+          "seconds": 0.03546520000236342
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "scholarship income transcript recommendation",
+          "rank": 1,
+          "seconds": 0.03159419999428792
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "November 15 application deadline",
+          "rank": 1,
+          "seconds": 0.04034880000108387
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "Find the grant instructions that reject missing documents",
+          "rank": 1,
+          "seconds": 0.03485109999746783
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "TR-88",
+          "rank": 1,
+          "seconds": 0.03863220000494039
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "Which itinerary has an early morning flight to Cebu?",
+          "rank": 1,
+          "seconds": 0.0384630999978981
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "Cebu December 2 flight",
+          "rank": 1,
+          "seconds": 0.03309550000267336
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "Find the travel note asking for government photo identification",
+          "rank": 3,
+          "seconds": 0.03672389999701409
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "check-in two hours before departure",
+          "rank": 1,
+          "seconds": 0.03193699999974342
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "CL-51",
+          "rank": 2,
+          "seconds": 0.03475369999796385
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "When was my teeth cleaning appointment?",
+          "rank": 1,
+          "seconds": 0.0339938000033726
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "dental cleaning Tuesday 2 PM",
+          "rank": 1,
+          "seconds": 0.03570810000383062
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "Find the appointment note with a day-before rescheduling rule",
+          "rank": 1,
+          "seconds": 0.036085300002014264
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "clinic appointment insurance card",
+          "rank": 1,
+          "seconds": 0.03488449999713339
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "WS-19",
+          "rank": 1,
+          "seconds": 0.03459399999701418
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "Find the weekend class where I need my camera",
+          "rank": 1,
+          "seconds": 0.035410699994827155
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "photography Saturday Room 204",
+          "rank": 1,
+          "seconds": 0.033695500002068
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "charged battery workshop registration",
+          "rank": 1,
+          "seconds": 0.034981900003913324
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "Which course costs 500 pesos and meets at ten in the morning?",
+          "rank": 1,
+          "seconds": 0.03619660000549629
+        },
+        {
+          "target": "misc_13.md",
+          "query": "RC-23",
+          "rank": 1,
+          "seconds": 0.03401960000337567
+        },
+        {
+          "target": "misc_13.md",
+          "query": "How long should the fruit loaf stay in the oven?",
+          "rank": 1,
+          "seconds": 0.03582159999496071
+        },
+        {
+          "target": "misc_13.md",
+          "query": "banana bread 175 Celsius",
+          "rank": 1,
+          "seconds": 0.03472830000100657
+        },
+        {
+          "target": "misc_13.md",
+          "query": "Find the recipe that uses overripe bananas",
+          "rank": 1,
+          "seconds": 0.03403480000270065
+        },
+        {
+          "target": "misc_13.md",
+          "query": "forty minutes flour eggs brown sugar",
+          "rank": 1,
+          "seconds": 0.03696050000144169
+        }
+      ]
+    },
+    "hybrid": {
+      "queries": 50,
+      "top1": 0.88,
+      "hit_rate_at_5": 0.98,
+      "mrr_at_5": 0.925,
+      "p95_seconds": 0.0521796000015456,
+      "observations": [
+        {
+          "target": "scan_0042.pdf",
+          "query": "How do I get my money back after leaving my apartment?",
+          "rank": 1,
+          "seconds": 0.038129300002765376
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "security deposit refund thirty days",
+          "rank": 1,
+          "seconds": 0.03732869999657851
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "rental agreement A17",
+          "rank": 2,
+          "seconds": 0.06806109999888577
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "Which agreement deducts repairs from my deposit?",
+          "rank": 2,
+          "seconds": 0.05593980000412557
+        },
+        {
+          "target": "scan_0042.pdf",
+          "query": "Find the lease that requires written move-out notice",
+          "rank": 1,
+          "seconds": 0.06666940000286559
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "lease B29",
+          "rank": 1,
+          "seconds": 0.04141169999638805
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "Which apartment agreement keeps the deposit for an early departure?",
+          "rank": 1,
+          "seconds": 0.04185449999931734
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "nonrefundable security deposit six months",
+          "rank": 1,
+          "seconds": 0.041587299994716886
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "Find the rental document with separate damage charges",
+          "rank": 1,
+          "seconds": 0.04397579999931622
+        },
+        {
+          "target": "image_928.pdf",
+          "query": "I remember a minimum six-month stay to avoid losing my deposit",
+          "rank": 2,
+          "seconds": 0.044533899999805726
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "INV-2048",
+          "rank": 1,
+          "seconds": 0.04758379999839235
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "receipt for a laptop power adapter",
+          "rank": 1,
+          "seconds": 0.0367199000029359
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "Which purchase allows returning a faulty charger within a week?",
+          "rank": 1,
+          "seconds": 0.04114960000151768
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "1250 pesos charger",
+          "rank": 1,
+          "seconds": 0.03743860000395216
+        },
+        {
+          "target": "notes_17.txt",
+          "query": "Find proof of purchase for my computer charger",
+          "rank": 1,
+          "seconds": 0.037469899994903244
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "INV-2049",
+          "rank": 1,
+          "seconds": 0.039383399998769164
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "wireless mouse receipt",
+          "rank": 1,
+          "seconds": 0.034491499995056074
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "850 pesos mouse warranty",
+          "rank": 1,
+          "seconds": 0.034609499998623505
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "Find the purchase with a one-year manufacturer guarantee",
+          "rank": 1,
+          "seconds": 0.03734889999759616
+        },
+        {
+          "target": "notes_18.txt",
+          "query": "Which receipt disallows change-of-mind returns?",
+          "rank": 2,
+          "seconds": 0.04616819999500876
+        },
+        {
+          "target": "draft.md",
+          "query": "ENG-301",
+          "rank": 1,
+          "seconds": 0.045816300000296906
+        },
+        {
+          "target": "draft.md",
+          "query": "Which instructions ask for a short talk on clean power?",
+          "rank": 1,
+          "seconds": 0.04338329999882262
+        },
+        {
+          "target": "draft.md",
+          "query": "renewable energy Friday presentation",
+          "rank": 1,
+          "seconds": 0.03705169999739155
+        },
+        {
+          "target": "draft.md",
+          "query": "Find the assignment comparing solar and wind",
+          "rank": 1,
+          "seconds": 0.03534849999414291
+        },
+        {
+          "target": "draft.md",
+          "query": "presentation three references ten minutes",
+          "rank": 1,
+          "seconds": 0.03598549999878742
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "SCH-77",
+          "rank": 1,
+          "seconds": 0.0352299000005587
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "What paperwork was needed for my education grant?",
+          "rank": 4,
+          "seconds": 0.03328010000404902
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "scholarship income transcript recommendation",
+          "rank": 1,
+          "seconds": 0.035995999998704065
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "November 15 application deadline",
+          "rank": 1,
+          "seconds": 0.03646590000425931
+        },
+        {
+          "target": "untitled_6.md",
+          "query": "Find the grant instructions that reject missing documents",
+          "rank": null,
+          "seconds": 0.032927700005529914
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "TR-88",
+          "rank": 1,
+          "seconds": 0.03529910000361269
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "Which itinerary has an early morning flight to Cebu?",
+          "rank": 1,
+          "seconds": 0.03726299999834737
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "Cebu December 2 flight",
+          "rank": 1,
+          "seconds": 0.03215020000061486
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "Find the travel note asking for government photo identification",
+          "rank": 1,
+          "seconds": 0.037060000002384186
+        },
+        {
+          "target": "attachment_9.txt",
+          "query": "check-in two hours before departure",
+          "rank": 1,
+          "seconds": 0.03647339999588439
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "CL-51",
+          "rank": 1,
+          "seconds": 0.03129320000152802
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "When was my teeth cleaning appointment?",
+          "rank": 1,
+          "seconds": 0.03628699999535456
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "dental cleaning Tuesday 2 PM",
+          "rank": 1,
+          "seconds": 0.03311470000335248
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "Find the appointment note with a day-before rescheduling rule",
+          "rank": 1,
+          "seconds": 0.037195699995209
+        },
+        {
+          "target": "copy_final.txt",
+          "query": "clinic appointment insurance card",
+          "rank": 1,
+          "seconds": 0.03630939999857219
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "WS-19",
+          "rank": 1,
+          "seconds": 0.03497349999815924
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "Find the weekend class where I need my camera",
+          "rank": 1,
+          "seconds": 0.04512560000148369
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "photography Saturday Room 204",
+          "rank": 1,
+          "seconds": 0.03951289999531582
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "charged battery workshop registration",
+          "rank": 1,
+          "seconds": 0.0395490000009886
+        },
+        {
+          "target": "export_001.pdf",
+          "query": "Which course costs 500 pesos and meets at ten in the morning?",
+          "rank": 1,
+          "seconds": 0.03970290000142995
+        },
+        {
+          "target": "misc_13.md",
+          "query": "RC-23",
+          "rank": 1,
+          "seconds": 0.03479679999873042
+        },
+        {
+          "target": "misc_13.md",
+          "query": "How long should the fruit loaf stay in the oven?",
+          "rank": 1,
+          "seconds": 0.035342200004379265
+        },
+        {
+          "target": "misc_13.md",
+          "query": "banana bread 175 Celsius",
+          "rank": 1,
+          "seconds": 0.038492600004246924
+        },
+        {
+          "target": "misc_13.md",
+          "query": "Find the recipe that uses overripe bananas",
+          "rank": 1,
+          "seconds": 0.03605719999904977
+        },
+        {
+          "target": "misc_13.md",
+          "query": "forty minutes flour eggs brown sugar",
+          "rank": 1,
+          "seconds": 0.033544500001880806
+        }
+      ]
+    }
+  },
+  "absent_target_observations": [
+    {
+      "query": "submarine maintenance log",
+      "candidates_returned": 5
+    },
+    {
+      "query": "passport renewal appointment confirmation",
+      "candidates_returned": 5
+    },
+    {
+      "query": "volcano evacuation map",
+      "candidates_returned": 5
+    },
+    {
+      "query": "dog vaccination certificate",
+      "candidates_returned": 5
+    },
+    {
+      "query": "payroll report for March",
+      "candidates_returned": 5
+    }
+  ],
+  "fresh_file_restart_removal": "passed",
+  "python_socket_connect_attempts": 0,
+  "limitations": [
+    "Development data, not a frozen holdout",
+    "No model comparison yet",
+    "No calibrated no-match threshold; all results require verification",
+    "Python-process guard only, not an OS/network audit",
+    "Ten-file corpus is not a scale benchmark"
+  ]
+}

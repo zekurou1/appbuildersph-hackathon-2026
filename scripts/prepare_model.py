@@ -7,15 +7,17 @@ from pathlib import Path
 from huggingface_hub import HfApi, snapshot_download
 
 MODEL_ID = "sentence-transformers/all-MiniLM-L6-v2"
+REVISION = "1110a243fdf4706b3f48f1d95db1a4f5529b4d41"
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--destination", type=Path, required=True)
+    parser.add_argument("--revision", default=REVISION, help="Explicit asset revision; defaults to the tested commit")
     args = parser.parse_args()
     destination = args.destination.resolve()
     destination.mkdir(parents=True, exist_ok=True)
-    revision = HfApi().model_info(MODEL_ID).sha
+    revision = HfApi().model_info(MODEL_ID, revision=args.revision).sha
     snapshot_download(
         MODEL_ID, revision=revision, local_dir=destination,
         allow_patterns=["*.json", "*.txt", "*.safetensors", "1_Pooling/*", "README.md"],

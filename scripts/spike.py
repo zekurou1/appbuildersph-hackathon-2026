@@ -18,6 +18,9 @@ import subprocess
 import time
 from pathlib import Path
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -48,7 +51,7 @@ def main():
     from PIL import Image, ImageDraw, ImageFont
     from pypdf import PdfReader
     from reportlab.pdfgen import canvas
-    from sentence_transformers import SentenceTransformer
+    from omnifind.model import LocalEmbedder
 
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -75,15 +78,14 @@ def main():
     (corpus / "draft.md").write_text(documents[2], encoding="utf-8")
 
     started = time.perf_counter()
-    model = SentenceTransformer(str(model_path), device="cpu", local_files_only=True,
-                                trust_remote_code=False, model_kwargs={"use_safetensors": True})
+    model = LocalEmbedder(model_path)
     load_seconds = time.perf_counter() - started
-    vectors = model.encode(documents, normalize_embeddings=True)
+    vectors = model.encode(documents)
     query = "Which document explains getting my money back when I leave the apartment?"
     durations = []
     for _ in range(6):
         started = time.perf_counter()
-        query_vector = model.encode([query], normalize_embeddings=True)[0]
+        query_vector = model.encode([query])[0]
         scores = vectors @ query_vector
         durations.append(time.perf_counter() - started)
     assert vectors.shape == (3, 384)
@@ -118,7 +120,7 @@ def main():
         "model_id": manifest["model_id"], "model_revision": manifest["revision"],
         "asset_bytes": manifest["total_bytes"], "backend": "CPU / PyTorch",
         "versions": {name: importlib.metadata.version(name) for name in
-                     ["sentence-transformers", "torch", "transformers", "pypdf", "numpy", "Pillow"]},
+                     ["torch", "transformers", "pypdf", "numpy", "Pillow"]},
         "model_load_seconds": load_seconds, "query_seconds": durations,
         "synthetic_pdf": {"status": "passed", "page": 1},
         "semantic_paraphrase": {"status": "passed", "top_file": "scan_0042.pdf", "scores": scores.tolist()},

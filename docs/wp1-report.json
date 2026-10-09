@@ -1,0 +1,56 @@
+{
+  "phase": "WP1 feasibility",
+  "python": "3.12.15",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "physical_ram_bytes": 16504397824,
+  "current_process_rss_bytes": 449576960,
+  "model_id": "sentence-transformers/all-MiniLM-L6-v2",
+  "model_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+  "asset_bytes": 91617680,
+  "backend": "CPU / PyTorch",
+  "versions": {
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "pypdf": "6.20.0",
+    "numpy": "2.5.3",
+    "Pillow": "12.3.0"
+  },
+  "model_load_seconds": 8.199070499998925,
+  "query_seconds": [
+    0.013910599998780526,
+    0.010059299995191395,
+    0.008916300001146737,
+    0.011994499996944796,
+    0.01153139999951236,
+    0.00826779999624705
+  ],
+  "synthetic_pdf": {
+    "status": "passed",
+    "page": 1
+  },
+  "semantic_paraphrase": {
+    "status": "passed",
+    "top_file": "scan_0042.pdf",
+    "scores": [
+      0.5586293339729309,
+      0.1518319845199585,
+      0.026126563549041748
+    ]
+  },
+  "embedding_shape": [
+    3,
+    384
+  ],
+  "fts5": "passed",
+  "ocr": {
+    "status": "not-run",
+    "reason": "Tesseract executable unavailable"
+  },
+  "python_socket_connection_attempts": 0,
+  "limitations": [
+    "Three synthetic documents only; not a retrieval benchmark",
+    "Socket guard covers this Python process; not an OS egress audit",
+    "RSS is a point sample, not peak process-tree memory",
+    "UI, durable index, refresh/removal and packaging are not implemented"
+  ]
+}
