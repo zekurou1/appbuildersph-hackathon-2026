@@ -2,7 +2,9 @@
 
 PNG, JPG and JPEG now use installed `Windows.Media.Ocr` (English `en-US`) inside the existing Windows Job Object parser. The text then passes through the pinned local MiniLM tokenizer and embedding model. Original files stay in their selected folders. No remote OCR or generated descriptions are used.
 
-The preview explicitly says **OCR-recognized English text**. OCR can make transcription errors; Open original and Show in folder retain the same authorization/fingerprint checks. Image filters are available. Standalone identifier recovery searches the recognized text, so it cannot recover characters OCR misreads.
+The preview explicitly says **OCR-recognized English text** beside an original-image thumbnail. Original images are decoded in an asynchronous Job Object worker, constrained to a 640 × 360 PNG; the UI displays a small copy without retaining it in the index or a disk thumbnail cache. It checks the original fingerprint before/after decoding and revalidates scope before display. Switching selection, removing folders or clearing evidence cancels pending work and rejects queued old thumbnails. Closing waits for preview cancellation. In-app full-resolution zoom is not implemented.
+
+OCR can make transcription errors; Open original and Show in folder retain the same authorization/fingerprint checks. Image filters are available. Standalone identifier recovery searches the recognized text, so it cannot recover characters OCR misreads.
 
 Inputs are limited to 20 MiB, four million pixels and a 6000-pixel longest edge. Animated, mismatched, corrupt, blank and oversized images fail explicitly. Parser timeout, cancellation, root revocation and the 256 MiB job limit still apply. Manual refresh reprocesses images even when bytes are unchanged because Windows manages OCR language components separately from our pinned MiniLM assets.
 
@@ -12,7 +14,7 @@ Windows 11 build 26200, PyWinRT bindings 3.2.1, installed English OCR. The real 
 
 [OCR verification](ocr-verification.json) records six clean synthetic PNG/JPEG images with authored labels and hashes written before evaluation. Reports include exact transcription comparisons, gated hybrid top-five retrieval, similar receipt codes and absent codes. These are small author-created tests, not independent user or general OCR accuracy evidence. No policy or ranking tuning occurred during the run.
 
-The suite now executes 35 passing tests and skips one symbolic-link test. New tests use the actual installed OCR and cover indexing, filtering, restart, root removal preserving originals, blank/corrupt/oversized failure states. Test fixture embeddings verify storage only; the desktop and OCR evaluation scripts use real MiniLM.
+The suite now executes 36 passing tests and skips one symbolic-link test. New tests use the actual installed OCR and cover indexing, filtering, restart, root removal preserving originals, blank/corrupt/oversized failure states and bounded thumbnail generation rejecting changed originals. The desktop check also verifies thumbnail revocation and closing with pending preview work. Test fixture embeddings verify storage only; the desktop and OCR evaluation scripts use real MiniLM.
 
 ## Setup and release limits
 

@@ -64,6 +64,11 @@ def main():
             if time.monotonic() > deadline:
                 raise TimeoutError(f"GUI task exceeded verification deadline; stage: {window.status.text()}")
         app.processEvents()
+        while window.thumbnail_tasks:
+            app.processEvents()
+            time.sleep(.02)
+            if time.monotonic() > deadline:
+                raise TimeoutError("Thumbnail exceeded verification deadline")
         assert bool(window.last_error) == expect_error, window.last_error
 
     def search(query, mode="hybrid"):
@@ -106,6 +111,7 @@ def main():
         assert window.results and Path(window.results[0]["path"]).name == screenshot.name
         assert "OCR-recognized" in window.preview_location.text()
         assert "safety goggles" in window.preview.toPlainText()
+        assert window.image_preview.isVisible() and not window.image_preview.pixmap().isNull()
         search("SCH-642")
         assert window.last_response["status"] == "exact-identifier-matches"
         window.grab().save(str(output / "ocr-evidence.png"))
@@ -196,8 +202,9 @@ def main():
         window.navigate(1)
         QTest.mouseClick(window.refresh_button, Qt.MouseButton.LeftButton)
         settle()
-        search("INV-2048", "lexical")
+        search("SCH-642")
         assert window.preview.toPlainText() and window.open_button.isEnabled()
+        assert window.image_preview.isVisible()
         # A separate window can revoke cached evidence without a new search/click.
         second_window = Window(run / "data/index.sqlite", Path("models/minilm"))
         second_window.remove_folder(second_window.folder_list.item(0).data(Qt.ItemDataRole.UserRole))
@@ -206,12 +213,28 @@ def main():
             app.processEvents()
             time.sleep(.02)
         assert not window.preview.toPlainText() and not window.open_button.isEnabled()
-        assert window.query.text() == "INV-2048" and window.folder_list.count() == 0
+        assert not window.image_preview.isVisible() and window.image_preview.pixmap().isNull()
+        assert window.query.text() == "SCH-642" and window.folder_list.count() == 0
         second_window.close()
         window.add_folder(corpus)
         window.navigate(1)
         QTest.mouseClick(window.refresh_button, Qt.MouseButton.LeftButton)
         settle()
+        search("SCH-642")
+        # Close with a newly started image worker: cancellation must finish before destruction.
+        window.select_result(0)
+        assert window.thumbnail_tasks
+        window.close()
+        deadline = time.monotonic() + 5
+        while window.thumbnail_tasks and time.monotonic() < deadline:
+            app.processEvents()
+            time.sleep(.02)
+        app.processEvents()
+        assert not window.thumbnail_tasks and not window.isVisible()
+        window = Window(run / "data/index.sqlite", Path("models/minilm"))
+        window.model = model
+        window.show()
+        window.navigate(1)
         # Removing scope remains available while background work runs.
         QTest.mouseClick(window.refresh_button, Qt.MouseButton.LeftButton)
         assert window.remove_button.isEnabled()
@@ -240,6 +263,8 @@ def main():
                              "Native picker response was supplied by the test", "OS viewer and Explorer launches intercepted after path authorization",
                              "Synthetic three-file corpus only", "No OS-level network audit"],
                   "ocr": {"engine": "Windows.Media.Ocr", "verified": ["contained screenshot extraction", "real MiniLM paraphrase search", "exact screenshot code", "OCR evidence label and original path"]}}
+        report["ocr"]["verified"].append("bounded original-image thumbnail with asynchronous preview")
+        report["ocr"]["verified"].extend(["cross-window revocation clears thumbnail", "close cancels thumbnail before window destruction"])
         (output / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
         print(json.dumps(report, indent=2))
     finally:

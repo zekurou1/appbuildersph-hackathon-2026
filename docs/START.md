@@ -1,4 +1,4 @@
-﻿# OmniFind Local implementation status
+# OmniFind Local implementation status
 
 Updated October 10, 2026 (Asia/Manila), from master plan revision 2.
 
@@ -43,7 +43,7 @@ That historical failure is now addressed by a narrow [exact-identifier route](ID
 
 The desktop prototype connects folder selection, background indexing, search/evidence and deliberate file actions. Cancellation preserves committed content, removal revokes scope while work runs, and queued responses are suppressed when their scope changes. Preview/open also validate the expected indexed fingerprint. Native OS launches were intercepted during tests; offscreen verification is not manual usability or screen-reader validation. See [GUI report](gui-verification.json).
 
-The reliability phase added a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. The later containment phase adds parser memory/process/output limits and persistent cross-window privacy invalidation. Thirty-five tests now pass, including evaluator/identifier/OCR checks; one symbolic-link test remains skipped. See [reliability evidence](RELIABILITY_PHASE.md) and [containment evidence](CONTAINMENT_PHASE.md). Consented larger-corpus performance, low-resource device recovery and complete OS privacy audits remain.
+The reliability phase added a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. The later containment phase adds parser memory/process/output limits and persistent cross-window privacy invalidation. Thirty-six tests now pass, including evaluator/identifier/OCR checks; one symbolic-link test remains skipped. See [reliability evidence](RELIABILITY_PHASE.md) and [containment evidence](CONTAINMENT_PHASE.md). Consented larger-corpus performance, low-resource device recovery and complete OS privacy audits remain.
 
 ## UI contract
 

@@ -1,5 +1,7 @@
 """Native desktop journey backed by the real local core; no web content or server."""
 import argparse
+import base64
+import json
 import os
 import re
 import sqlite3
@@ -8,7 +10,7 @@ import threading
 from pathlib import Path
 
 from PySide6.QtCore import QThread, Signal, Qt, QUrl, QTimer
-from PySide6.QtGui import QDesktopServices, QFont, QFontDatabase, QKeySequence, QShortcut
+from PySide6.QtGui import QDesktopServices, QFont, QFontDatabase, QKeySequence, QShortcut, QPixmap
 from PySide6.QtWidgets import (
     QApplication, QCheckBox, QComboBox, QFileDialog, QFrame, QHBoxLayout, QLabel,
     QLineEdit, QListWidget, QListWidgetItem, QMainWindow, QMessageBox, QProgressBar, QGridLayout,
@@ -16,6 +18,36 @@ from PySide6.QtWidgets import (
 )
 
 from .core import Index, ScopeError, WorkCancelled, is_identifier_query
+from .worker import run_worker
+
+
+class ThumbnailTask(QThread):
+    result = Signal(object)
+
+    def __init__(self, database, source, parent=None):
+        super().__init__(parent)
+        self.database, self.source = database, source
+        self.cancel = threading.Event()
+
+    def run(self):
+        index = None
+        try:
+            index = Index(self.database)
+            def checkpoint():
+                if self.cancel.is_set():
+                    raise WorkCancelled("operation-cancelled")
+                index.source_path(self.source["file_id"], self.source["revision"])
+            checkpoint()
+            root = index.db.execute("SELECT path FROM roots WHERE id=?", (self.source["root_id"],)).fetchone()[0]
+            code, output = run_worker("omnifind.thumbnail", [self.source["path"], root, self.source["revision"]], checkpoint)
+            checkpoint()
+            if code == 0:
+                self.result.emit(json.loads(output))
+        except Exception:
+            pass  # Text evidence remains usable if an optional thumbnail fails.
+        finally:
+            if index:
+                index.close()
 
 
 def error_copy(error):
@@ -96,6 +128,8 @@ class Window(QMainWindow):
         self.file_action = file_action or self._native_action
         self.model = None
         self.task = None
+        self.thumbnail_tasks = []
+        self.preview_generation = 0
         self.closing = False
         self.results = []
         self.selected = None
@@ -250,6 +284,11 @@ class Window(QMainWindow):
         self.preview_path.setPlaceholderText("Select a result to inspect its matching passage.")
         self.preview_path.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
         self.preview_location = label("", "secondary", True)
+        self.image_preview = QLabel()
+        self.image_preview.setAccessibleName("Original image thumbnail")
+        self.image_preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.image_preview.setMaximumHeight(180)
+        self.image_preview.hide()
         self.preview = QTextBrowser()
         self.preview.setAccessibleName("Original matching passage")
         self.preview.setOpenExternalLinks(False)
@@ -266,7 +305,7 @@ class Window(QMainWindow):
         for button in [self.open_button, self.reveal_button, self.copy_button]:
             button.setEnabled(False)
             actions.addWidget(button)
-        for widget in [self.preview_title, self.preview_path, self.preview_location, self.preview]:
+        for widget in [self.preview_title, self.preview_path, self.preview_location, self.image_preview, self.preview]:
             preview_layout.addWidget(widget)
         preview_layout.addLayout(actions)
         self.splitter.addWidget(self.preview_panel)
@@ -404,6 +443,11 @@ class Window(QMainWindow):
                 self.filters.addWidget(widget, number // 2 if narrow else 0, number % 2 if narrow else number)
 
     def clear_preview(self):
+        self.preview_generation += 1
+        for task in self.thumbnail_tasks:
+            task.cancel.set()
+        self.image_preview.clear()
+        self.image_preview.hide()
         self.selected = None
         self.preview_title.setText("Check the source")
         self.preview_path.clear()
@@ -649,6 +693,7 @@ class Window(QMainWindow):
             self.preview.setPlainText(result["text"])
             if result.get("provenance") == "ocr-recognized":
                 self.preview_location.setText("OCR-recognized English text · check the original image for errors")
+                self.load_thumbnail(result)
             for button in [self.open_button, self.reveal_button, self.copy_button]:
                 button.setEnabled(True)
         except (OSError, ValueError, sqlite3.Error) as error:
@@ -656,6 +701,43 @@ class Window(QMainWindow):
         finally:
             if index:
                 index.close()
+
+    def load_thumbnail(self, source):
+        if len(self.thumbnail_tasks) >= 2:
+            return
+        generation = self.preview_generation
+        task = ThumbnailTask(self.database, source, self)
+        self.thumbnail_tasks.append(task)
+        def display(payload):
+            self.check_external_revocation()
+            if generation != self.preview_generation or self.selected != source:
+                return
+            index = None
+            try:
+                index = Index(self.database)
+                index.source_path(source["file_id"], source["revision"])
+                if not (0 < payload["width"] <= 640 and 0 < payload["height"] <= 360):
+                    return
+                png = base64.b64decode(payload["png"], validate=True)
+                if len(png) > 1024 * 1024:
+                    return
+                pixmap = QPixmap()
+                if pixmap.loadFromData(png, "PNG"):
+                    self.image_preview.setPixmap(pixmap.scaled(640, 180, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
+                    self.image_preview.show()
+            except (OSError, ValueError, sqlite3.Error, KeyError):
+                self.clear_preview()
+            finally:
+                if index:
+                    index.close()
+        def finished():
+            self.thumbnail_tasks.remove(task)
+            task.deleteLater()
+            if self.closing:
+                self.close()
+        task.result.connect(display)
+        task.finished.connect(finished)
+        task.start()
 
     def act_on_file(self, action):
         self.check_external_revocation()
@@ -691,6 +773,12 @@ class Window(QMainWindow):
         return QDesktopServices.openUrl(QUrl.fromLocalFile(str(path.parent)))
 
     def closeEvent(self, event):
+        if self.thumbnail_tasks:
+            self.closing = True
+            for task in self.thumbnail_tasks:
+                task.cancel.set()
+            event.ignore()
+            return
         if self.task and self.task.isRunning():
             self.closing = True
             self.cancel_work()

@@ -35,7 +35,10 @@
       "contained screenshot extraction",
       "real MiniLM paraphrase search",
       "exact screenshot code",
-      "OCR evidence label and original path"
+      "OCR evidence label and original path",
+      "bounded original-image thumbnail with asynchronous preview",
+      "cross-window revocation clears thumbnail",
+      "close cancels thumbnail before window destruction"
     ]
   }
 }

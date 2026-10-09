@@ -1,5 +1,8 @@
 """Actual installed OCR and scoped retrieval; fixture embeddings test storage only."""
 import json
+import hashlib
+import base64
+import io
 import os
 import tempfile
 import unittest
@@ -62,6 +65,21 @@ class OcrTests(unittest.TestCase):
             code, output = run_worker("omnifind.extract", [path, self.root])
             self.assertEqual(code, 1)
             self.assertEqual(json.loads(output)["error"], error)
+
+    def test_contained_original_thumbnail_and_changed_source_rejection(self):
+        source = self.picture("source.png", "ORIGINAL IMAGE - IMG-482")
+        digest = hashlib.sha256(source.read_bytes()).hexdigest()
+        code, output = run_worker("omnifind.thumbnail", [source, self.root, digest])
+        self.assertEqual(code, 0)
+        payload = json.loads(output)
+        with Image.open(io.BytesIO(base64.b64decode(payload["png"]))) as image:
+            self.assertEqual(image.format, "PNG")
+            self.assertLessEqual(image.width, 640)
+            self.assertLessEqual(image.height, 360)
+        self.picture("source.png", "CHANGED IMAGE")
+        code, output = run_worker("omnifind.thumbnail", [source, self.root, digest])
+        self.assertEqual(code, 1)
+        self.assertEqual(json.loads(output)["error"], "source-changed-refresh-required")
 
 
 if __name__ == "__main__":
