@@ -59,6 +59,8 @@ Refresh manually after changes. Stale/missing files are excluded until refreshed
 
 Settings → Clear index forgets all selected folders and removes derived index data after confirmation; originals and downloaded models are preserved. CLI equivalent: `python -m omnifind clear-index --yes` using the project's virtual environment. Competing refresh/add/clear operations receive a retry message. SQLite 3.42 or newer is required for secure FTS deletion. See [reliability and cleanup checks](docs/RELIABILITY_PHASE.md) for tested crash recovery and privacy limits.
 
+Windows extraction now runs in a Job Object with bounded memory, process count, duration and output. Cancellation/removal stops an active parser; model inference stops after its current call. Other desktop windows automatically clear revoked previews/actions through a persistent privacy epoch. See [containment verification](docs/CONTAINMENT_PHASE.md). OS-level network auditing and clean-machine packaging remain pending.
+
 For alternate synthetic test storage, pass `--db path/to/index.sqlite` **before** the subcommand. `--model` is also a global option. Lexical and filename search do not load model assets; indexing and semantic/hybrid search require them. Search does not execute retrieved content or automatically open files.
 
 ## Verification

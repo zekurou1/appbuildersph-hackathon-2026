@@ -7,7 +7,7 @@ import subprocess
 import threading
 from pathlib import Path
 
-from PySide6.QtCore import QThread, Signal, Qt, QUrl
+from PySide6.QtCore import QThread, Signal, Qt, QUrl, QTimer
 from PySide6.QtGui import QDesktopServices, QFont, QFontDatabase, QKeySequence, QShortcut
 from PySide6.QtWidgets import (
     QApplication, QCheckBox, QComboBox, QFileDialog, QFrame, QHBoxLayout, QLabel,
@@ -154,6 +154,38 @@ class Window(QMainWindow):
         self.set_theme(False)
         self.navigate(0)
         self.update_folders()
+        # Read-only connection avoids schema/setup writes on each privacy heartbeat.
+        self.scope_monitor = None
+        self.privacy_epoch = None
+        try:
+            self.scope_monitor = sqlite3.connect(self.database.resolve().as_uri() + "?mode=ro", uri=True, timeout=.05)
+            self.privacy_epoch = self.read_privacy_epoch()
+        except (sqlite3.Error, TypeError):
+            if self.scope_monitor:
+                self.scope_monitor.close()
+            self.scope_monitor = None
+        self.scope_timer = QTimer(self)
+        self.scope_timer.setInterval(250)
+        self.scope_timer.timeout.connect(self.check_external_revocation)
+        self.scope_timer.start()
+
+    def read_privacy_epoch(self):
+        return self.scope_monitor.execute("SELECT value FROM metadata WHERE key='privacy-epoch'").fetchone()[0]
+
+    def check_external_revocation(self):
+        if not self.scope_monitor or (self.task and self.task.isRunning() and self.task.operation == "clear"):
+            return
+        try:
+            epoch = self.read_privacy_epoch()
+        except sqlite3.Error:
+            return
+        if epoch != self.privacy_epoch:
+            self.privacy_epoch = epoch
+            self.cancel_work()
+            self.generation += 1
+            self.invalidate_results()
+            self.update_folders()
+            self.status.setText("Folder access changed. Previous evidence was cleared; search again in the remaining folders.")
 
     def _search_page(self):
         page = QWidget()
@@ -458,6 +490,7 @@ class Window(QMainWindow):
         try:
             index = Index(self.database)
             index.remove_root(root_id)
+            self.privacy_epoch = self.read_privacy_epoch() if self.scope_monitor else None
             self.generation += 1
             if self.task and self.task.isRunning():
                 self.task.cancel.set()
@@ -534,12 +567,17 @@ class Window(QMainWindow):
         self.update_folders()
 
     def clear_done(self, result):
+        self.privacy_epoch = self.read_privacy_epoch() if self.scope_monitor else None
         self.invalidate_results()
         self.update_folders()
         self.status.setText("Index cleared. Original files and models are kept. Add folders to start again." if result["compacted"]
                             else "Index cleared; storage compaction could not finish. Original files and models are kept.")
 
     def search_done(self, response):
+        generation = self.generation
+        self.check_external_revocation()
+        if generation != self.generation:
+            return
         index = None
         validated = []
         try:
@@ -615,6 +653,7 @@ class Window(QMainWindow):
                 index.close()
 
     def act_on_file(self, action):
+        self.check_external_revocation()
         if not self.selected:
             return
         index = None
@@ -652,6 +691,10 @@ class Window(QMainWindow):
             self.cancel_work()
             event.ignore()
         else:
+            if hasattr(self, "scope_timer"):
+                self.scope_timer.stop()
+                if self.scope_monitor:
+                    self.scope_monitor.close()
             event.accept()
 
 

@@ -173,6 +173,22 @@ def main():
         window.navigate(1)
         QTest.mouseClick(window.refresh_button, Qt.MouseButton.LeftButton)
         settle()
+        search("INV-2048", "lexical")
+        assert window.preview.toPlainText() and window.open_button.isEnabled()
+        # A separate window can revoke cached evidence without a new search/click.
+        second_window = Window(run / "data/index.sqlite", Path("models/minilm"))
+        second_window.remove_folder(second_window.folder_list.item(0).data(Qt.ItemDataRole.UserRole))
+        deadline = time.monotonic() + 2
+        while window.preview.toPlainText() and time.monotonic() < deadline:
+            app.processEvents()
+            time.sleep(.02)
+        assert not window.preview.toPlainText() and not window.open_button.isEnabled()
+        assert window.query.text() == "INV-2048" and window.folder_list.count() == 0
+        second_window.close()
+        window.add_folder(corpus)
+        window.navigate(1)
+        QTest.mouseClick(window.refresh_button, Qt.MouseButton.LeftButton)
+        settle()
         # Removing scope remains available while background work runs.
         QTest.mouseClick(window.refresh_button, Qt.MouseButton.LeftButton)
         assert window.remove_button.isEnabled()
@@ -193,6 +209,7 @@ def main():
                              "cancel preserves query and committed index", "filter invalidation preserves query",
                              "no-strong-match and weak-match recovery", "stale open rejected", "manual refresh",
                              "restart persistence", "missing-model failure and lexical recovery", "clear-index confirmation and rebuild preserve originals",
+                             "cross-window revocation clears preview and actions without interaction",
                              "folder revocation during work preserves originals"],
                   "python_socket_connect_attempts": len(attempts),
                   "limits": ["Offscreen QtTest, not manual Windows usability or screen-reader validation",

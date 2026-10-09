@@ -8,9 +8,9 @@ Main repository: [zekurou1/appbuildersph-hackathon-2026](https://github.com/zeku
 | --- | --- | --- |
 | WP1 | Real CPU embeddings and digital PDF extraction; asset manifest | Passed for text tier; screenshot OCR not tested |
 | WP2 | Labeled development queries, four retrieval baselines, grouped source evidence | MiniLM/BGE comparison and experimental weak-match gates completed on development data; frozen holdout remains |
-| WP3 | Atomic state, restart, refresh, root revocation | Cross-process refresh guard, killed embedding/commit/clear recovery and real Windows junction checks passed; parser process-tree and resource recovery remain |
+| WP3 | Atomic state, restart, refresh, root revocation | Cross-process guard, killed embedding/commit/clear recovery, junction boundaries and parser Job Object lifecycle/resource tests passed; low-resource device recovery remains |
 | WP4 | Select folder → index → search → inspect → open/reveal through UI | Working PySide6 desktop prototype; real inference and offscreen controls verified, native viewer/picker behavior still unverified |
-| WP5 | Fresh offline file/query, egress, boundaries, cleanup and recovery | Python socket-guarded fresh file/query and synthetic database cleanup checks passed; full OS egress/privacy audit pending |
+| WP5 | Fresh offline file/query, egress, boundaries, cleanup and recovery | Python socket-guarded inference, synthetic cleanup, bounded extraction and cross-window preview revocation passed; full OS egress/privacy audit pending |
 | WP6 | Holdout evaluation, clean setup and demo evidence | Pending |
 
 ## Verified runtime
@@ -23,7 +23,7 @@ No Tesseract executable was found on PATH. Scope remains digital PDF/TXT/MD. Scr
 
 ## Retrieval and persistence
 
-Explicit folders only. Overlapping roots, links/junctions, cloud placeholders and the index data folder are rejected/excluded. Workers recheck the path boundary before reading. PDF extraction runs in a separate process with a 20-second timeout, a 20 MiB file limit, 200-page limit and two-million-character output limit. Native parser peak-memory enforcement remains future work.
+Explicit folders only. Overlapping roots, links/junctions, cloud placeholders and the index data folder are rejected/excluded. Workers recheck the path boundary before reading. Windows extraction uses a Job Object with 256 MiB committed-memory ceiling, two-process ceiling (uv launcher plus Python), a 20-second timeout and 16 MiB stdout limit. Input limits remain 20 MiB, 200 PDF pages and two-million-character extracted text. Timeout, cancellation, revocation and supervisor kill terminate the job; this is not a filesystem/network sandbox.
 
 Chunks are original source slices using the pinned tokenizer: up to 160 tokens with 30 overlap. PDF evidence retains page numbers; text evidence retains line ranges. Source evidence is not generated prose. Inputs beyond the model token budget fail visibly rather than being silently truncated.
 
@@ -39,7 +39,7 @@ Twenty absent-target probes now support an experimental model-specific weak-matc
 
 The desktop prototype connects folder selection, background indexing, search/evidence and deliberate file actions. Cancellation preserves committed content, removal revokes scope while work runs, and queued responses are suppressed when their scope changes. Preview/open also validate the expected indexed fingerprint. Native OS launches were intercepted during tests; offscreen verification is not manual usability or screen-reader validation. See [GUI report](gui-verification.json).
 
-The next reliability phase adds a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed embedding/commit/clear workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. Nineteen tests pass; one symbolic-link test remains skipped. See [reliability and cleanup evidence](RELIABILITY_PHASE.md). Parser process-tree/memory limits, consented larger-corpus performance and complete OS privacy audits remain.
+The reliability phase added a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. The later containment phase adds parser memory/process/output limits and persistent cross-window privacy invalidation. Twenty-six tests pass; one symbolic-link test remains skipped. See [reliability evidence](RELIABILITY_PHASE.md) and [containment evidence](CONTAINMENT_PHASE.md). Consented larger-corpus performance, low-resource device recovery and complete OS privacy audits remain.
 
 ## UI contract
 

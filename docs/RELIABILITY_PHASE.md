@@ -1,5 +1,7 @@
 # Reliability and cleanup phase
 
+Historical phase report; later parser and cross-window work is recorded in [CONTAINMENT_PHASE.md](CONTAINMENT_PHASE.md).
+
 October 10, 2026. Windows prototype hardening; not a packaged-release privacy certification.
 
 ## Changes

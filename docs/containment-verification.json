@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-10",
+  "platform": "Windows 11 host",
+  "suite_passed": 26,
+  "suite_skipped": 1,
+  "skipped_reason": "Host does not permit symbolic-link creation; real directory junction test passed",
+  "worker_limits": {
+    "committed_memory_bytes_per_process_and_job": 268435456,
+    "active_processes": 2,
+    "wall_seconds": 20,
+    "stdout_bytes": 16777216
+  },
+  "worker_tests_passed": [
+    "timeout kills actual Python worker",
+    "checkpoint cancellation kills worker",
+    "512 MiB allocation denied by 128 MiB test ceiling",
+    "bounded output overflow",
+    "assignment failure does not start probe",
+    "supervisor-only kill destroys parser",
+    "root removal during extraction rejects commit and preserves original"
+  ],
+  "desktop": "Real MiniLM PDF/TXT journey and cross-window revocation passed in offscreen QtTest",
+  "limits": [
+    "Resource containment is not a filesystem or network sandbox",
+    "No OS-level egress audit",
+    "No native picker/viewer or screen-reader validation",
+    "No global desktop/model-process memory limit",
+    "Non-Windows indexing fails closed until equivalent containment exists"
+  ]
+}

@@ -5,12 +5,11 @@ import os
 import re
 import sqlite3
 import stat
-import subprocess
-import sys
 from pathlib import Path
 
 from .extract import MAX_FILE_BYTES, SUPPORTED
 from .locking import writer_lease
+from .worker import run_worker
 
 
 class ScopeError(ValueError):
@@ -71,6 +70,7 @@ class Index:
         if version and version[0] != "1":
             raise ValueError("unsupported-index-schema")
         self.db.execute("INSERT OR IGNORE INTO metadata VALUES ('schema','1')")
+        self.db.execute("INSERT OR IGNORE INTO metadata VALUES ('privacy-epoch','0')")
         self.db.commit()
 
     def close(self):
@@ -116,6 +116,10 @@ class Index:
         # One transaction removes scope and all text/vector/FTS derivatives.
         with self.db:
             self.db.execute("DELETE FROM roots WHERE id=?", (root_id,))
+            self._revoke_epoch()
+
+    def _revoke_epoch(self):
+        self.db.execute("UPDATE metadata SET value=CAST(value AS INTEGER)+1 WHERE key='privacy-epoch'")
 
     def clear(self):
         """Forget all selected folders and derived records, retaining originals/assets."""
@@ -123,6 +127,7 @@ class Index:
             with self.db:
                 self.db.execute("BEGIN IMMEDIATE")
                 self.db.execute("DELETE FROM roots")
+                self._revoke_epoch()
                 # Recreate FTS, including shadow tables; DELETE alone retains old segments.
                 self.db.execute("DROP TABLE chunk_fts")
                 self.db.execute("CREATE VIRTUAL TABLE chunk_fts USING fts5(filename, content)")
@@ -198,11 +203,17 @@ class Index:
                                 self.db.execute("UPDATE files SET size=?,mtime=? WHERE id=?",
                                                 (before.st_size, before.st_mtime_ns, current["id"]))
                             continue
-                    process = subprocess.run([sys.executable, "-m", "omnifind.extract", str(path), str(root)],
-                                             capture_output=True, text=True, encoding="utf-8", timeout=20)
-                    payload = json.loads(process.stdout)
-                    if process.returncode:
-                        raise ValueError(payload.get("error", "extraction-failed"))
+                    def extraction_checkpoint():
+                        checkpoint()
+                        self.authorize(root_id, path)
+                    returncode, output = run_worker("omnifind.extract", [path, root], extraction_checkpoint)
+                    if returncode:
+                        try:
+                            error = json.loads(output).get("error", "extraction-failed")
+                        except (ValueError, AttributeError):
+                            error = "extraction-resource-or-worker-failure"
+                        raise ValueError(error)
+                    payload = json.loads(output)
                     checkpoint()
                     self.authorize(root_id, path)
                     chunks = []
@@ -241,8 +252,6 @@ class Index:
                     # Revocation terminates processing; unsafe files are visible as skipped.
                     self._root(root_id)
                     self._record_error(root_id, path, "failed", "scope-or-placeholder")
-                except subprocess.TimeoutExpired:
-                    self._record_error(root_id, path, "failed", "extraction-timeout")
                 except Exception as error:
                     code = str(error) if isinstance(error, ValueError) and re.fullmatch(r"[a-z-]+", str(error)) else "processing-failed"
                     self._record_error(root_id, path, "failed", code)
