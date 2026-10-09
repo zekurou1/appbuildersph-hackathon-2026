@@ -7,11 +7,11 @@ Main repository: [zekurou1/appbuildersph-hackathon-2026](https://github.com/zeku
 | Package | Completion gate | Current state |
 | --- | --- | --- |
 | WP1 | Real CPU embeddings and digital PDF extraction; asset manifest | Passed for text tier; screenshot OCR not tested |
-| WP2 | Labeled development queries, four retrieval baselines, grouped source evidence | MiniLM/BGE comparison and experimental weak-match gates completed on development data; frozen holdout remains |
+| WP2 | Labeled development queries, four retrieval baselines, grouped source evidence | Development comparison and frozen synthetic holdout completed; unchanged hybrid gate hides 8/50 valid holdout queries |
 | WP3 | Atomic state, restart, refresh, root revocation | Cross-process guard, killed embedding/commit/clear recovery, junction boundaries and parser Job Object lifecycle/resource tests passed; low-resource device recovery remains |
 | WP4 | Select folder → index → search → inspect → open/reveal through UI | Working PySide6 desktop prototype; real inference and offscreen controls verified, native viewer/picker behavior still unverified |
 | WP5 | Fresh offline file/query, egress, boundaries, cleanup and recovery | Python socket-guarded inference, synthetic cleanup, bounded extraction and cross-window preview revocation passed; full OS egress/privacy audit pending |
-| WP6 | Holdout evaluation, clean setup and demo evidence | Pending |
+| WP6 | Holdout evaluation, clean setup and demo evidence | Frozen synthetic holdout measured; gated Recall@5 84% misses 85% target; clean setup/demo gates pending |
 
 ## Verified runtime
 
@@ -35,11 +35,13 @@ Manual refresh handles changed/new/deleted files and records unsupported/failed 
 
 See [retrieval development results](RETRIEVAL_RESULTS.md) and the machine-readable [evaluation report](retrieval-evaluation.json). Fifty present-target queries over ten synthetic documents compare filename, lexical, semantic and hybrid modes. This deliberately includes misleading filenames; it does not establish general superiority over filename search or production accuracy. Labels were authored with the corpus, not inferred from model winners.
 
-Twenty absent-target probes now support an experimental model-specific weak-match gate, with Show weaker matches recovery. MiniLM and BGE were compared in isolated indexes; MiniLM stays the compatible desktop default. See [desktop phase](DESKTOP_PHASE.md) and [comparison report](model-comparison.json). The fitted threshold rejects 19/20 absent MiniLM probes but also hides 6/50 present queries in development data. A frozen holdout, ambiguous/multi-relevant queries and consented user validation remain before release.
+Twenty absent-target probes support an experimental model-specific weak-match gate, with Show weaker matches recovery. MiniLM and BGE were compared in isolated indexes; MiniLM stays the compatible desktop default. See [desktop phase](DESKTOP_PHASE.md) and [comparison report](model-comparison.json). The fitted threshold rejects 19/20 absent MiniLM probes but also hides 6/50 present queries in development data. Those measurements were followed by the frozen holdout below; independent consented user validation remains before release.
+
+The later [frozen synthetic holdout](HOLDOUT_EVALUATION.md) adds 20 new documents, 50 labeled queries (including filters and multiple relevant files) and 20 absent targets. Raw hybrid finds every labeled target, but the unchanged policy hides eight identifier queries: gated Recall@5 is 84%, with 18/20 absent queries rejected. Warm gated p95 is 174 ms on this small Windows host corpus. Policy/ranking were not retuned. These author-created labels are not independent user validation; the current gated recall misses the proposed 85% gate.
 
 The desktop prototype connects folder selection, background indexing, search/evidence and deliberate file actions. Cancellation preserves committed content, removal revokes scope while work runs, and queued responses are suppressed when their scope changes. Preview/open also validate the expected indexed fingerprint. Native OS launches were intercepted during tests; offscreen verification is not manual usability or screen-reader validation. See [GUI report](gui-verification.json).
 
-The reliability phase added a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. The later containment phase adds parser memory/process/output limits and persistent cross-window privacy invalidation. Twenty-six tests pass; one symbolic-link test remains skipped. See [reliability evidence](RELIABILITY_PHASE.md) and [containment evidence](CONTAINMENT_PHASE.md). Consented larger-corpus performance, low-resource device recovery and complete OS privacy audits remain.
+The reliability phase added a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. The later containment phase adds parser memory/process/output limits and persistent cross-window privacy invalidation. Twenty-nine tests now pass, including three evaluator checks; one symbolic-link test remains skipped. See [reliability evidence](RELIABILITY_PHASE.md) and [containment evidence](CONTAINMENT_PHASE.md). Consented larger-corpus performance, low-resource device recovery and complete OS privacy audits remain.
 
 ## UI contract
 

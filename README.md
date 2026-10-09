@@ -75,4 +75,6 @@ The evaluation generates ten synthetic documents from `fixtures/development.json
 
 See [current status and gates](docs/START.md), [measured development results](docs/RETRIEVAL_RESULTS.md), and [master plan](docs/OMNIFIND_LOCAL_MASTER_PLAN.md).
 
+The [frozen holdout report](docs/HOLDOUT_EVALUATION.md) measures new synthetic documents without retuning the current policy. Raw hybrid retrieves all labeled targets, but its weak-match gate hides eight identifier searches and reaches 84% Recall@5. For exact codes, Words only avoids this semantic gate. Reproduce with `python scripts/evaluate_holdout.py` from the virtual environment; the runner rejects changes to frozen inputs or retrieval implementation. This is not user validation or a release pass.
+
 Technical references: [MiniLM model card and pooling recipe](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2), [Transformers local asset loading](https://huggingface.co/docs/transformers/installation#offline-mode), [SQLite FTS5](https://sqlite.org/fts5.html), [pypdf extraction](https://pypdf.readthedocs.io/en/stable/user/extract-text.html). Model card declares Apache-2.0; see [asset provenance](docs/model-assets.json). Local storage is not encryption.
