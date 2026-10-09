@@ -1,0 +1,15 @@
+[project]
+name = "omnifind-local"
+version = "0.1.0"
+description = "Windows local file retrieval feasibility spike"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "sentence-transformers>=5,<6",
+  "pypdf>=6,<7",
+  "Pillow>=11,<13",
+  "reportlab>=4,<5",
+  "psutil>=7,<8",
+]
+
+[tool.uv]
+package = false
