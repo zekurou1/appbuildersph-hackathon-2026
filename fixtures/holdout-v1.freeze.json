@@ -1,0 +1,16 @@
+{
+  "dataset": "synthetic-holdout-v1",
+  "frozen_before_first_evaluation": true,
+  "tuning_allowed": false,
+  "files": {
+    "fixtures/holdout-v1.json": "5b30257a5b51a4dce545e256aa179d55f51b9f12055e163fec2b80979c069936",
+    "config/retrieval-policy.json": "9019d597acb8e5d12bb974834fd446bf1ab155222cee38a7433d47e0bb77d55a",
+    "omnifind/core.py": "dd3d2b218b6b9c350179faa2c5a76dbe787e230207d220606723fd1a11018f48",
+    "omnifind/model.py": "1eaabddc8d066541de195fe9315a10c997af2000d1e5405e31618121d78d5309",
+    "omnifind/extract.py": "72a148a6bb74201812f73210ca5b62249556518884a94ac5a69e61fc6c2d9584",
+    "omnifind/worker.py": "31b3c4f20b3782ea827b3672ad678ec9533e515bad93e93b9f980246c844601b",
+    "omnifind/windows_job.py": "e3da18581765107f329aeb8115bfff342767b44351fa7ad05af4613a6379e62f",
+    "omnifind/worker_bootstrap.py": "602167db5cb8b6b6d8127864e89ecbf274ce8d41b37ce747c7aa9c217cecc4be"
+  },
+  "hash_normalization": "CRLF converted to LF for text source files"
+}
