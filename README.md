@@ -4,7 +4,7 @@ Describe a file you remember, search selected folders locally, and inspect match
 
 Main repository: [zekurou1/appbuildersph-hackathon-2026](https://github.com/zekurou1/appbuildersph-hackathon-2026).
 
-**Current artifact: a native desktop prototype plus command-line retrieval core.** Digital PDF/TXT/MD, local CPU embeddings, lexical/semantic/hybrid search, page/line evidence, SQLite persistence, manual refresh and folder removal are implemented. OCR, scanned PDFs, DOCX and a packaged installer are pending.
+**Current artifact: a native desktop prototype plus command-line retrieval core.** Digital PDF/TXT/MD, English PNG/JPEG OCR, local CPU embeddings, lexical/semantic/hybrid search, source evidence, SQLite persistence, manual refresh and folder removal are implemented. Scanned PDFs, DOCX and a packaged installer are pending. See [OCR verification and setup limits](docs/OCR_PHASE.md).
 
 ## Setup
 
@@ -14,6 +14,7 @@ Use Python 3.12 and [uv](https://docs.astral.sh/uv/). From the repository root:
 uv sync --locked
 & '.venv\Scripts\python.exe' scripts/prepare_model.py --destination models/minilm
 & '.venv\Scripts\python.exe' scripts/spike.py --model models/minilm
+& '.venv\Scripts\python.exe' scripts/check_setup.py
 ```
 
 This existing workspace also has `.tools\uv\uv.exe`; it is a local convenience, not distributed with Git. If using it, set `$env:UV_CACHE_DIR = Join-Path $PWD '.tools\cache'` before syncing.
@@ -66,7 +67,7 @@ For alternate synthetic test storage, pass `--db path/to/index.sqlite` **before*
 ## Verification
 
 ```powershell
-& '.venv\Scripts\python.exe' -m unittest discover -s tests -v
+& '.venv\Scripts\python.exe' -m unittest tests.test_core tests.test_recovery tests.test_worker tests.test_holdout tests.test_identifiers tests.test_ocr -v
 & '.venv\Scripts\python.exe' scripts/evaluate.py --model models/minilm
 & '.venv\Scripts\python.exe' scripts/verify_gui.py
 ```

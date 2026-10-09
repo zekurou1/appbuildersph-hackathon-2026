@@ -1,0 +1,5646 @@
+{
+  "dataset": "synthetic-holdout-v1",
+  "held_out_from_development_tuning": false,
+  "regression_after_reusing_holdout": true,
+  "independent_or_blinded_validation": false,
+  "freeze": {
+    "dataset": "synthetic-holdout-v1",
+    "frozen_before_first_evaluation": true,
+    "tuning_allowed": false,
+    "files": {
+      "fixtures/holdout-v1.json": "5b30257a5b51a4dce545e256aa179d55f51b9f12055e163fec2b80979c069936",
+      "config/retrieval-policy.json": "9019d597acb8e5d12bb974834fd446bf1ab155222cee38a7433d47e0bb77d55a",
+      "omnifind/core.py": "dd3d2b218b6b9c350179faa2c5a76dbe787e230207d220606723fd1a11018f48",
+      "omnifind/model.py": "1eaabddc8d066541de195fe9315a10c997af2000d1e5405e31618121d78d5309",
+      "omnifind/extract.py": "72a148a6bb74201812f73210ca5b62249556518884a94ac5a69e61fc6c2d9584",
+      "omnifind/worker.py": "31b3c4f20b3782ea827b3672ad678ec9533e515bad93e93b9f980246c844601b",
+      "omnifind/windows_job.py": "e3da18581765107f329aeb8115bfff342767b44351fa7ad05af4613a6379e62f",
+      "omnifind/worker_bootstrap.py": "602167db5cb8b6b6d8127864e89ecbf274ce8d41b37ce747c7aa9c217cecc4be"
+    },
+    "hash_normalization": "CRLF converted to LF for text source files",
+    "regression_implementation_changes": {
+      "omnifind/core.py": "012ef2d7a291f5152f907d68597b22db53315165adfb1df4f5fe16a32d443c13",
+      "omnifind/extract.py": "40ec387c53088e4ab83ff9834035ccf3be15fea9849b5b76316a094bf294900c"
+    }
+  },
+  "model": "sentence-transformers/all-MiniLM-L6-v2@1110a243fdf4706b3f48f1d95db1a4f5529b4d41:mean-normalized-v1",
+  "policy": {
+    "minimum_similarity": 0.3203275799751282,
+    "balanced_accuracy": 0.915,
+    "present_queries_retained": 44,
+    "present_queries": 50,
+    "absent_queries_rejected": 19,
+    "absent_queries": 20,
+    "calibration": "synthetic-development-only; not confidence or held-out validation"
+  },
+  "device": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.15",
+    "cpu": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+    "logical_cpus": 12,
+    "ram_bytes": 16504397824,
+    "sqlite": "3.53.1",
+    "backend": "CPU",
+    "model_threads": 4
+  },
+  "corpus": {
+    "files": 20,
+    "bytes": 14890,
+    "pdf_pages": 8,
+    "chunks": 20,
+    "selected_roots": 2,
+    "index_bytes": 122880
+  },
+  "model_load_seconds": 8.280580400001782,
+  "indexing_seconds": 5.8860465999969165,
+  "first_hybrid_request_seconds": 0.1256673999960185,
+  "warmup": "One hybrid-policy request before timed baseline calls; same process and OS cache",
+  "coverage": {
+    "searchable": 20,
+    "failed": 0,
+    "unsupported": 0,
+    "pending": 0,
+    "discovered": 20
+  },
+  "metrics": {
+    "filename": {
+      "queries": 50,
+      "top1": 0.02,
+      "hit_rate_at_5": 0.08,
+      "recall_at_5": 0.08,
+      "mrr_at_5": 0.039,
+      "warm_median_seconds": 0.0394200999980967,
+      "warm_p95_seconds": 0.054436695006006626,
+      "timed_calls": 50
+    },
+    "lexical": {
+      "queries": 50,
+      "top1": 0.9,
+      "hit_rate_at_5": 1,
+      "recall_at_5": 1.0,
+      "mrr_at_5": 0.939,
+      "warm_median_seconds": 0.045767049999994924,
+      "warm_p95_seconds": 0.0568069849989115,
+      "timed_calls": 50
+    },
+    "semantic": {
+      "queries": 50,
+      "top1": 0.94,
+      "hit_rate_at_5": 0.98,
+      "recall_at_5": 0.98,
+      "mrr_at_5": 0.96,
+      "warm_median_seconds": 0.06348780000189436,
+      "warm_p95_seconds": 0.07394947999673603,
+      "timed_calls": 50
+    },
+    "hybrid": {
+      "queries": 50,
+      "top1": 1,
+      "hit_rate_at_5": 1,
+      "recall_at_5": 1.0,
+      "mrr_at_5": 1.0,
+      "warm_median_seconds": 0.06027075000383775,
+      "warm_p95_seconds": 0.07152429499947174,
+      "timed_calls": 50
+    },
+    "hybrid-gated": {
+      "queries": 50,
+      "top1": 1,
+      "hit_rate_at_5": 1,
+      "recall_at_5": 1.0,
+      "mrr_at_5": 1.0,
+      "warm_median_seconds": 0.08254615000259946,
+      "warm_p95_seconds": 0.11839267000286782,
+      "timed_calls": 50
+    }
+  },
+  "by_kind": {
+    "filename": {
+      "filtered": {
+        "queries": 5,
+        "top1": 0,
+        "hit_rate_at_5": 0.2,
+        "recall_at_5": 0.2,
+        "mrr_at_5": 0.1,
+        "warm_median_seconds": 0.00631759999669157,
+        "warm_p95_seconds": 0.01722804000164615,
+        "timed_calls": 5
+      },
+      "identifier": {
+        "queries": 20,
+        "top1": 0,
+        "hit_rate_at_5": 0,
+        "recall_at_5": 0.0,
+        "mrr_at_5": 0,
+        "warm_median_seconds": 0.037844099999347236,
+        "warm_p95_seconds": 0.047372734995587966,
+        "timed_calls": 20
+      },
+      "multiple-relevant": {
+        "queries": 5,
+        "top1": 0,
+        "hit_rate_at_5": 0,
+        "recall_at_5": 0.0,
+        "mrr_at_5": 0,
+        "warm_median_seconds": 0.04653330000292044,
+        "warm_p95_seconds": 0.04819285999692511,
+        "timed_calls": 5
+      },
+      "paraphrase": {
+        "queries": 20,
+        "top1": 0.05,
+        "hit_rate_at_5": 0.15,
+        "recall_at_5": 0.15,
+        "mrr_at_5": 0.0725,
+        "warm_median_seconds": 0.04336869999679038,
+        "warm_p95_seconds": 0.05572026999907394,
+        "timed_calls": 20
+      }
+    },
+    "lexical": {
+      "filtered": {
+        "queries": 5,
+        "top1": 0.8,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 0.9,
+        "warm_median_seconds": 0.020743100001709536,
+        "warm_p95_seconds": 0.02388199999986682,
+        "timed_calls": 5
+      },
+      "identifier": {
+        "queries": 20,
+        "top1": 1,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 1.0,
+        "warm_median_seconds": 0.038955199997872114,
+        "warm_p95_seconds": 0.048437750002267424,
+        "timed_calls": 20
+      },
+      "multiple-relevant": {
+        "queries": 5,
+        "top1": 1,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 1.0,
+        "warm_median_seconds": 0.0562632000001031,
+        "warm_p95_seconds": 0.05730061999638565,
+        "timed_calls": 5
+      },
+      "paraphrase": {
+        "queries": 20,
+        "top1": 0.8,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 0.8725,
+        "warm_median_seconds": 0.0535727999995288,
+        "warm_p95_seconds": 0.05568297500503833,
+        "timed_calls": 20
+      }
+    },
+    "semantic": {
+      "filtered": {
+        "queries": 5,
+        "top1": 1,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 1.0,
+        "warm_median_seconds": 0.021097299999382813,
+        "warm_p95_seconds": 0.03235745999554638,
+        "timed_calls": 5
+      },
+      "identifier": {
+        "queries": 20,
+        "top1": 0.9,
+        "hit_rate_at_5": 0.95,
+        "recall_at_5": 0.95,
+        "mrr_at_5": 0.925,
+        "warm_median_seconds": 0.0631453500027419,
+        "warm_p95_seconds": 0.0702403850027622,
+        "timed_calls": 20
+      },
+      "multiple-relevant": {
+        "queries": 5,
+        "top1": 1,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 1.0,
+        "warm_median_seconds": 0.07084770000074059,
+        "warm_p95_seconds": 0.08081111999927089,
+        "timed_calls": 5
+      },
+      "paraphrase": {
+        "queries": 20,
+        "top1": 0.95,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 0.975,
+        "warm_median_seconds": 0.06373415000052773,
+        "warm_p95_seconds": 0.06764526999977534,
+        "timed_calls": 20
+      }
+    },
+    "hybrid": {
+      "filtered": {
+        "queries": 5,
+        "top1": 1,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 1.0,
+        "warm_median_seconds": 0.018081900001561735,
+        "warm_p95_seconds": 0.026704840001184494,
+        "timed_calls": 5
+      },
+      "identifier": {
+        "queries": 20,
+        "top1": 1,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 1.0,
+        "warm_median_seconds": 0.059862350000912556,
+        "warm_p95_seconds": 0.06755738999927417,
+        "timed_calls": 20
+      },
+      "multiple-relevant": {
+        "queries": 5,
+        "top1": 1,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 1.0,
+        "warm_median_seconds": 0.06003950000012992,
+        "warm_p95_seconds": 0.06215146000031382,
+        "timed_calls": 5
+      },
+      "paraphrase": {
+        "queries": 20,
+        "top1": 1,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 1.0,
+        "warm_median_seconds": 0.06216119999953662,
+        "warm_p95_seconds": 0.07431640999893717,
+        "timed_calls": 20
+      }
+    },
+    "hybrid-gated": {
+      "filtered": {
+        "queries": 5,
+        "top1": 1,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 1.0,
+        "warm_median_seconds": 0.05088850000174716,
+        "warm_p95_seconds": 0.05923744000319857,
+        "timed_calls": 5
+      },
+      "identifier": {
+        "queries": 20,
+        "top1": 1,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 1.0,
+        "warm_median_seconds": 0.039287449999392265,
+        "warm_p95_seconds": 0.04882270999805769,
+        "timed_calls": 20
+      },
+      "multiple-relevant": {
+        "queries": 5,
+        "top1": 1,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 1.0,
+        "warm_median_seconds": 0.11571280000498518,
+        "warm_p95_seconds": 0.11703083999454975,
+        "timed_calls": 5
+      },
+      "paraphrase": {
+        "queries": 20,
+        "top1": 1,
+        "hit_rate_at_5": 1,
+        "recall_at_5": 1.0,
+        "mrr_at_5": 1.0,
+        "warm_median_seconds": 0.11503215000266209,
+        "warm_p95_seconds": 0.11861208999544033,
+        "timed_calls": 20
+      }
+    }
+  },
+  "observations": {
+    "filename": [
+      {
+        "query": "The note telling us to fill containers before they wash the building tank",
+        "targets": [
+          "water"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "outage",
+          "transfer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.042371000003186055
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "WTR-612",
+        "targets": [
+          "water"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03872070000215899
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The bill for fixing the burst pipe under the kitchen sink",
+        "targets": [
+          "plumber"
+        ],
+        "kind": "paraphrase",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04239949999464443
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "PLB-613",
+        "targets": [
+          "plumber"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04726519999530865
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "Rules for claiming back cab money after visiting a customer",
+        "targets": [
+          "transit"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "water",
+          "plumber",
+          "seminar",
+          "venue",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04757629999949131
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "EXP-710",
+        "targets": [
+          "transit"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.036656600001151673
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "What was the food allowance when we travelled overnight for work?",
+        "targets": [
+          "meal"
+        ],
+        "kind": "paraphrase",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.037844300000870135
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "EXP-711",
+        "targets": [
+          "meal"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03741219999938039
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The instructions about sending weekly hours before Friday afternoon",
+        "targets": [
+          "timesheet"
+        ],
+        "kind": "paraphrase",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.045649300001969095
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "TMS-901",
+        "targets": [
+          "timesheet"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03772409999510273
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "Where was the note about booking the room for eight people?",
+        "targets": [
+          "meeting"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "outage",
+          "transfer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.044337899998936336
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "MTG-902",
+        "targets": [
+          "meeting"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03783799999655457
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "Instructions for the laundry machine that leaves water inside",
+        "targets": [
+          "washer"
+        ],
+        "kind": "paraphrase",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03842089999670861
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "WSH-802",
+        "targets": [
+          "washer"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03852249999908963
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The advice for a fridge whose freezer still works but the food section is warm",
+        "targets": [
+          "fridge"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "water",
+          "plumber",
+          "seminar",
+          "venue",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05869700000039302
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "FRG-803",
+        "targets": [
+          "fridge"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.037754600001790095
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "Proof that Mara joined the session about responsible use of data",
+        "targets": [
+          "seminar"
+        ],
+        "kind": "paraphrase",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03817919999710284
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "SEM-440",
+        "targets": [
+          "seminar"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03768110000237357
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The booking for the training space with a projector and forty seats",
+        "targets": [
+          "venue"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "water",
+          "plumber",
+          "seminar",
+          "venue",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05556359999900451
+        ],
+        "top1": false,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 0.25
+      },
+      {
+        "query": "VEN-441",
+        "targets": [
+          "venue"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04525139999896055
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "Where is the message telling me to collect the package before the counter shuts?",
+        "targets": [
+          "pickup"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "seminar",
+          "venue"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.040781899995636195
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "PCL-320",
+        "targets": [
+          "pickup"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.047236400001565926
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The courier message saying they came when the house was empty",
+        "targets": [
+          "attempt"
+        ],
+        "kind": "paraphrase",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03972139999677893
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "PCL-321",
+        "targets": [
+          "attempt"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03743730000132928
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The form for moving to a different lab class without dropping the subject",
+        "targets": [
+          "course"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "water",
+          "plumber",
+          "seminar",
+          "venue",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05518230000598123
+        ],
+        "top1": false,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 0.2
+      },
+      {
+        "query": "CRS-530",
+        "targets": [
+          "course"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.0378502000021399
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "Instructions for identifying my tuition transfer and emailing the receipt",
+        "targets": [
+          "fee"
+        ],
+        "kind": "paraphrase",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04782820000400534
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "FEE-531",
+        "targets": [
+          "fee"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03911879999941448
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "How could I stop my gym days being used while I was away?",
+        "targets": [
+          "pause"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "pause",
+          "cancel",
+          "handover",
+          "vpn"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05352540000603767
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "FRZ-220",
+        "targets": [
+          "pause"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03725950000080047
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The rules for ending the fitness contract and getting unused months refunded",
+        "targets": [
+          "cancel"
+        ],
+        "kind": "paraphrase",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.046854100000928156
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "CAN-221",
+        "targets": [
+          "cancel"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.038246000003709923
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The network message asking us to leave the modem on during street cable repairs",
+        "targets": [
+          "outage"
+        ],
+        "kind": "paraphrase",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03783750000002328
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "NET-660",
+        "targets": [
+          "outage"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04941590000089491
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The instructions for taking my internet connection to a new flat",
+        "targets": [
+          "transfer"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "water",
+          "plumber",
+          "seminar",
+          "venue",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04660850000072969
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "MOV-661",
+        "targets": [
+          "transfer"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.037014100002124906
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The handover explaining what to check after restoring the dashboard database",
+        "targets": [
+          "handover"
+        ],
+        "kind": "paraphrase",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.037510399997700006
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "HND-880",
+        "targets": [
+          "handover"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04421770000044489
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The help note for remote access refusing my new password",
+        "targets": [
+          "vpn"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "outage",
+          "transfer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04211779999604914
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "VPN-881",
+        "targets": [
+          "vpn"
+        ],
+        "kind": "identifier",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03665029999683611
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "Both expense policies for approved work travel",
+        "targets": [
+          "transit",
+          "meal"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.047205499999108724
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The two courier messages about whether a parcel can be collected",
+        "targets": [
+          "pickup",
+          "attempt"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "water",
+          "plumber",
+          "transit",
+          "meal",
+          "seminar"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.045995100001164246
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "Gym paperwork for pausing or ending a membership",
+        "targets": [
+          "pause",
+          "cancel"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "pickup",
+          "attempt",
+          "water",
+          "plumber",
+          "seminar"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04653330000292044
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "Internet notices about a broken cable or moving service",
+        "targets": [
+          "outage",
+          "transfer"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "pickup",
+          "attempt",
+          "water",
+          "plumber",
+          "seminar"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.048439699996379204
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The appliance notes about drainage and cooling",
+        "targets": [
+          "washer",
+          "fridge"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "outage",
+          "transfer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04126100000576116
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The receipt requirement for taxi visits",
+        "targets": [
+          "transit"
+        ],
+        "folder": "work",
+        "suffix": "pdf",
+        "kind": "filtered",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.00631759999669157
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The maintenance notice about rooftop water storage",
+        "targets": [
+          "water"
+        ],
+        "folder": "home",
+        "suffix": "pdf",
+        "kind": "filtered",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.017353800001728814
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "A note about picking up a parcel with identification",
+        "targets": [
+          "pickup"
+        ],
+        "folder": "home",
+        "suffix": "txt",
+        "kind": "filtered",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.004657200006477069
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The laboratory section change instructions",
+        "targets": [
+          "course"
+        ],
+        "folder": "work",
+        "suffix": "md",
+        "kind": "filtered",
+        "returned": [],
+        "status": "raw-candidates",
+        "seconds": [
+          0.004932800002279691
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "Saved credentials after changing a remote-access password",
+        "targets": [
+          "vpn"
+        ],
+        "folder": "work",
+        "suffix": "txt",
+        "kind": "filtered",
+        "returned": [
+          "handover",
+          "vpn"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.016725000001315493
+        ],
+        "top1": false,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 0.5
+      }
+    ],
+    "lexical": [
+      {
+        "query": "The note telling us to fill containers before they wash the building tank",
+        "targets": [
+          "water"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "water",
+          "washer",
+          "fridge",
+          "venue",
+          "transfer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06699510000180453
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "WTR-612",
+        "targets": [
+          "water"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "water"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.044026699993992224
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The bill for fixing the burst pipe under the kitchen sink",
+        "targets": [
+          "plumber"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "plumber",
+          "pause",
+          "pickup",
+          "transit",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05411620000086259
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "PLB-613",
+        "targets": [
+          "plumber"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "plumber"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04761780000262661
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Rules for claiming back cab money after visiting a customer",
+        "targets": [
+          "transit"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "pause",
+          "timesheet",
+          "cancel",
+          "pickup",
+          "transit"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04593179999938002
+        ],
+        "top1": false,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 0.2
+      },
+      {
+        "query": "EXP-710",
+        "targets": [
+          "transit"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "transit"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.039633099993807264
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "What was the food allowance when we travelled overnight for work?",
+        "targets": [
+          "meal"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "attempt",
+          "fridge",
+          "plumber",
+          "meal",
+          "washer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05321399999957066
+        ],
+        "top1": false,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 0.25
+      },
+      {
+        "query": "EXP-711",
+        "targets": [
+          "meal"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "meal"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03945509999903152
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The instructions about sending weekly hours before Friday afternoon",
+        "targets": [
+          "timesheet"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "timesheet",
+          "seminar",
+          "pause",
+          "meeting",
+          "venue"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05339600000297651
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "TMS-901",
+        "targets": [
+          "timesheet"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "timesheet"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04687040000135312
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Where was the note about booking the room for eight people?",
+        "targets": [
+          "meeting"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "meeting",
+          "attempt",
+          "venue",
+          "plumber",
+          "fridge"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.045090799998433795
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "MTG-902",
+        "targets": [
+          "meeting"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "meeting"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.038545999996131286
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Instructions for the laundry machine that leaves water inside",
+        "targets": [
+          "washer"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "water",
+          "washer",
+          "pause",
+          "pickup",
+          "transit"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05446020000090357
+        ],
+        "top1": false,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 0.5
+      },
+      {
+        "query": "WSH-802",
+        "targets": [
+          "washer"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "washer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03882319999684114
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The advice for a fridge whose freezer still works but the food section is warm",
+        "targets": [
+          "fridge"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "fridge",
+          "pause",
+          "pickup",
+          "transit",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05346329999883892
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "FRG-803",
+        "targets": [
+          "fridge"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "fridge"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04858499999681953
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Proof that Mara joined the session about responsible use of data",
+        "targets": [
+          "seminar"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "fee",
+          "seminar",
+          "attempt",
+          "fridge",
+          "transfer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04538779999711551
+        ],
+        "top1": false,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 0.5
+      },
+      {
+        "query": "SEM-440",
+        "targets": [
+          "seminar"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "seminar"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03895789999660337
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The booking for the training space with a projector and forty seats",
+        "targets": [
+          "venue"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "venue",
+          "fridge",
+          "pause",
+          "pickup",
+          "transit"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05407289999857312
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "VEN-441",
+        "targets": [
+          "venue"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "venue"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.037592699998640455
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Where is the message telling me to collect the package before the counter shuts?",
+        "targets": [
+          "pickup"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "pickup",
+          "attempt",
+          "venue",
+          "transfer",
+          "pause"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05435120000038296
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "PCL-320",
+        "targets": [
+          "pickup"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "pickup"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.0465734999961569
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The courier message saying they came when the house was empty",
+        "targets": [
+          "attempt"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "attempt",
+          "washer",
+          "plumber",
+          "outage",
+          "fridge"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04709490000095684
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "PCL-321",
+        "targets": [
+          "attempt"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.038952499999140855
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The form for moving to a different lab class without dropping the subject",
+        "targets": [
+          "course"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "course",
+          "fee",
+          "venue",
+          "pause",
+          "transit"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.053682300000218675
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "CRS-530",
+        "targets": [
+          "course"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03791909999563359
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Instructions for identifying my tuition transfer and emailing the receipt",
+        "targets": [
+          "fee"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "fee",
+          "transit",
+          "transfer",
+          "pause",
+          "pickup"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05377069999667583
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "FEE-531",
+        "targets": [
+          "fee"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "fee"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03855479999765521
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "How could I stop my gym days being used while I was away?",
+        "targets": [
+          "pause"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "pause",
+          "attempt",
+          "cancel",
+          "plumber",
+          "water"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04422859999613138
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "FRZ-220",
+        "targets": [
+          "pause"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "pause"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04843000000255415
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The rules for ending the fitness contract and getting unused months refunded",
+        "targets": [
+          "cancel"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "cancel",
+          "meeting",
+          "pause",
+          "pickup",
+          "transit"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.044839099995442666
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "CAN-221",
+        "targets": [
+          "cancel"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "cancel"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.038228999997954816
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The network message asking us to leave the modem on during street cable repairs",
+        "targets": [
+          "outage"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "outage",
+          "plumber",
+          "meal",
+          "course",
+          "seminar"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05498680000164313
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "NET-660",
+        "targets": [
+          "outage"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "outage"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03851279999798862
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The instructions for taking my internet connection to a new flat",
+        "targets": [
+          "transfer"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "transfer",
+          "outage",
+          "venue",
+          "pause",
+          "transit"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04560230000060983
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "MOV-661",
+        "targets": [
+          "transfer"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "transfer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03830459999880986
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The handover explaining what to check after restoring the dashboard database",
+        "targets": [
+          "handover"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "handover",
+          "fridge",
+          "pause",
+          "washer",
+          "vpn"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05407250000280328
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "HND-880",
+        "targets": [
+          "handover"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03858060000493424
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The help note for remote access refusing my new password",
+        "targets": [
+          "vpn"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "vpn",
+          "transfer",
+          "fridge",
+          "cancel",
+          "washer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.055087600005208515
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "VPN-881",
+        "targets": [
+          "vpn"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "vpn"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03994510000484297
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Both expense policies for approved work travel",
+        "targets": [
+          "transit",
+          "meal"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "transit",
+          "meal",
+          "seminar",
+          "course",
+          "pause"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05725189999793656
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The two courier messages about whether a parcel can be collected",
+        "targets": [
+          "pickup",
+          "attempt"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "attempt",
+          "cancel",
+          "pause",
+          "pickup",
+          "water"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05731279999599792
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Gym paperwork for pausing or ending a membership",
+        "targets": [
+          "pause",
+          "cancel"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "pause",
+          "cancel",
+          "pickup",
+          "transit",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.055758299997251015
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Internet notices about a broken cable or moving service",
+        "targets": [
+          "outage",
+          "transfer"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "outage",
+          "transfer",
+          "water",
+          "fridge",
+          "washer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.054449199997179676
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The appliance notes about drainage and cooling",
+        "targets": [
+          "washer",
+          "fridge"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "fridge",
+          "transfer",
+          "outage",
+          "handover",
+          "washer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.0562632000001031
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The receipt requirement for taxi visits",
+        "targets": [
+          "transit"
+        ],
+        "folder": "work",
+        "suffix": "pdf",
+        "kind": "filtered",
+        "returned": [
+          "transit",
+          "venue",
+          "seminar",
+          "meal"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.021493599997484125
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The maintenance notice about rooftop water storage",
+        "targets": [
+          "water"
+        ],
+        "folder": "home",
+        "suffix": "pdf",
+        "kind": "filtered",
+        "returned": [
+          "water",
+          "cancel",
+          "pause",
+          "plumber"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.024479100000462495
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "A note about picking up a parcel with identification",
+        "targets": [
+          "pickup"
+        ],
+        "folder": "home",
+        "suffix": "txt",
+        "kind": "filtered",
+        "returned": [
+          "attempt",
+          "pickup",
+          "washer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.009993699997721706
+        ],
+        "top1": false,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 0.5
+      },
+      {
+        "query": "The laboratory section change instructions",
+        "targets": [
+          "course"
+        ],
+        "folder": "work",
+        "suffix": "md",
+        "kind": "filtered",
+        "returned": [
+          "course",
+          "fee",
+          "meeting"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.009843200001341756
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Saved credentials after changing a remote-access password",
+        "targets": [
+          "vpn"
+        ],
+        "folder": "work",
+        "suffix": "txt",
+        "kind": "filtered",
+        "returned": [
+          "vpn",
+          "timesheet",
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.020743100001709536
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      }
+    ],
+    "semantic": [
+      {
+        "query": "The note telling us to fill containers before they wash the building tank",
+        "targets": [
+          "water"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "water",
+          "washer",
+          "timesheet",
+          "fridge",
+          "pickup"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.062167199997929856
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "WTR-612",
+        "targets": [
+          "water"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "water",
+          "pickup",
+          "attempt",
+          "handover",
+          "venue"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06277640000189422
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The bill for fixing the burst pipe under the kitchen sink",
+        "targets": [
+          "plumber"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "plumber",
+          "meal",
+          "washer",
+          "water",
+          "pickup"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06397589999687625
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "PLB-613",
+        "targets": [
+          "plumber"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "plumber",
+          "pickup",
+          "attempt",
+          "course",
+          "transfer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06266179999511223
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Rules for claiming back cab money after visiting a customer",
+        "targets": [
+          "transit"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "transit",
+          "meal",
+          "cancel",
+          "pickup",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06802089999837335
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "EXP-710",
+        "targets": [
+          "transit"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "transit",
+          "pickup",
+          "transfer",
+          "handover",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06149809999624267
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "What was the food allowance when we travelled overnight for work?",
+        "targets": [
+          "meal"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "meal",
+          "transit",
+          "timesheet",
+          "pause",
+          "meeting"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06531410000025062
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "EXP-711",
+        "targets": [
+          "meal"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "pickup",
+          "transfer",
+          "attempt",
+          "transit",
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.0699116000032518
+        ],
+        "top1": false,
+        "hit": false,
+        "recall": 0.0,
+        "rr": 0
+      },
+      {
+        "query": "The instructions about sending weekly hours before Friday afternoon",
+        "targets": [
+          "timesheet"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "timesheet",
+          "water",
+          "pickup",
+          "venue",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06427650000114227
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "TMS-901",
+        "targets": [
+          "timesheet"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "timesheet",
+          "seminar",
+          "venue",
+          "course",
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06290599999920232
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Where was the note about booking the room for eight people?",
+        "targets": [
+          "meeting"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "meeting",
+          "venue",
+          "seminar",
+          "meal",
+          "pickup"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06531900000118185
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "MTG-902",
+        "targets": [
+          "meeting"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "meeting",
+          "pickup",
+          "attempt",
+          "transfer",
+          "outage"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.0635647999952198
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Instructions for the laundry machine that leaves water inside",
+        "targets": [
+          "washer"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "washer",
+          "water",
+          "timesheet",
+          "fridge",
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06268290000298293
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "WSH-802",
+        "targets": [
+          "washer"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "washer",
+          "water",
+          "transfer",
+          "venue",
+          "timesheet"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06287460000021383
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The advice for a fridge whose freezer still works but the food section is warm",
+        "targets": [
+          "fridge"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "fridge",
+          "pause",
+          "meal",
+          "outage",
+          "meeting"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06377520000387449
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "FRG-803",
+        "targets": [
+          "fridge"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "fridge",
+          "transfer",
+          "pickup",
+          "vpn",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.0637194000009913
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Proof that Mara joined the session about responsible use of data",
+        "targets": [
+          "seminar"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "seminar",
+          "handover",
+          "timesheet",
+          "transit",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.062254200005554594
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "SEM-440",
+        "targets": [
+          "seminar"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "seminar",
+          "timesheet",
+          "pickup",
+          "course",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06364000000030501
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The booking for the training space with a projector and forty seats",
+        "targets": [
+          "venue"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "venue",
+          "meeting",
+          "seminar",
+          "timesheet",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.0637907999989693
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "VEN-441",
+        "targets": [
+          "venue"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "venue",
+          "timesheet",
+          "seminar",
+          "handover",
+          "pickup"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06352960000367602
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Where is the message telling me to collect the package before the counter shuts?",
+        "targets": [
+          "pickup"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "attempt",
+          "pickup",
+          "timesheet",
+          "meeting",
+          "water"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06762549999984913
+        ],
+        "top1": false,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 0.5
+      },
+      {
+        "query": "PCL-320",
+        "targets": [
+          "pickup"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "pickup",
+          "attempt",
+          "outage",
+          "course",
+          "seminar"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06943009999667993
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The courier message saying they came when the house was empty",
+        "targets": [
+          "attempt"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "attempt",
+          "pickup",
+          "water",
+          "transfer",
+          "meeting"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06344600000011269
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "PCL-321",
+        "targets": [
+          "attempt"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "pickup",
+          "attempt",
+          "outage",
+          "meeting",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.061778299997968134
+        ],
+        "top1": false,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 0.5
+      },
+      {
+        "query": "The form for moving to a different lab class without dropping the subject",
+        "targets": [
+          "course"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "course",
+          "fee",
+          "transfer",
+          "timesheet",
+          "venue"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06369309999718098
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "CRS-530",
+        "targets": [
+          "course"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "course",
+          "pickup",
+          "attempt",
+          "outage",
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06244950000109384
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Instructions for identifying my tuition transfer and emailing the receipt",
+        "targets": [
+          "fee"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "fee",
+          "course",
+          "seminar",
+          "transfer",
+          "pickup"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06278700000257231
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "FEE-531",
+        "targets": [
+          "fee"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "fee",
+          "pickup",
+          "transfer",
+          "plumber",
+          "venue"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.060991300000750925
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "How could I stop my gym days being used while I was away?",
+        "targets": [
+          "pause"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "pause",
+          "cancel",
+          "venue",
+          "meeting",
+          "water"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06227039999794215
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "FRZ-220",
+        "targets": [
+          "pause"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "pause",
+          "fridge",
+          "attempt",
+          "pickup",
+          "transfer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06133340000087628
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The rules for ending the fitness contract and getting unused months refunded",
+        "targets": [
+          "cancel"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "cancel",
+          "pause",
+          "meal",
+          "course",
+          "timesheet"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06520730000192998
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "CAN-221",
+        "targets": [
+          "cancel"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "cancel",
+          "timesheet",
+          "pickup",
+          "course",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06208660000265809
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The network message asking us to leave the modem on during street cable repairs",
+        "targets": [
+          "outage"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "outage",
+          "transfer",
+          "water",
+          "attempt",
+          "seminar"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06262950000382261
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "NET-660",
+        "targets": [
+          "outage"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "outage",
+          "transfer",
+          "pickup",
+          "attempt",
+          "meeting"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06338470000628149
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The instructions for taking my internet connection to a new flat",
+        "targets": [
+          "transfer"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "transfer",
+          "outage",
+          "fee",
+          "pickup",
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06161900000006426
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "MOV-661",
+        "targets": [
+          "transfer"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "transfer",
+          "pickup",
+          "attempt",
+          "handover",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.0764872999934596
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The handover explaining what to check after restoring the dashboard database",
+        "targets": [
+          "handover"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "handover",
+          "course",
+          "pickup",
+          "cancel",
+          "outage"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06323739999788813
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "HND-880",
+        "targets": [
+          "handover"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "handover",
+          "outage",
+          "pickup",
+          "venue",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06388390000211075
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The help note for remote access refusing my new password",
+        "targets": [
+          "vpn"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "vpn",
+          "cancel",
+          "course",
+          "fee",
+          "washer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06749320000380976
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "VPN-881",
+        "targets": [
+          "vpn"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "vpn",
+          "transfer",
+          "outage",
+          "venue",
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06654449999768985
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Both expense policies for approved work travel",
+        "targets": [
+          "transit",
+          "meal"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "meal",
+          "transit",
+          "cancel",
+          "fee",
+          "timesheet"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.07084770000074059
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The two courier messages about whether a parcel can be collected",
+        "targets": [
+          "pickup",
+          "attempt"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "attempt",
+          "pickup",
+          "transit",
+          "seminar",
+          "meal"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.08176739999908023
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Gym paperwork for pausing or ending a membership",
+        "targets": [
+          "pause",
+          "cancel"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "cancel",
+          "pause",
+          "venue",
+          "course",
+          "seminar"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06648370000038994
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Internet notices about a broken cable or moving service",
+        "targets": [
+          "outage",
+          "transfer"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "outage",
+          "transfer",
+          "attempt",
+          "water",
+          "pickup"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06986809999943944
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The appliance notes about drainage and cooling",
+        "targets": [
+          "washer",
+          "fridge"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "fridge",
+          "water",
+          "washer",
+          "plumber",
+          "meal"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.07698600000003353
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The receipt requirement for taxi visits",
+        "targets": [
+          "transit"
+        ],
+        "folder": "work",
+        "suffix": "pdf",
+        "kind": "filtered",
+        "returned": [
+          "transit",
+          "meal",
+          "seminar",
+          "venue"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.03388749999430729
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The maintenance notice about rooftop water storage",
+        "targets": [
+          "water"
+        ],
+        "folder": "home",
+        "suffix": "pdf",
+        "kind": "filtered",
+        "returned": [
+          "water",
+          "plumber",
+          "cancel",
+          "pause"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.021097299999382813
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "A note about picking up a parcel with identification",
+        "targets": [
+          "pickup"
+        ],
+        "folder": "home",
+        "suffix": "txt",
+        "kind": "filtered",
+        "returned": [
+          "pickup",
+          "attempt",
+          "washer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.026237300000502728
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The laboratory section change instructions",
+        "targets": [
+          "course"
+        ],
+        "folder": "work",
+        "suffix": "md",
+        "kind": "filtered",
+        "returned": [
+          "course",
+          "fee",
+          "meeting"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.015432499996677507
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Saved credentials after changing a remote-access password",
+        "targets": [
+          "vpn"
+        ],
+        "folder": "work",
+        "suffix": "txt",
+        "kind": "filtered",
+        "returned": [
+          "vpn",
+          "handover",
+          "timesheet"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.016214700001000892
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      }
+    ],
+    "hybrid": [
+      {
+        "query": "The note telling us to fill containers before they wash the building tank",
+        "targets": [
+          "water"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "water",
+          "washer",
+          "fridge",
+          "timesheet",
+          "venue"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06927339999674587
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "WTR-612",
+        "targets": [
+          "water"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "water",
+          "pickup",
+          "attempt",
+          "handover",
+          "venue"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06161470000370173
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The bill for fixing the burst pipe under the kitchen sink",
+        "targets": [
+          "plumber"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "plumber",
+          "pickup",
+          "attempt",
+          "washer",
+          "transit"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06540999999560881
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "PLB-613",
+        "targets": [
+          "plumber"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "plumber",
+          "pickup",
+          "attempt",
+          "course",
+          "transfer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06234769999718992
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Rules for claiming back cab money after visiting a customer",
+        "targets": [
+          "transit"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "transit",
+          "cancel",
+          "pickup",
+          "attempt",
+          "pause"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06935130000056233
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "EXP-710",
+        "targets": [
+          "transit"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "transit",
+          "pickup",
+          "transfer",
+          "handover",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06707119999919087
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "What was the food allowance when we travelled overnight for work?",
+        "targets": [
+          "meal"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "meal",
+          "attempt",
+          "fridge",
+          "transit",
+          "pause"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.060525199995026924
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "EXP-711",
+        "targets": [
+          "meal"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "meal",
+          "pickup",
+          "transfer",
+          "attempt",
+          "transit"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05919720000383677
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The instructions about sending weekly hours before Friday afternoon",
+        "targets": [
+          "timesheet"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "timesheet",
+          "venue",
+          "meeting",
+          "seminar",
+          "pickup"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06264680000458611
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "TMS-901",
+        "targets": [
+          "timesheet"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "timesheet",
+          "seminar",
+          "venue",
+          "course",
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05005890000029467
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Where was the note about booking the room for eight people?",
+        "targets": [
+          "meeting"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "meeting",
+          "venue",
+          "attempt",
+          "pickup",
+          "fridge"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06414679999579675
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "MTG-902",
+        "targets": [
+          "meeting"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "meeting",
+          "pickup",
+          "attempt",
+          "transfer",
+          "outage"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.060466399998404086
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Instructions for the laundry machine that leaves water inside",
+        "targets": [
+          "washer"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "washer",
+          "water",
+          "fridge",
+          "pickup",
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06310379999922588
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "WSH-802",
+        "targets": [
+          "washer"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "washer",
+          "water",
+          "transfer",
+          "venue",
+          "timesheet"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.060826900000392925
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The advice for a fridge whose freezer still works but the food section is warm",
+        "targets": [
+          "fridge"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "fridge",
+          "pause",
+          "pickup",
+          "attempt",
+          "meeting"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.061010999997961335
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "FRG-803",
+        "targets": [
+          "fridge"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "fridge",
+          "transfer",
+          "pickup",
+          "vpn",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05978519999916898
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Proof that Mara joined the session about responsible use of data",
+        "targets": [
+          "seminar"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "seminar",
+          "attempt",
+          "handover",
+          "meeting",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05953580000641523
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "SEM-440",
+        "targets": [
+          "seminar"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "seminar",
+          "timesheet",
+          "pickup",
+          "course",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05849189999571536
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The booking for the training space with a projector and forty seats",
+        "targets": [
+          "venue"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "venue",
+          "pause",
+          "pickup",
+          "course",
+          "transit"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.051448899997922126
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "VEN-441",
+        "targets": [
+          "venue"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "venue",
+          "timesheet",
+          "seminar",
+          "handover",
+          "pickup"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05993950000265613
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Where is the message telling me to collect the package before the counter shuts?",
+        "targets": [
+          "pickup"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "pickup",
+          "attempt",
+          "timesheet",
+          "meeting",
+          "pause"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06091499999456573
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "PCL-320",
+        "targets": [
+          "pickup"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "pickup",
+          "attempt",
+          "outage",
+          "course",
+          "seminar"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05963579999661306
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The courier message saying they came when the house was empty",
+        "targets": [
+          "attempt"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "attempt",
+          "outage",
+          "washer",
+          "pickup",
+          "fridge"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05107950000092387
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "PCL-321",
+        "targets": [
+          "attempt"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "attempt",
+          "pickup",
+          "outage",
+          "meeting",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.04922660000011092
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The form for moving to a different lab class without dropping the subject",
+        "targets": [
+          "course"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "course",
+          "fee",
+          "venue",
+          "transfer",
+          "pause"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06089049999718554
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "CRS-530",
+        "targets": [
+          "course"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "course",
+          "pickup",
+          "attempt",
+          "outage",
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.060019199998350814
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Instructions for identifying my tuition transfer and emailing the receipt",
+        "targets": [
+          "fee"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "fee",
+          "transfer",
+          "pickup",
+          "transit",
+          "venue"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.0935864000057336
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "FEE-531",
+        "targets": [
+          "fee"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "fee",
+          "pickup",
+          "transfer",
+          "plumber",
+          "venue"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.07679500000085682
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "How could I stop my gym days being used while I was away?",
+        "targets": [
+          "pause"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "pause",
+          "cancel",
+          "water",
+          "attempt",
+          "pickup"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.0598727999968105
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "FRZ-220",
+        "targets": [
+          "pause"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "pause",
+          "fridge",
+          "attempt",
+          "pickup",
+          "transfer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05033320000075037
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The rules for ending the fitness contract and getting unused months refunded",
+        "targets": [
+          "cancel"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "cancel",
+          "pause",
+          "meeting",
+          "transit",
+          "venue"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06215109999902779
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "CAN-221",
+        "targets": [
+          "cancel"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "cancel",
+          "timesheet",
+          "pickup",
+          "course",
+          "attempt"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05936199999996461
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The network message asking us to leave the modem on during street cable repairs",
+        "targets": [
+          "outage"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "outage",
+          "water",
+          "transfer",
+          "plumber",
+          "seminar"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06217130000004545
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "NET-660",
+        "targets": [
+          "outage"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "outage",
+          "transfer",
+          "pickup",
+          "attempt",
+          "meeting"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05878939999820432
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The instructions for taking my internet connection to a new flat",
+        "targets": [
+          "transfer"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "transfer",
+          "outage",
+          "pickup",
+          "fee",
+          "venue"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06531929999619024
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "MOV-661",
+        "targets": [
+          "transfer"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "transfer",
+          "pickup",
+          "attempt",
+          "handover",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06034340000041993
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The handover explaining what to check after restoring the dashboard database",
+        "targets": [
+          "handover"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "handover",
+          "cancel",
+          "vpn",
+          "pause",
+          "washer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.07330219999857945
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "HND-880",
+        "targets": [
+          "handover"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "handover",
+          "outage",
+          "pickup",
+          "venue",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06130069999926491
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The help note for remote access refusing my new password",
+        "targets": [
+          "vpn"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "vpn",
+          "cancel",
+          "fridge",
+          "washer",
+          "transfer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.060246200002438854
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "VPN-881",
+        "targets": [
+          "vpn"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "vpn",
+          "transfer",
+          "outage",
+          "venue",
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05963410000549629
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Both expense policies for approved work travel",
+        "targets": [
+          "transit",
+          "meal"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "transit",
+          "meal",
+          "pause",
+          "attempt",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06261549999908311
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The two courier messages about whether a parcel can be collected",
+        "targets": [
+          "pickup",
+          "attempt"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "attempt",
+          "pickup",
+          "transfer",
+          "cancel",
+          "seminar"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05077280000114115
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Gym paperwork for pausing or ending a membership",
+        "targets": [
+          "pause",
+          "cancel"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "pause",
+          "cancel",
+          "venue",
+          "pickup",
+          "course"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.05967840000084834
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Internet notices about a broken cable or moving service",
+        "targets": [
+          "outage",
+          "transfer"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "outage",
+          "transfer",
+          "water",
+          "fridge",
+          "vpn"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06003950000012992
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The appliance notes about drainage and cooling",
+        "targets": [
+          "washer",
+          "fridge"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "fridge",
+          "washer",
+          "transfer",
+          "outage",
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.06029530000523664
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The receipt requirement for taxi visits",
+        "targets": [
+          "transit"
+        ],
+        "folder": "work",
+        "suffix": "pdf",
+        "kind": "filtered",
+        "returned": [
+          "transit",
+          "venue",
+          "meal",
+          "seminar"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.027128000001539476
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The maintenance notice about rooftop water storage",
+        "targets": [
+          "water"
+        ],
+        "folder": "home",
+        "suffix": "pdf",
+        "kind": "filtered",
+        "returned": [
+          "water",
+          "cancel",
+          "plumber",
+          "pause"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.018081900001561735
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "A note about picking up a parcel with identification",
+        "targets": [
+          "pickup"
+        ],
+        "folder": "home",
+        "suffix": "txt",
+        "kind": "filtered",
+        "returned": [
+          "pickup",
+          "attempt",
+          "washer"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.015456300003279466
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The laboratory section change instructions",
+        "targets": [
+          "course"
+        ],
+        "folder": "work",
+        "suffix": "md",
+        "kind": "filtered",
+        "returned": [
+          "course",
+          "fee",
+          "meeting"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.015164700002060272
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Saved credentials after changing a remote-access password",
+        "targets": [
+          "vpn"
+        ],
+        "folder": "work",
+        "suffix": "txt",
+        "kind": "filtered",
+        "returned": [
+          "vpn",
+          "timesheet",
+          "handover"
+        ],
+        "status": "raw-candidates",
+        "seconds": [
+          0.02501219999976456
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      }
+    ],
+    "hybrid-gated": [
+      {
+        "query": "The note telling us to fill containers before they wash the building tank",
+        "targets": [
+          "water"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "water",
+          "washer",
+          "fridge",
+          "timesheet",
+          "venue"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.1171840000024531
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "WTR-612",
+        "targets": [
+          "water"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "water"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.04774590000306489
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The bill for fixing the burst pipe under the kitchen sink",
+        "targets": [
+          "plumber"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "plumber",
+          "pickup",
+          "attempt",
+          "washer",
+          "transit"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.10652180000033695
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "PLB-613",
+        "targets": [
+          "plumber"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "plumber"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.038301799999317154
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Rules for claiming back cab money after visiting a customer",
+        "targets": [
+          "transit"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "transit",
+          "cancel",
+          "pickup",
+          "attempt",
+          "pause"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11674289999791654
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "EXP-710",
+        "targets": [
+          "transit"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "transit"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.03807729999971343
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "What was the food allowance when we travelled overnight for work?",
+        "targets": [
+          "meal"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "meal",
+          "attempt",
+          "fridge",
+          "transit",
+          "pause"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.1185637999951723
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "EXP-711",
+        "targets": [
+          "meal"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "meal"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.04887040000176057
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The instructions about sending weekly hours before Friday afternoon",
+        "targets": [
+          "timesheet"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "timesheet",
+          "venue",
+          "meeting",
+          "seminar",
+          "pickup"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.10576120000041556
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "TMS-901",
+        "targets": [
+          "timesheet"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "timesheet"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.03809699999692384
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Where was the note about booking the room for eight people?",
+        "targets": [
+          "meeting"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "meeting",
+          "venue",
+          "attempt",
+          "pickup",
+          "fridge"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11461599999893224
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "MTG-902",
+        "targets": [
+          "meeting"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "meeting"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.03801920000114478
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Instructions for the laundry machine that leaves water inside",
+        "targets": [
+          "washer"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "washer",
+          "water",
+          "fridge",
+          "pickup",
+          "handover"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11544830000639195
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "WSH-802",
+        "targets": [
+          "washer"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "washer"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.03904029999830527
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The advice for a fridge whose freezer still works but the food section is warm",
+        "targets": [
+          "fridge"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "fridge",
+          "pause",
+          "pickup",
+          "attempt",
+          "meeting"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11610300000029383
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "FRG-803",
+        "targets": [
+          "fridge"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "fridge"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.047266299996408634
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Proof that Mara joined the session about responsible use of data",
+        "targets": [
+          "seminar"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "seminar",
+          "attempt",
+          "handover",
+          "meeting",
+          "course"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.10721259999991162
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "SEM-440",
+        "targets": [
+          "seminar"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "seminar"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.03930499999842141
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The booking for the training space with a projector and forty seats",
+        "targets": [
+          "venue"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "venue",
+          "pause",
+          "pickup",
+          "course",
+          "transit"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11393649999808986
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "VEN-441",
+        "targets": [
+          "venue"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "venue"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.038405500003136694
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Where is the message telling me to collect the package before the counter shuts?",
+        "targets": [
+          "pickup"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "pickup",
+          "attempt",
+          "timesheet",
+          "meeting",
+          "pause"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11721039999974892
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "PCL-320",
+        "targets": [
+          "pickup"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "pickup"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.048211799999990035
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The courier message saying they came when the house was empty",
+        "targets": [
+          "attempt"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "attempt",
+          "outage",
+          "washer",
+          "pickup",
+          "fridge"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.10469320000265725
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "PCL-321",
+        "targets": [
+          "attempt"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "attempt"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.0488201999978628
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The form for moving to a different lab class without dropping the subject",
+        "targets": [
+          "course"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "course",
+          "fee",
+          "venue",
+          "transfer",
+          "pause"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.10520050000195624
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "CRS-530",
+        "targets": [
+          "course"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "course"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.0395658999987063
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Instructions for identifying my tuition transfer and emailing the receipt",
+        "targets": [
+          "fee"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "fee",
+          "transfer",
+          "pickup",
+          "transit",
+          "venue"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11367850000533508
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "FEE-531",
+        "targets": [
+          "fee"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "fee"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.03926990000036312
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "How could I stop my gym days being used while I was away?",
+        "targets": [
+          "pause"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "pause",
+          "cancel",
+          "water",
+          "attempt",
+          "pickup"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11844730000302661
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "FRZ-220",
+        "targets": [
+          "pause"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "pause"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.0486562000005506
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The rules for ending the fitness contract and getting unused months refunded",
+        "targets": [
+          "cancel"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "cancel",
+          "pause",
+          "meeting",
+          "transit",
+          "venue"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11952960000053281
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "CAN-221",
+        "targets": [
+          "cancel"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "cancel"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.038669100002152845
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The network message asking us to leave the modem on during street cable repairs",
+        "targets": [
+          "outage"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "outage",
+          "water",
+          "transfer",
+          "plumber",
+          "seminar"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11832590000267373
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "NET-660",
+        "targets": [
+          "outage"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "outage"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.04682179999508662
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The instructions for taking my internet connection to a new flat",
+        "targets": [
+          "transfer"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "transfer",
+          "outage",
+          "pickup",
+          "fee",
+          "venue"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.10743849999562372
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "MOV-661",
+        "targets": [
+          "transfer"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "transfer"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.038175300003786106
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The handover explaining what to check after restoring the dashboard database",
+        "targets": [
+          "handover"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "handover",
+          "cancel",
+          "vpn",
+          "pause",
+          "washer"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.10470319999876665
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "HND-880",
+        "targets": [
+          "handover"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "handover"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.04202909999730764
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The help note for remote access refusing my new password",
+        "targets": [
+          "vpn"
+        ],
+        "kind": "paraphrase",
+        "returned": [
+          "vpn",
+          "cancel",
+          "fridge",
+          "washer",
+          "transfer"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11580609999509761
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "VPN-881",
+        "targets": [
+          "vpn"
+        ],
+        "kind": "identifier",
+        "returned": [
+          "vpn"
+        ],
+        "status": "exact-identifier-matches",
+        "seconds": [
+          0.03853259999596048
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Both expense policies for approved work travel",
+        "targets": [
+          "transit",
+          "meal"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "transit",
+          "meal",
+          "pause",
+          "attempt",
+          "course"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11559279999346472
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The two courier messages about whether a parcel can be collected",
+        "targets": [
+          "pickup",
+          "attempt"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "attempt",
+          "pickup",
+          "transfer",
+          "cancel",
+          "seminar"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.1171628999945824
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Gym paperwork for pausing or ending a membership",
+        "targets": [
+          "pause",
+          "cancel"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "pause",
+          "cancel",
+          "venue",
+          "pickup",
+          "course"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11650259999441914
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Internet notices about a broken cable or moving service",
+        "targets": [
+          "outage",
+          "transfer"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "outage",
+          "transfer",
+          "water",
+          "fridge",
+          "vpn"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.11571280000498518
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The appliance notes about drainage and cooling",
+        "targets": [
+          "washer",
+          "fridge"
+        ],
+        "kind": "multiple-relevant",
+        "returned": [
+          "fridge",
+          "washer",
+          "transfer",
+          "outage",
+          "handover"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.1067719999991823
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The receipt requirement for taxi visits",
+        "targets": [
+          "transit"
+        ],
+        "folder": "work",
+        "suffix": "pdf",
+        "kind": "filtered",
+        "returned": [
+          "transit",
+          "venue",
+          "meal",
+          "seminar"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.06039910000254167
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The maintenance notice about rooftop water storage",
+        "targets": [
+          "water"
+        ],
+        "folder": "home",
+        "suffix": "pdf",
+        "kind": "filtered",
+        "returned": [
+          "water",
+          "cancel",
+          "plumber",
+          "pause"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.05459080000582617
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "A note about picking up a parcel with identification",
+        "targets": [
+          "pickup"
+        ],
+        "folder": "home",
+        "suffix": "txt",
+        "kind": "filtered",
+        "returned": [
+          "pickup",
+          "attempt",
+          "washer"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.05088850000174716
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "The laboratory section change instructions",
+        "targets": [
+          "course"
+        ],
+        "folder": "work",
+        "suffix": "md",
+        "kind": "filtered",
+        "returned": [
+          "course",
+          "fee",
+          "meeting"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.03773100000398699
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      },
+      {
+        "query": "Saved credentials after changing a remote-access password",
+        "targets": [
+          "vpn"
+        ],
+        "folder": "work",
+        "suffix": "txt",
+        "kind": "filtered",
+        "returned": [
+          "vpn",
+          "timesheet",
+          "handover"
+        ],
+        "status": "matches",
+        "seconds": [
+          0.03775139999925159
+        ],
+        "top1": true,
+        "hit": true,
+        "recall": 1.0,
+        "rr": 1.0
+      }
+    ]
+  },
+  "absent_observations": [
+    {
+      "query": "school bus route for kindergarten children",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "approved mortgage amortization table",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "recipe for vegetarian mushroom soup",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "cat adoption contract with microchip number",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "train platform change for the evening express",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "instructions for replacing a cracked phone screen",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "wedding florist quotation for roses",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "residential solar battery installation drawing",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "eye examination prescription for contact lenses",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "fishing boat engine inspection report",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "warehouse forklift operator license",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "community basketball tournament fixture list",
+      "status": "matches",
+      "returned": [
+        "venue",
+        "meeting",
+        "seminar",
+        "fee",
+        "course"
+      ],
+      "accepted": true
+    },
+    {
+      "query": "requirements for registering a motorcycle",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "museum exhibition loan agreement",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "factory noise exposure measurement sheet",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "seed germination observations for tomatoes",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "child swimming lesson enrollment waiver",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "restaurant allergy menu for peanut-free meals",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    },
+    {
+      "query": "piano tuning appointment and service quote",
+      "status": "matches",
+      "returned": [
+        "seminar",
+        "venue",
+        "meal",
+        "fridge",
+        "water"
+      ],
+      "accepted": true
+    },
+    {
+      "query": "consent form for donating blood",
+      "status": "no-strong-match",
+      "returned": [],
+      "accepted": false
+    }
+  ],
+  "absent_queries": 20,
+  "absent_rejected": 18,
+  "python_socket_connect_attempts": 0,
+  "memory": {
+    "peak_process_tree_rss_bytes": 492789760,
+    "samples": 1021,
+    "sampling_interval_seconds": 0.02,
+    "definition": "Sampled sum of evaluator and descendant RSS; shared pages can be counted twice, short peaks may be missed"
+  },
+  "limitations": [
+    "Author-created synthetic labels, not independent users or blinded validation",
+    "Twenty short documents, not a scale benchmark",
+    "No language/OCR validation",
+    "Python socket guard is not an OS egress audit",
+    "No machine-cold cache or clean-install measurement",
+    "No changes permitted during this run; regression reuse is not new held-out validation"
+  ]
+}

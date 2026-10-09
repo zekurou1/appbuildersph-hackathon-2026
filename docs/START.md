@@ -6,12 +6,12 @@ Main repository: [zekurou1/appbuildersph-hackathon-2026](https://github.com/zeku
 
 | Package | Completion gate | Current state |
 | --- | --- | --- |
-| WP1 | Real CPU embeddings and digital PDF extraction; asset manifest | Passed for text tier; screenshot OCR not tested |
+| WP1 | Real CPU embeddings and digital PDF extraction; asset manifest | Text tier and installed Windows English PNG/JPEG OCR verified; packaged OCR deployment remains |
 | WP2 | Labeled development queries, four retrieval baselines, grouped source evidence | Original holdout found identifier rejection; narrow exact-code route recovers all eight in regression; fresh validation remains |
 | WP3 | Atomic state, restart, refresh, root revocation | Cross-process guard, killed embedding/commit/clear recovery, junction boundaries and parser Job Object lifecycle/resource tests passed; low-resource device recovery remains |
 | WP4 | Select folder → index → search → inspect → open/reveal through UI | Working PySide6 desktop prototype; real inference and offscreen controls verified, native viewer/picker behavior still unverified |
 | WP5 | Fresh offline file/query, egress, boundaries, cleanup and recovery | Python socket-guarded inference, synthetic cleanup, bounded extraction and cross-window preview revocation passed; full OS egress/privacy audit pending |
-| WP6 | Holdout evaluation, clean setup and demo evidence | Original holdout and post-fix regression recorded separately; fresh holdout, clean setup/demo gates pending |
+| WP6 | Holdout evaluation, clean setup and demo evidence | Original holdout and regressions recorded separately; isolated locked environment verified on same host; fresh independent holdout, another-machine setup/demo gates pending |
 
 ## Verified runtime
 
@@ -19,7 +19,7 @@ The original `_ssl` failure no longer reproduces. A scikit-learn native DLL rema
 
 Python 3.12.15, Windows 11 build 26200, about 16.5 GB installed RAM. CPU MiniLM produced finite normalized 384-dimensional embeddings and found a synthetic rental PDF using a paraphrased query. Digital PDF extraction and FTS5 passed. Model assets total 91,617,680 bytes; exact revision and SHA-256 entries are in [model-assets.json](model-assets.json).
 
-No Tesseract executable was found on PATH. Scope remains digital PDF/TXT/MD. Screenshot search, scanned PDFs and DOCX are unsupported, not silently treated as searchable.
+English PNG/JPEG screenshot search now uses installed Windows OCR inside the bounded parser, followed by real CPU MiniLM. Evidence is labeled as OCR transcription. See [OCR phase](OCR_PHASE.md) for bounds, setup, six-image verification and the package-identity release limitation. Scanned PDFs and DOCX remain unsupported.
 
 ## Retrieval and persistence
 
@@ -43,7 +43,7 @@ That historical failure is now addressed by a narrow [exact-identifier route](ID
 
 The desktop prototype connects folder selection, background indexing, search/evidence and deliberate file actions. Cancellation preserves committed content, removal revokes scope while work runs, and queued responses are suppressed when their scope changes. Preview/open also validate the expected indexed fingerprint. Native OS launches were intercepted during tests; offscreen verification is not manual usability or screen-reader validation. See [GUI report](gui-verification.json).
 
-The reliability phase added a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. The later containment phase adds parser memory/process/output limits and persistent cross-window privacy invalidation. Thirty-three tests now pass, including evaluator/identifier checks; one symbolic-link test remains skipped. See [reliability evidence](RELIABILITY_PHASE.md) and [containment evidence](CONTAINMENT_PHASE.md). Consented larger-corpus performance, low-resource device recovery and complete OS privacy audits remain.
+The reliability phase added a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. The later containment phase adds parser memory/process/output limits and persistent cross-window privacy invalidation. Thirty-five tests now pass, including evaluator/identifier/OCR checks; one symbolic-link test remains skipped. See [reliability evidence](RELIABILITY_PHASE.md) and [containment evidence](CONTAINMENT_PHASE.md). Consented larger-corpus performance, low-resource device recovery and complete OS privacy audits remain.
 
 ## UI contract
 

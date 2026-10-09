@@ -10,6 +10,7 @@ from pathlib import Path
 from .extract import MAX_FILE_BYTES, SUPPORTED
 from .locking import writer_lease
 from .worker import run_worker
+from .ocr import IMAGE_SUFFIXES
 
 
 class ScopeError(ValueError):
@@ -202,7 +203,7 @@ class Index:
                     with path.open("rb") as stream:
                         digest = hashlib.file_digest(stream, "sha256").hexdigest()
                     current = self.db.execute("SELECT * FROM files WHERE path=?", (str(path),)).fetchone()
-                    if current and current["status"] == "searchable" and current["digest"] == digest:
+                    if current and current["status"] == "searchable" and current["digest"] == digest and path.suffix.lower() not in IMAGE_SUFFIXES:
                         identities = self.db.execute("SELECT DISTINCT model FROM chunks WHERE file_id=?",
                                                      (current["id"],)).fetchall()
                         if len(identities) == 1 and identities[0][0] == self.embedder.identity:
@@ -393,6 +394,7 @@ class Index:
                 continue
             results.append({"file_id": file_id, "path": row["path"], "root_id": row["root_id"],
                             "revision": row["digest"],
+                            "provenance": "ocr-recognized" if row["suffix"] in IMAGE_SUFFIXES else "digital-text",
                             "text": row["text"], "page": row["page"], "line_start": row["line_start"],
                             "line_end": row["line_end"], "rank_score": group["score"],
                             "similarity": semantic_scores.get(row["id"]),
@@ -420,6 +422,7 @@ class Index:
             seen.add(row["file_id"])
             results.append({"file_id": row["file_id"], "path": row["path"], "root_id": row["root_id"],
                             "revision": row["digest"], "text": row["text"], "page": row["page"],
+                            "provenance": "ocr-recognized" if row["suffix"] in IMAGE_SUFFIXES else "digital-text",
                             "line_start": row["line_start"], "line_end": row["line_end"],
                             "rank_score": None, "similarity": None, "weak_match": False,
                             "status": "verify-source", "mode": "hybrid", "match_basis": "exact-identifier"})

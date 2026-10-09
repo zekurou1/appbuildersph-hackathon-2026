@@ -1,0 +1,157 @@
+{
+  "dataset": "ocr-synthetic-v1",
+  "runtime": {
+    "engine": "Windows.Media.Ocr",
+    "language": "en-US",
+    "os": "Windows-11-10.0.26200-SP0",
+    "binding_version": "3.2.1",
+    "english_available": true,
+    "model_assets": "Installed Windows OCR language components; OS-managed, not a separately pinned weight file",
+    "max_image_pixels": 4000000,
+    "max_image_edge": 6000
+  },
+  "model": "sentence-transformers/all-MiniLM-L6-v2@1110a243fdf4706b3f48f1d95db1a4f5529b4d41:mean-normalized-v1",
+  "coverage": {
+    "searchable": 6,
+    "failed": 0,
+    "unsupported": 0,
+    "pending": 0,
+    "discovered": 6
+  },
+  "indexing_seconds": 2.0123830000011367,
+  "freeze": {
+    "fixture_sha256": "2c91d72af983dcb2eec8d9b3093a3720bedde97cc9443096d5d133721de75604",
+    "image_sha256": {
+      "photo_01.png": "c36f8cc9ad845775e7b29d56761adf47134500d36ee45ba57898b7e72bcd7e64",
+      "photo_02.jpg": "65cb49a4ef1ac238fbce0df0c98e35ec5196f926905b43c9e01e60a629950499",
+      "photo_03.png": "ea2c1c78a947fe68bc1246180a3d08f2de4253dd65456c7c7d7d34279f682d2a",
+      "photo_04.jpeg": "f717c6f5b49709e45fc7e452702bc1c6c138a17e6230b4ee8729cac47d9bb0cb",
+      "photo_05.png": "b8989e54fe240b3f9bb6b4a7673119f7e7948aacdf24b793e6c881efc2e68c13",
+      "photo_06.jpg": "d75762490670d10ccf2444f50b71302f78df4f9a729b6aa12cd680954c53dcc2"
+    }
+  },
+  "outcomes": [
+    {
+      "file": "photo_01.png",
+      "query": "what documents do I need for my immunization visit",
+      "status": "matches",
+      "top5": [
+        "photo_04.jpeg",
+        "photo_02.jpg",
+        "photo_06.jpg",
+        "photo_03.png",
+        "photo_01.png"
+      ],
+      "relevant_in_top5": true,
+      "exact_code_files": [
+        "photo_01.png"
+      ],
+      "exact_code_correct": true,
+      "recognized_text_equals_authored": true
+    },
+    {
+      "file": "photo_02.jpg",
+      "query": "how long is the guarantee for fixing my bike brakes",
+      "status": "matches",
+      "top5": [
+        "photo_02.jpg",
+        "photo_06.jpg",
+        "photo_04.jpeg",
+        "photo_03.png",
+        "photo_05.png"
+      ],
+      "relevant_in_top5": true,
+      "exact_code_files": [
+        "photo_02.jpg"
+      ],
+      "exact_code_correct": true,
+      "recognized_text_equals_authored": true
+    },
+    {
+      "file": "photo_03.png",
+      "query": "instructions for preparing seafood with ginger",
+      "status": "matches",
+      "top5": [
+        "photo_03.png",
+        "photo_02.jpg",
+        "photo_06.jpg",
+        "photo_01.png",
+        "photo_04.jpeg"
+      ],
+      "relevant_in_top5": true,
+      "exact_code_files": [
+        "photo_03.png"
+      ],
+      "exact_code_correct": true,
+      "recognized_text_equals_authored": true
+    },
+    {
+      "file": "photo_04.jpeg",
+      "query": "where should students gather before visiting the museum",
+      "status": "matches",
+      "top5": [
+        "photo_04.jpeg",
+        "photo_01.png",
+        "photo_03.png",
+        "photo_05.png",
+        "photo_06.jpg"
+      ],
+      "relevant_in_top5": true,
+      "exact_code_files": [
+        "photo_04.jpeg"
+      ],
+      "exact_code_correct": true,
+      "recognized_text_equals_authored": true
+    },
+    {
+      "file": "photo_05.png",
+      "query": "when will the power be unavailable because of maintenance",
+      "status": "matches",
+      "top5": [
+        "photo_04.jpeg",
+        "photo_05.png",
+        "photo_02.jpg",
+        "photo_06.jpg",
+        "photo_01.png"
+      ],
+      "relevant_in_top5": true,
+      "exact_code_files": [
+        "photo_05.png"
+      ],
+      "exact_code_correct": true,
+      "recognized_text_equals_authored": true
+    },
+    {
+      "file": "photo_06.jpg",
+      "query": "how long is the guarantee for the replacement bike tire",
+      "status": "matches",
+      "top5": [
+        "photo_06.jpg",
+        "photo_02.jpg",
+        "photo_04.jpeg",
+        "photo_03.png",
+        "photo_05.png"
+      ],
+      "relevant_in_top5": true,
+      "exact_code_files": [
+        "photo_06.jpg"
+      ],
+      "exact_code_correct": true,
+      "recognized_text_equals_authored": true
+    }
+  ],
+  "absent_codes_rejected": {
+    "MED-729": true,
+    "REP-595": true,
+    "DISH-815": true,
+    "TRIP-268": true,
+    "ELEC-937": true
+  },
+  "python_socket_connect_attempts": 0,
+  "limits": [
+    "Six clean synthetic English images; author-created labels, not independent user validation",
+    "No ranking or gate tuning during evaluation; this corpus is now regression data",
+    "Socket guard covers evaluator only, not native OCR or process-tree egress",
+    "No handwriting, multilingual, rotated, low-contrast or scanned-PDF claim"
+  ]
+}

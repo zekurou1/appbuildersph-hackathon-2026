@@ -16,6 +16,7 @@ from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QApplication, QFileDialog, QMessageBox
 from PySide6.QtGui import QFontDatabase
 from reportlab.pdfgen import canvas
+from PIL import Image, ImageDraw, ImageFont
 
 from omnifind.core import Index
 from omnifind.gui import Window
@@ -44,6 +45,11 @@ def main():
     pdf.save()
     receipt = corpus / "misc.txt"
     receipt.write_text("Laptop charger receipt INV-2048. Paid 1250 pesos.", encoding="utf-8")
+    screenshot = corpus / "schedule.png"
+    image = Image.new("RGB", (1000, 450), "white")
+    ImageDraw.Draw(image).multiline_text((40, 40), "CLASS SCHEDULE - SCH-642\nPhysics laboratory: Wednesday 3 PM\nRoom 307. Bring safety goggles.",
+        fill="black", font=ImageFont.truetype("C:/Windows/Fonts/segoeui.ttf", 32), spacing=18)
+    image.save(screenshot)
     actions = []
     window = Window(run / "data/index.sqlite", Path("models/minilm"),
                     file_action=lambda action, path: actions.append((action, str(path))) or True)
@@ -85,7 +91,7 @@ def main():
         assert window.pages.currentIndex() == 2
         settle()
         print('GUI first refresh passed', flush=True)
-        assert "2 searchable" in window.status.text(), window.status.text()
+        assert "3 searchable" in window.status.text(), window.status.text()
         QTest.keyClick(window, Qt.Key.Key_K, Qt.KeyboardModifier.ControlModifier)
         app.processEvents()
         assert window.pages.currentIndex() == 0 and window.query.hasFocus()
@@ -95,6 +101,16 @@ def main():
         assert "security deposit" in window.preview.toPlainText()
         assert "page 1" in window.preview_location.text()
         assert window.open_button.isEnabled()
+        window.type_filter.setCurrentIndex(window.type_filter.findData("png"))
+        search("what should I wear to the physics practical class")
+        assert window.results and Path(window.results[0]["path"]).name == screenshot.name
+        assert "OCR-recognized" in window.preview_location.text()
+        assert "safety goggles" in window.preview.toPlainText()
+        search("SCH-642")
+        assert window.last_response["status"] == "exact-identifier-matches"
+        window.grab().save(str(output / "ocr-evidence.png"))
+        window.type_filter.setCurrentIndex(window.type_filter.findData("pdf"))
+        search("getting my money back when I leave the apartment")
         QTest.mouseClick(window.open_button, Qt.MouseButton.LeftButton)
         QTest.mouseClick(window.reveal_button, Qt.MouseButton.LeftButton)
         assert actions == [("open", str(original)), ("reveal", str(original))]
@@ -222,7 +238,8 @@ def main():
                   "python_socket_connect_attempts": len(attempts),
                   "limits": ["Offscreen QtTest, not manual Windows usability or screen-reader validation",
                              "Native picker response was supplied by the test", "OS viewer and Explorer launches intercepted after path authorization",
-                             "Synthetic two-file corpus only", "No OS-level network audit"]}
+                             "Synthetic three-file corpus only", "No OS-level network audit"],
+                  "ocr": {"engine": "Windows.Media.Ocr", "verified": ["contained screenshot extraction", "real MiniLM paraphrase search", "exact screenshot code", "OCR evidence label and original path"]}}
         (output / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
         print(json.dumps(report, indent=2))
     finally:

@@ -213,7 +213,7 @@ class Window(QMainWindow):
         layout.addLayout(row)
         self.filters = QGridLayout()
         self.type_filter = QComboBox()
-        for text, value in [("All supported types", None), ("PDF", "pdf"), ("Text", "txt"), ("Markdown", "md")]:
+        for text, value in [("All supported types", None), ("PDF", "pdf"), ("Text", "txt"), ("Markdown", "md"), ("PNG screenshot", "png"), ("JPEG image", "jpg"), ("JPEG (.jpeg)", "jpeg")]:
             self.type_filter.addItem(text, value)
         self.type_filter.setAccessibleName("File type filter")
         self.folder_filter = QComboBox()
@@ -279,7 +279,7 @@ class Window(QMainWindow):
         layout = QVBoxLayout(page)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(label("Choose your search space.", "headline"))
-        layout.addWidget(label("OmniFind reads only folders you choose. Supported now: digital PDF, TXT and MD. "
+        layout.addWidget(label("OmniFind reads only folders you choose. Supported now: digital PDF, TXT, MD and English PNG/JPEG OCR. "
                                "It stores searchable text and vectors locally; original files stay untouched.", "secondary", True))
         self.folder_list = QListWidget()
         self.folder_list.setAccessibleName("Selected folders")
@@ -316,7 +316,7 @@ class Window(QMainWindow):
         self.clear_button.clicked.connect(self.confirm_clear)
         layout.addWidget(self.clear_button)
         layout.addWidget(label("Prototype scope", "section"))
-        layout.addWidget(label("English-first digital PDF/TXT/MD. OCR, scanned PDFs, installers and large-corpus performance are not verified. "
+        layout.addWidget(label("English-first digital PDF/TXT/MD and PNG/JPEG OCR using installed Windows English OCR. Scanned PDFs, installers and large-corpus performance are not verified. "
                                "Weak-match thresholds were tuned on synthetic development examples; verify evidence before opening a file.", wrap=True))
         layout.addWidget(label("If model assets are missing, use Words only for previously indexed content. "
                                "To prepare assets, follow the local setup instructions in the README, then retry.", wrap=True))
@@ -647,6 +647,8 @@ class Window(QMainWindow):
             self.preview_location.setText(f'Original text · page {result["page"]}' if result["page"] else
                                           f'Original text · lines {result["line_start"]}–{result["line_end"]}')
             self.preview.setPlainText(result["text"])
+            if result.get("provenance") == "ocr-recognized":
+                self.preview_location.setText("OCR-recognized English text · check the original image for errors")
             for button in [self.open_button, self.reveal_button, self.copy_button]:
                 button.setEnabled(True)
         except (OSError, ValueError, sqlite3.Error) as error:

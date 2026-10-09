@@ -26,7 +26,16 @@
     "Offscreen QtTest, not manual Windows usability or screen-reader validation",
     "Native picker response was supplied by the test",
     "OS viewer and Explorer launches intercepted after path authorization",
-    "Synthetic two-file corpus only",
+    "Synthetic three-file corpus only",
     "No OS-level network audit"
-  ]
+  ],
+  "ocr": {
+    "engine": "Windows.Media.Ocr",
+    "verified": [
+      "contained screenshot extraction",
+      "real MiniLM paraphrase search",
+      "exact screenshot code",
+      "OCR evidence label and original path"
+    ]
+  }
 }

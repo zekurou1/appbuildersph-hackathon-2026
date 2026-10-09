@@ -1,4 +1,4 @@
-"""Bounded, killable digital-text extraction worker; no OCR claim."""
+"""Bounded digital-text and Windows screenshot OCR worker."""
 import json
 import sys
 from pathlib import Path
@@ -6,7 +6,7 @@ from pathlib import Path
 MAX_FILE_BYTES = 20 * 1024 * 1024
 MAX_PAGES = 200
 MAX_TEXT_CHARS = 2_000_000
-SUPPORTED = {".pdf", ".txt", ".md"}
+SUPPORTED = {".pdf", ".txt", ".md", ".png", ".jpg", ".jpeg"}
 
 
 def extract(path):
@@ -29,6 +29,12 @@ def extract(path):
                 raise ValueError("text-too-large")
             if text.strip():
                 sections.append({"text": text, "page": number})
+    elif path.suffix.lower() in {".png", ".jpg", ".jpeg"}:
+        from .ocr import recognize
+        text = recognize(path)
+        if len(text) > MAX_TEXT_CHARS:
+            raise ValueError("text-too-large")
+        sections = [{"text": text, "page": None}]
     else:
         text = path.read_text(encoding="utf-8-sig")
         if len(text) > MAX_TEXT_CHARS:

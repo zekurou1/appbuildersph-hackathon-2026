@@ -1,0 +1,13 @@
+{
+  "dataset": "ocr-synthetic-v1",
+  "independent_labels": false,
+  "cases": [
+    {"file": "photo_01.png", "text": "COMMUNITY CLINIC - MED-728\nVaccination appointment: Friday at 9 AM\nBring your health card and valid identification.", "query": "what documents do I need for my immunization visit", "code": "MED-728"},
+    {"file": "photo_02.jpg", "text": "SERVICE RECEIPT - REP-593\nBicycle brake replacement completed.\nWarranty covers parts for ninety days.", "query": "how long is the guarantee for fixing my bike brakes", "code": "REP-593"},
+    {"file": "photo_03.png", "text": "COOKING NOTES - DISH-814\nSteam fish with ginger for fifteen minutes.\nServe with rice and calamansi juice.", "query": "instructions for preparing seafood with ginger", "code": "DISH-814"},
+    {"file": "photo_04.jpeg", "text": "SCHOOL TRIP - TRIP-267\nMuseum visit begins Saturday at 8 AM.\nMeet at the school gate. Bring packed lunch.", "query": "where should students gather before visiting the museum", "code": "TRIP-267"},
+    {"file": "photo_05.png", "text": "UTILITY NOTICE - ELEC-936\nElectricity supply interruption on Monday.\nRepair work lasts from 10 AM until 2 PM.", "query": "when will the power be unavailable because of maintenance", "code": "ELEC-936"},
+    {"file": "photo_06.jpg", "text": "SERVICE RECEIPT - REP-594\nBicycle tire replacement completed.\nWarranty covers parts for thirty days.", "query": "how long is the guarantee for the replacement bike tire", "code": "REP-594"}
+  ],
+  "absent_codes": ["MED-729", "REP-595", "DISH-815", "TRIP-268", "ELEC-937"]
+}
