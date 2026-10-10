@@ -14,7 +14,7 @@ Windows 11 build 26200, PyWinRT bindings 3.2.1, installed English OCR. The real 
 
 [OCR verification](ocr-verification.json) records six clean synthetic PNG/JPEG images with authored labels and hashes written before evaluation. Reports include exact transcription comparisons, gated hybrid top-five retrieval, similar receipt codes and absent codes. These are small author-created tests, not independent user or general OCR accuracy evidence. No policy or ranking tuning occurred during the run.
 
-The suite now executes 36 passing tests and skips one symbolic-link test. New tests use the actual installed OCR and cover indexing, filtering, restart, root removal preserving originals, blank/corrupt/oversized failure states and bounded thumbnail generation rejecting changed originals. The desktop check also verifies thumbnail revocation and closing with pending preview work. Test fixture embeddings verify storage only; the desktop and OCR evaluation scripts use real MiniLM.
+The OCR/thumbnail increment executed 36 passing tests and skipped one symbolic-link test; current totals are in START.md. New tests use the actual installed OCR and cover indexing, filtering, restart, root removal preserving originals, blank/corrupt/oversized failure states and bounded thumbnail generation rejecting changed originals. The desktop check also verifies thumbnail revocation and closing with pending preview work. Test fixture embeddings verify storage only; the desktop and OCR evaluation scripts use real MiniLM.
 
 ## Setup and release limits
 

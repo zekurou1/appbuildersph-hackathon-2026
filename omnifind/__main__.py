@@ -20,6 +20,10 @@ def main():
     remove = sub.add_parser("remove-folder")
     remove.add_argument("root_id", type=int)
     sub.add_parser("status")
+    issues = sub.add_parser("issues")
+    issues.add_argument("--folder", dest="root_id", type=int)
+    issues.add_argument("--after", dest="after_id", type=int, default=0)
+    issues.add_argument("--limit", type=int, default=100)
     clear = sub.add_parser("clear-index")
     clear.add_argument("--yes", action="store_true", required=True,
                        help="Forget selected folders and derived index data; preserve originals and models")
@@ -47,6 +51,11 @@ def main():
             result = {"removed": args.root_id, "original_files_preserved": True}
         elif args.command == "status":
             result = {"folders": index.roots(), "coverage": index.coverage(), "storage": "plaintext-local-index"}
+        elif args.command == "issues":
+            from .issues import issue_copy
+            result = index.file_issues(args.root_id, args.after_id, args.limit)
+            for item in result["items"]:
+                item["recovery"] = issue_copy(item["state"], item["error"])
         elif args.command == "clear-index":
             result = index.clear()
         else:

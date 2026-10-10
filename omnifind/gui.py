@@ -14,11 +14,12 @@ from PySide6.QtGui import QDesktopServices, QFont, QFontDatabase, QKeySequence, 
 from PySide6.QtWidgets import (
     QApplication, QCheckBox, QComboBox, QFileDialog, QFrame, QHBoxLayout, QLabel,
     QLineEdit, QListWidget, QListWidgetItem, QMainWindow, QMessageBox, QProgressBar, QGridLayout,
-    QPushButton, QSplitter, QStackedWidget, QTextBrowser, QVBoxLayout, QWidget, QScrollArea, QSizePolicy,
+    QPushButton, QSplitter, QStackedWidget, QTextBrowser, QVBoxLayout, QWidget, QScrollArea, QSizePolicy, QDialog,
 )
 
 from .core import Index, ScopeError, WorkCancelled, is_identifier_query
 from .worker import run_worker
+from .issues import issue_copy
 
 
 class ThumbnailTask(QThread):
@@ -135,6 +136,7 @@ class Window(QMainWindow):
         self.selected = None
         self.last_response = None
         self.last_error = None
+        self.issue_dialog = None
         self.text_scale = 1.0
         self.generation = 0
         self.cancel_requested = False
@@ -329,15 +331,17 @@ class Window(QMainWindow):
         self.add_button.setObjectName("primary")
         self.refresh_button = QPushButton("Refresh selected")
         self.remove_button = QPushButton("Remove from index…")
+        self.issues_button = QPushButton("Review file issues")
+        self.issues_button.clicked.connect(self.review_issues)
         self.add_button.clicked.connect(self.choose_folder)
         self.refresh_button.clicked.connect(self.refresh_selected)
         self.remove_button.clicked.connect(self.confirm_remove)
-        for button in [self.add_button, self.refresh_button, self.remove_button]:
+        for button in [self.add_button, self.refresh_button, self.remove_button, self.issues_button]:
             controls.addWidget(button)
         layout.addLayout(controls)
         self.coverage = label("No folders selected.", "secondary", True)
         layout.addWidget(self.coverage)
-        layout.addWidget(label("Refresh is manual. Cloud-only files, links, screenshots and scanned pages are excluded.", "secondary", True))
+        layout.addWidget(label("Refresh is manual. Cloud-only files, links and scanned PDF pages are excluded. Readable English PNG/JPEG screenshots are supported.", "secondary", True))
         self.pages.addWidget(page)
 
     def _settings_page(self):
@@ -457,10 +461,82 @@ class Window(QMainWindow):
             button.setEnabled(False)
 
     def invalidate_results(self, *args):
+        if self.issue_dialog:
+            self.issue_dialog.issue_list.clear()
+            self.issue_dialog.close()
         self.results = []
         self.result_list.clear()
         self.clear_preview()
         self.result_count.setText("Press Search to apply this description and these filters.")
+
+    def review_issues(self):
+        self.check_external_revocation()
+        item = self.folder_list.currentItem()
+        if not item:
+            self.status.setText("Choose a selected folder to review its files.")
+            return
+        if self.issue_dialog:
+            self.issue_dialog.close()
+        root_id = item.data(Qt.ItemDataRole.UserRole)
+        dialog = QDialog(self)
+        dialog.setWindowTitle("File issues in selected folder")
+        dialog.resize(760, 520)
+        layout = QVBoxLayout(dialog)
+        layout.addWidget(label("Files that need attention", "section"))
+        dialog.summary = label("", "secondary", True)
+        layout.addWidget(dialog.summary)
+        dialog.issue_list = QListWidget()
+        dialog.issue_list.setAccessibleName("File issues and recovery steps")
+        dialog.issue_list.setWordWrap(True)
+        dialog.issue_list.setSpacing(8)
+        layout.addWidget(dialog.issue_list, 1)
+        more = QPushButton("Show more")
+        more.setAccessibleName("Show next file issues")
+        close = QPushButton("Close")
+        close.clicked.connect(dialog.close)
+        actions = QHBoxLayout()
+        actions.addWidget(more)
+        actions.addStretch()
+        actions.addWidget(close)
+        layout.addLayout(actions)
+        dialog.cursor = 0
+        self.issue_dialog = dialog
+        def load_page():
+            index = None
+            try:
+                index = Index(self.database)
+                page = index.file_issues(root_id, dialog.cursor)
+                self.check_external_revocation()
+                if self.issue_dialog is not dialog:
+                    return
+                for issue in page["items"]:
+                    path = Path(issue["path"])
+                    text = f'{path.name}\n{path.parent}\n{issue["state"].capitalize()} · {issue_copy(issue["state"], issue["error"])}'
+                    entry = QListWidgetItem(text)
+                    entry.setData(Qt.ItemDataRole.AccessibleTextRole, text)
+                    dialog.issue_list.addItem(entry)
+                dialog.cursor = page["next_after_id"]
+                more.setEnabled(dialog.cursor is not None)
+                count = dialog.issue_list.count()
+                dialog.summary.setText(f"{count} file issues shown. Refresh this folder after addressing them." if count else
+                                       "No recorded issues in this folder. Refresh to discover new or changed files.")
+            except (OSError, ValueError, sqlite3.Error):
+                dialog.issue_list.clear()
+                more.setEnabled(False)
+                dialog.summary.setText("Folder access changed or is unavailable. Close this view and check the selected folders.")
+            finally:
+                if index:
+                    index.close()
+        def finished():
+            dialog.issue_list.clear()
+            if self.issue_dialog is dialog:
+                self.issue_dialog = None
+            dialog.deleteLater()
+        dialog.finished.connect(finished)
+        more.clicked.connect(load_page)
+        load_page()
+        if self.issue_dialog is dialog:
+            dialog.show()
 
     def update_folders(self):
         selected_id = self.folder_filter.currentData() if hasattr(self, "folder_filter") else None
@@ -773,6 +849,9 @@ class Window(QMainWindow):
         return QDesktopServices.openUrl(QUrl.fromLocalFile(str(path.parent)))
 
     def closeEvent(self, event):
+        if self.issue_dialog:
+            self.issue_dialog.issue_list.clear()
+            self.issue_dialog.close()
         if self.thumbnail_tasks:
             self.closing = True
             for task in self.thumbnail_tasks:

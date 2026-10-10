@@ -280,20 +280,49 @@ class Index:
             parameters = (root_id,)
         counts = {"searchable": 0, "failed": 0, "unsupported": 0, "pending": 0}
         for row in self.db.execute(sql, parameters):
-            state = row["status"]
-            if state == "searchable":
-                try:
-                    path = self.authorize(row["root_id"], row["path"])
-                    info = path.stat()
-                    if (info.st_size, info.st_mtime_ns) != (row["size"], row["mtime"]):
-                        state = "stale"
-                except FileNotFoundError:
-                    state = "missing"
-                except (OSError, ScopeError):
-                    state = "unavailable"
+            state = self._file_state(row)
             counts[state] = counts.get(state, 0) + 1
         counts["discovered"] = sum(counts.values())
         return counts
+
+    def _file_state(self, row):
+        state = row["status"]
+        if state == "searchable":
+            try:
+                path = self.authorize(row["root_id"], row["path"])
+                info = path.stat()
+                if (info.st_size, info.st_mtime_ns) != (row["size"], row["mtime"]):
+                    state = "stale"
+            except FileNotFoundError:
+                state = "missing"
+            except (OSError, ScopeError):
+                state = "unavailable"
+        return state
+
+    def file_issues(self, root_id=None, after_id=0, limit=100):
+        """Read selected-root metadata only; no extraction, inference or file actions."""
+        if not isinstance(limit, int) or not 1 <= limit <= 500 or not isinstance(after_id, int) or after_id < 0:
+            raise ValueError("invalid-issue-page")
+        if root_id is not None:
+            self._root(root_id)
+        sql = "SELECT f.* FROM files f JOIN roots r ON r.id=f.root_id WHERE f.id>?"
+        parameters = [after_id]
+        if root_id is not None:
+            sql += " AND f.root_id=?"
+            parameters.append(root_id)
+        items = []
+        cursor = after_id
+        for row in self.db.execute(sql + " ORDER BY f.id", parameters):
+            cursor = row["id"]
+            state = self._file_state(row)
+            if state != "searchable":
+                items.append({"file_id": row["id"], "root_id": row["root_id"], "path": row["path"],
+                              "state": state, "error": row["error"]})
+                if len(items) == limit:
+                    break
+        parameters[0] = cursor
+        more = self.db.execute(sql + " LIMIT 1", parameters).fetchone() is not None
+        return {"items": items, "next_after_id": cursor if more else None}
 
     def _eligible(self, root_id=None, suffix=None):
         sql = """SELECT c.*,f.path,f.root_id,f.suffix,f.size,f.mtime,f.digest FROM chunks c

@@ -53,6 +53,7 @@ The index stores plaintext extracted text and vectors under `%LOCALAPPDATA%\Omni
 & '.venv\Scripts\python.exe' -m omnifind search 'getting my deposit back after moving out' --type pdf
 & '.venv\Scripts\python.exe' -m omnifind search 'INV-2048' --mode lexical --folder 1
 & '.venv\Scripts\python.exe' -m omnifind status
+& '.venv\Scripts\python.exe' -m omnifind issues --folder 1
 & '.venv\Scripts\python.exe' -m omnifind remove-folder 1
 ```
 
@@ -67,7 +68,7 @@ For alternate synthetic test storage, pass `--db path/to/index.sqlite` **before*
 ## Verification
 
 ```powershell
-& '.venv\Scripts\python.exe' -m unittest tests.test_core tests.test_recovery tests.test_worker tests.test_holdout tests.test_identifiers tests.test_ocr -v
+& '.venv\Scripts\python.exe' -m unittest tests.test_core tests.test_recovery tests.test_worker tests.test_holdout tests.test_identifiers tests.test_ocr tests.test_issues -v
 & '.venv\Scripts\python.exe' scripts/evaluate.py --model models/minilm
 & '.venv\Scripts\python.exe' scripts/verify_gui.py
 ```

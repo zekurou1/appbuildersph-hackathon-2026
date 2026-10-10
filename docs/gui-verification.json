@@ -19,14 +19,16 @@
     "clear-index confirmation and rebuild preserve originals",
     "hybrid exact identifier works without model assets and rejects absent codes",
     "cross-window revocation clears preview and actions without interaction",
-    "folder revocation during work preserves originals"
+    "folder revocation during work preserves originals",
+    "file issues identify corrupt and unsupported files with recovery steps",
+    "cross-window revocation closes file issues"
   ],
   "python_socket_connect_attempts": 0,
   "limits": [
     "Offscreen QtTest, not manual Windows usability or screen-reader validation",
     "Native picker response was supplied by the test",
     "OS viewer and Explorer launches intercepted after path authorization",
-    "Synthetic three-file corpus only",
+    "Synthetic six-file corpus: three searchable and three recorded issues",
     "No OS-level network audit"
   ],
   "ocr": {

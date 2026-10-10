@@ -31,6 +31,8 @@ SQLite stores metadata, selected roots, file fingerprints, chunks, local vectors
 
 Manual refresh handles changed/new/deleted files and records unsupported/failed files. Changed or missing originals are excluded from results until refreshed, with coverage showing stale/missing states. Removing a root deletes its text/vector/FTS derivatives in one transaction, including after restart, and preserves originals. Lexical search of committed content works without loading the model, with an explicit mode selection.
 
+Folders now offers [file-issues review](FILE_ISSUES.md) with per-file recovery guidance, paging and stale/missing states. The CLI `issues` command also works without model assets. Issue dialogs clear on folder revocation, including across windows; originals remain untouched.
+
 ## Evidence and remaining gates
 
 See [retrieval development results](RETRIEVAL_RESULTS.md) and the machine-readable [evaluation report](retrieval-evaluation.json). Fifty present-target queries over ten synthetic documents compare filename, lexical, semantic and hybrid modes. This deliberately includes misleading filenames; it does not establish general superiority over filename search or production accuracy. Labels were authored with the corpus, not inferred from model winners.
@@ -43,7 +45,7 @@ That historical failure is now addressed by a narrow [exact-identifier route](ID
 
 The desktop prototype connects folder selection, background indexing, search/evidence and deliberate file actions. Cancellation preserves committed content, removal revokes scope while work runs, and queued responses are suppressed when their scope changes. Preview/open also validate the expected indexed fingerprint. Native OS launches were intercepted during tests; offscreen verification is not manual usability or screen-reader validation. See [GUI report](gui-verification.json).
 
-The reliability phase added a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. The later containment phase adds parser memory/process/output limits and persistent cross-window privacy invalidation. Thirty-six tests now pass, including evaluator/identifier/OCR checks; one symbolic-link test remains skipped. See [reliability evidence](RELIABILITY_PHASE.md) and [containment evidence](CONTAINMENT_PHASE.md). Consented larger-corpus performance, low-resource device recovery and complete OS privacy audits remain.
+The reliability phase added a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. The later containment phase adds parser memory/process/output limits and persistent cross-window privacy invalidation. Forty tests now pass, including evaluator/identifier/OCR/file-issues checks; one symbolic-link test remains skipped. See [reliability evidence](RELIABILITY_PHASE.md) and [containment evidence](CONTAINMENT_PHASE.md). Consented larger-corpus performance, low-resource device recovery and complete OS privacy audits remain.
 
 ## UI contract
 

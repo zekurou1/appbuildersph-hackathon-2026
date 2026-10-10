@@ -50,6 +50,9 @@ def main():
     ImageDraw.Draw(image).multiline_text((40, 40), "CLASS SCHEDULE - SCH-642\nPhysics laboratory: Wednesday 3 PM\nRoom 307. Bring safety goggles.",
         fill="black", font=ImageFont.truetype("C:/Windows/Fonts/segoeui.ttf", 32), spacing=18)
     image.save(screenshot)
+    (corpus / "broken.png").write_bytes(b"invalid image")
+    (corpus / "broken.pdf").write_bytes(b"invalid PDF")
+    (corpus / "unsupported.csv").write_text("unsupported synthetic file")
     actions = []
     window = Window(run / "data/index.sqlite", Path("models/minilm"),
                     file_action=lambda action, path: actions.append((action, str(path))) or True)
@@ -97,6 +100,16 @@ def main():
         settle()
         print('GUI first refresh passed', flush=True)
         assert "3 searchable" in window.status.text(), window.status.text()
+        QTest.mouseClick(window.issues_button, Qt.MouseButton.LeftButton)
+        app.processEvents()
+        assert window.issue_dialog and window.issue_dialog.issue_list.count() == 3
+        issue_text = " ".join(window.issue_dialog.issue_list.item(i).text() for i in range(3))
+        assert "broken.png" in issue_text and "could not be decoded" in issue_text
+        assert "unsupported.csv" in issue_text and "not supported" in issue_text
+        window.issue_dialog.grab().save(str(output / "file-issues.png"))
+        window.issue_dialog.close()
+        window.activateWindow()
+        app.processEvents()
         QTest.keyClick(window, Qt.Key.Key_K, Qt.KeyboardModifier.ControlModifier)
         app.processEvents()
         assert window.pages.currentIndex() == 0 and window.query.hasFocus()
@@ -205,6 +218,9 @@ def main():
         search("SCH-642")
         assert window.preview.toPlainText() and window.open_button.isEnabled()
         assert window.image_preview.isVisible()
+        window.navigate(1)
+        QTest.mouseClick(window.issues_button, Qt.MouseButton.LeftButton)
+        assert window.issue_dialog and window.issue_dialog.issue_list.count() == 3
         # A separate window can revoke cached evidence without a new search/click.
         second_window = Window(run / "data/index.sqlite", Path("models/minilm"))
         second_window.remove_folder(second_window.folder_list.item(0).data(Qt.ItemDataRole.UserRole))
@@ -214,6 +230,7 @@ def main():
             time.sleep(.02)
         assert not window.preview.toPlainText() and not window.open_button.isEnabled()
         assert not window.image_preview.isVisible() and window.image_preview.pixmap().isNull()
+        assert window.issue_dialog is None
         assert window.query.text() == "SCH-642" and window.folder_list.count() == 0
         second_window.close()
         window.add_folder(corpus)
@@ -261,10 +278,11 @@ def main():
                   "python_socket_connect_attempts": len(attempts),
                   "limits": ["Offscreen QtTest, not manual Windows usability or screen-reader validation",
                              "Native picker response was supplied by the test", "OS viewer and Explorer launches intercepted after path authorization",
-                             "Synthetic three-file corpus only", "No OS-level network audit"],
+                             "Synthetic six-file corpus: three searchable and three recorded issues", "No OS-level network audit"],
                   "ocr": {"engine": "Windows.Media.Ocr", "verified": ["contained screenshot extraction", "real MiniLM paraphrase search", "exact screenshot code", "OCR evidence label and original path"]}}
         report["ocr"]["verified"].append("bounded original-image thumbnail with asynchronous preview")
         report["ocr"]["verified"].extend(["cross-window revocation clears thumbnail", "close cancels thumbnail before window destruction"])
+        report["passed"].extend(["file issues identify corrupt and unsupported files with recovery steps", "cross-window revocation closes file issues"])
         (output / "report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
         print(json.dumps(report, indent=2))
     finally:
