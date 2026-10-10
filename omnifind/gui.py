@@ -7,6 +7,7 @@ import re
 import sqlite3
 import subprocess
 import threading
+import sys
 from pathlib import Path
 
 from PySide6.QtCore import QThread, Signal, Qt, QUrl, QTimer
@@ -873,7 +874,7 @@ class Window(QMainWindow):
 def main():
     parser = argparse.ArgumentParser(description="OmniFind Local desktop prototype")
     parser.add_argument("--db", type=Path, default=Path(os.environ.get("LOCALAPPDATA", Path.home())) / "OmniFindLocal/index.sqlite")
-    parser.add_argument("--model", type=Path, default=Path("models/minilm"))
+    parser.add_argument("--model", type=Path, default=Path(sys.executable).parent / "models/minilm" if getattr(sys, "frozen", False) else Path("models/minilm"))
     args = parser.parse_args()
     app = QApplication.instance() or QApplication([])
     window = Window(args.db, args.model)

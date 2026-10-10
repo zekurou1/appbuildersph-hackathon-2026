@@ -3,6 +3,7 @@ import json
 import os
 import re
 import sqlite3
+import sys
 from pathlib import Path
 
 from .core import Index, is_identifier_query
@@ -11,7 +12,7 @@ from .core import Index, is_identifier_query
 def main():
     parser = argparse.ArgumentParser(description="OmniFind Local retrieval core")
     parser.add_argument("--db", type=Path, default=Path(os.environ.get("LOCALAPPDATA", Path.home())) / "OmniFindLocal" / "index.sqlite")
-    parser.add_argument("--model", type=Path, default=Path("models/minilm"))
+    parser.add_argument("--model", type=Path, default=Path(sys.executable).parent / "models/minilm" if getattr(sys, "frozen", False) else Path("models/minilm"))
     sub = parser.add_subparsers(dest="command", required=True)
     add = sub.add_parser("add-folder")
     add.add_argument("path", type=Path)

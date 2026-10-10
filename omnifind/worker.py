@@ -37,7 +37,15 @@ def run_worker(module, arguments, checkpoint=None, timeout=TIMEOUT_SECONDS,
     try:
         if checkpoint:
             checkpoint()
-        process = subprocess.Popen([sys.executable, "-m", "omnifind.worker_bootstrap", module, *map(str, arguments)],
+        if getattr(sys, "frozen", False):
+            from pathlib import Path
+            worker_executable = Path(sys.executable).with_name("OmniFindCLI.exe")
+            if not worker_executable.is_file():
+                raise ValueError("extraction-worker-missing")
+            command = [str(worker_executable), "--worker", module, *map(str, arguments)]
+        else:
+            command = [sys.executable, "-m", "omnifind.worker_bootstrap", module, *map(str, arguments)]
+        process = subprocess.Popen(command,
                                    stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                    creationflags=subprocess.CREATE_NO_WINDOW)
         job.assign(process.pid)

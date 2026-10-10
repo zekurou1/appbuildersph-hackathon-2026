@@ -1,0 +1,52 @@
+name: Windows release checks
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'omnifind/**'
+      - 'packaging/**'
+      - 'scripts/verify_package.py'
+      - 'pyproject.toml'
+      - 'uv.lock'
+      - '.github/workflows/windows-release-check.yml'
+permissions:
+  contents: read
+jobs:
+  windows-package:
+    runs-on: windows-2025
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12.15'
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          version: '0.12.24'
+      - name: Locked environment
+        run: uv sync --locked --group release
+      - name: Download pinned public model assets
+        run: .venv/Scripts/python.exe scripts/prepare_model.py --destination models/minilm
+      - name: Deterministic lifecycle checks
+        run: .venv/Scripts/python.exe -m unittest tests.test_core tests.test_recovery tests.test_worker tests.test_holdout tests.test_identifiers tests.test_issues -v
+      - name: Build Windows executables
+        run: .venv/Scripts/python.exe -m PyInstaller --noconfirm --distpath dist --workpath build packaging/omnifind.spec
+      - name: Verify frozen package on separate Windows runner
+        run: .venv/Scripts/python.exe scripts/verify_package.py --allow-unavailable-ocr
+      - name: Record OCR readiness separately
+        continue-on-error: true
+        run: .venv/Scripts/python.exe scripts/check_setup.py --output reports/runtime/runner-readiness.json
+      - name: Upload synthetic verification reports
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: windows-release-check-reports
+          path: |
+            reports/runtime/package-verification.json
+            reports/runtime/runner-readiness.json
+          if-no-files-found: warn
+          retention-days: 7
