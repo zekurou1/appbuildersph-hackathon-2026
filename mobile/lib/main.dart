@@ -75,7 +75,8 @@ class _PhoneSearchState extends State<PhoneSearch> with WidgetsBindingObserver {
     on PlatformException catch (e) { if (mounted) setState(() => status = problem(e)); }
     finally { if (mounted) setState(() => busy = false); }
   }
-  String sourceLocation(Map<String, dynamic> result) => result['page'] == null
+  String sourceLocation(Map<String, dynamic> result) => result['kind'] == 'ocr'
+      ? 'OCR line ${result['line']}' : result['page'] == null
       ? 'Line ${result['line']}' : 'Page ${result['page']} · extracted line ${result['line']}';
   String issueLabel(String code) => switch (code) {
     'pdf-needs-android-15' => 'PDF text search needs Android 15 or newer',
@@ -87,6 +88,12 @@ class _PhoneSearchState extends State<PhoneSearch> with WidgetsBindingObserver {
     'unsupported-type' => 'Unsupported file format',
     'no-searchable-text' => 'File has no searchable text',
     'source-changed' => 'File changed during indexing; refresh again',
+    'image-no-text' => 'Image has no recognized text',
+    'image-unreadable' => 'Image could not be decoded',
+    'image-pixel-limit' => 'Image exceeds 4 million pixels',
+    'image-needs-rotation' => 'Rotated or mirrored JPEG is unsupported; choose an upright image',
+    'ocr-text-limit' => 'Image exceeds the 100,000-character OCR limit',
+    'ocr-model-invalid' => 'OCR model could not be verified or loaded',
     _ => 'File could not be indexed ($code)',
   };
   Future<void> pick() => work(() async {
@@ -129,9 +136,11 @@ class _PhoneSearchState extends State<PhoneSearch> with WidgetsBindingObserver {
     await Navigator.push<void>(context, MaterialPageRoute(builder: (context) => Scaffold(
       appBar: AppBar(title: Text(result['name'] as String)),
       body: ListView(padding: const EdgeInsets.all(24), children: [
-        Text('Original source · ${sourceLocation(result)}', style: Theme.of(context).textTheme.labelLarge),
+        Text('${result['kind'] == 'ocr' ? 'Recognized image text' : 'Original source'} · ${sourceLocation(result)}', style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: 16), SelectableText(result['text'] as String, style: Theme.of(context).textTheme.bodyLarge),
-        const SizedBox(height: 24), const Text('An excerpt from your file. Search does not generate an answer.'),
+        const SizedBox(height: 24), Text(result['kind'] == 'ocr'
+            ? 'OCR can misread words and codes. Open the original image to verify this passage.'
+            : 'An excerpt from your file. Search does not generate an answer.'),
       ]),
       bottomNavigationBar: SafeArea(child: Padding(padding: const EdgeInsets.all(16), child: FilledButton.icon(
         icon: const Icon(Icons.open_in_new), label: const Text('Open original'), onPressed: () async {
@@ -176,7 +185,7 @@ class _PhoneSearchState extends State<PhoneSearch> with WidgetsBindingObserver {
         ]),
         1 => ListView(padding: const EdgeInsets.all(20), children: [
           Text('Selected folders', style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 12), const Text('Choose a subfolder on this phone. Text and Markdown are supported. Digital PDF text search requires Android 15 or newer. Scanned PDFs and screenshot OCR are unavailable.'),
+          const SizedBox(height: 12), const Text('Choose a subfolder on this phone. Text, Markdown and upright PNG/JPEG text recognition are supported. Digital PDF text search requires Android 15 or newer. Scanned PDFs are unavailable.'),
           const SizedBox(height: 12), FilledButton.icon(onPressed: busy ? null : pick, icon: const Icon(Icons.create_new_folder_outlined), label: const Text('Choose folder')),
           const SizedBox(height: 12), Text(status),
           for (final root in roots) Card(child: Padding(padding: const EdgeInsets.all(16), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -191,8 +200,9 @@ class _PhoneSearchState extends State<PhoneSearch> with WidgetsBindingObserver {
         _ => ListView(padding: const EdgeInsets.all(24), children: [
           Text('On this phone', style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 16), const Text('Meaning search uses bundled MiniLM on the phone CPU. No cloud fallback, desktop connection or account.'),
+          const SizedBox(height: 16), const Text('Image text recognition uses bundled English Tesseract on this phone. OCR can misread text; verify the original image. It does not recognize objects or scenes.'),
           const SizedBox(height: 16), const Text('The local index contains readable source excerpts and vectors in app-private storage. Android backup is disabled. Query history is not saved. Originals stay in their folders.'),
-          const SizedBox(height: 16), const Text('Pilot limits: English text, Markdown and digital PDFs (Android 15+); 200 files per folder; 1 MiB per file; 20 MiB per refresh; 20 pages and 100,000 extracted characters per PDF. PDF lines describe extracted text, not visual rows. Manual refresh is required after changes. Providers and external viewers have their own behavior.'),
+          const SizedBox(height: 16), const Text('Pilot limits: English text, Markdown, upright PNG/JPEG and digital PDFs (Android 15+); 200 files per folder; 1 MiB per file; 20 MiB per refresh; 4 million pixels per image; 20 pages per PDF; 100,000 extracted characters per image or PDF. PDF lines describe extracted text, not visual rows. Manual refresh is required after changes. Providers and external viewers have their own behavior.'),
           const SizedBox(height: 16), const Text('Experimental match threshold. Quality and performance need independent phone testing.'),
         ]),
       }),

@@ -1,3 +1,5 @@
+import java.security.MessageDigest
+
 plugins {
     id("com.android.application")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
@@ -52,6 +54,24 @@ flutter {
 
 dependencies {
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.31.0")
+    implementation("cz.adaptech.tesseract4android:tesseract4android:4.9.0")
     androidTestImplementation("androidx.test:runner:1.7.0")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
 }
+
+// Verify the exact native OCR artifact before compiling either pilot variant.
+val verifyOcrLibrary = tasks.register("verifyOcrLibrary") {
+    doLast {
+        val artifact = configurations.getByName("debugRuntimeClasspath").resolvedConfiguration.resolvedArtifacts.single {
+            it.moduleVersion.id.group == "cz.adaptech.tesseract4android" && it.name == "tesseract4android"
+        }
+        val digest = MessageDigest.getInstance("SHA-256")
+        artifact.file.inputStream().use { input ->
+            val buffer = ByteArray(8192)
+            while (true) { val count = input.read(buffer); if (count < 0) break; digest.update(buffer, 0, count) }
+        }
+        val sha = digest.digest().joinToString("") { "%02x".format(it.toInt() and 255) }
+        check(sha == "bce5d6413a1a5ae3d7240033fbbc851ba3217d0a08d9769400e17a077f42cb2a") { "OCR library checksum mismatch" }
+    }
+}
+tasks.matching { it.name == "preBuild" }.configureEach { dependsOn(verifyOcrLibrary) }

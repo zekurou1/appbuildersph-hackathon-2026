@@ -8,16 +8,21 @@ import java.io.File
 import java.nio.ByteBuffer
 import java.nio.charset.CodingErrorAction
 
-data class SourceLine(val page: Int?, val line: Int, val text: String)
+data class SourceLine(val page: Int?, val line: Int, val text: String, val kind: String = "text", val region: List<Int>? = null)
 
 /** Bounded, phone-local extraction. PDF evidence refers to extracted page text, not visual rows. */
-class PhoneTextExtractor(private val context: Context) {
+class PhoneTextExtractor(private val context: Context) : AutoCloseable {
+    private var ocr: PhoneOcr? = null
     private val staging = File(context.cacheDir, "omnifind-pdf").apply { mkdirs() }
     init { staging.listFiles()?.filter { it.name.startsWith("source-") && it.extension == "pdf" }?.forEach { it.delete() } }
 
     fun extract(name: String, bytes: ByteArray, checkpoint: () -> Unit): List<SourceLine> {
         checkpoint()
         require(bytes.size <= 1_048_576) { "file-too-large" }
+        if (name.substringAfterLast('.').lowercase() in setOf("png", "jpg", "jpeg")) {
+            val engine = ocr ?: PhoneOcr(context).also { ocr = it }
+            return engine.extract(bytes, checkpoint)
+        }
         if (!name.endsWith(".pdf", ignoreCase = true)) {
             require(name.endsWith(".txt", true) || name.endsWith(".md", true)) { "unsupported-type" }
             val decoder = Charsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT)
@@ -58,4 +63,5 @@ class PhoneTextExtractor(private val context: Context) {
             throw IllegalArgumentException("pdf-unreadable")
         } finally { file.delete() }
     }
+    override fun close() { ocr?.close() }
 }

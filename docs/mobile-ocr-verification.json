@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-10",
+  "evidence_kind": "Builder observations in the release APK using synthetic originals, plus native and Flutter tests",
+  "device": "Android 17 API 37 x86_64 emulator-5554",
+  "package": "ph.appbuilders.omnifind_mobile",
+  "corpus": "Documents/OmniFindOcrProbe20261010: upright PNG and JPEG with English text, blank PNG, corrupt PNG and Markdown receipt",
+  "release_apk_sha256": "59a387c24059f6ec2b6c473d232b073edcf37a5644bb2726245b6711325c9871",
+  "offline": {
+    "airplane_mode_before": 0,
+    "wifi_before": "enabled and connected to AndroidWifi",
+    "first_use_indexing_search_and_original_view": "airplane mode 1, Wi-Fi disabled",
+    "airplane_mode_restored": 0,
+    "wifi_restored": "enabled and connected to AndroidWifi"
+  },
+  "native_picker_selected_only_probe_subfolder": true,
+  "refresh": {
+    "files_seen": 5,
+    "searchable": 3,
+    "issues": 2,
+    "visible_reasons": ["Image has no recognized text", "Image could not be decoded"]
+  },
+  "meaning_query": "How soon do I get my rental deposit after leaving",
+  "meaning_results": ["receipt.jpg", "unrelated.png"],
+  "recognized_passage": {"kind": "ocr", "line": 1, "text": "Rental deposit returned after moving out."},
+  "detail_label_and_ocr_accuracy_warning_verified": true,
+  "original_png_native_viewer_contents_visually_verified": true,
+  "resume_cleared_prior_results_and_preserved_query": true,
+  "exact_code_after_process_restart_without_refresh": {
+    "query": "PKG-483",
+    "matching_files": ["receipt.jpg", "unrelated.png"],
+    "ocr_line": 2,
+    "recognized_text": "Reference PKG-483"
+  },
+  "root_removed_and_exact_code_no_longer_returned": true,
+  "all_five_original_sha256_values_preserved": true,
+  "original_hashes": {
+    "blank.png": "45c5022dcaa72fc60285893485fbf2f42df16f886d6261dcd4cef17f74e00e90",
+    "broken.png": "5464533c9647b67eb320c40ccc5959537c09102ae75388f6a7675b433e745c9d",
+    "note.md": "d723aaa224aef11b611f43957f0342d0592896c9deb81034be603ee2bec444a5",
+    "receipt.jpg": "132a2464da8612dfd4e2d1d2cd72cc6bd2f853108d18c9f44d362fcd7f536f9a",
+    "unrelated.png": "b3bbe7a65f80e974e463243cb11e9e32a17fad3c9d23efacc3fd1207bec35349"
+  },
+  "checks": {"flutter_analyze": "No issues found", "flutter_widget_tests_passed": 5, "native_instrumented_tests_passed": 14},
+  "limits": [
+    "Synthetic inputs are not a retrieval benchmark or independent user acceptance",
+    "English upright readable PNG/JPEG text only; no scanned-PDF OCR or object/scene understanding",
+    "1 MiB compressed bytes, 4 million pixels, 100000 recognized characters and 2000 passages per image",
+    "JPEG non-normal EXIF orientation is rejected; PNG orientation metadata is not interpreted",
+    "Native OCR calls lack process isolation and a hard timeout; cancellation is checked around recognition and before commit",
+    "Pixel regions were checked in native extraction tests; image highlighting is not implemented",
+    "Physical devices, TalkBack, memory and thermal measurements, and hostile-input timing remain unverified",
+    "Offline emulator flow and manifest inspection are not a complete OS/service or external-viewer egress audit"
+  ]
+}

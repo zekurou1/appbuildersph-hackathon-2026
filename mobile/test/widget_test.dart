@@ -6,6 +6,22 @@ import 'package:omnifind_mobile/main.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  testWidgets('Image evidence is labeled OCR and asks users to verify the original', (tester) async {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(const MethodChannel('omnifind/phone'), (call) async {
+      if (call.method == 'search') return [{'uri': 'synthetic-image', 'name': 'receipt.png', 'sha': 'fixture', 'kind': 'ocr', 'line': 2, 'text': 'Reference PKG-483', 'score': 1.0}];
+      return [];
+    });
+    await tester.pumpWidget(const OmniFindApp());
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'PKG-483');
+    await tester.tap(find.widgetWithText(FilledButton, 'Search'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('receipt.png'));
+    await tester.pumpAndSettle();
+    expect(find.text('Recognized image text · OCR line 2'), findsOneWidget);
+    expect(find.text('OCR can misread words and codes. Open the original image to verify this passage.'), findsOneWidget);
+    expect(find.text('Open original'), findsOneWidget);
+  });
   testWidgets('In-flight search locks the query; changing mode clears old evidence', (tester) async {
     final pending = Completer<List<Map<String, dynamic>>>();
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(const MethodChannel('omnifind/phone'), (call) async {

@@ -10,6 +10,7 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.security.MessageDigest
 import java.util.concurrent.atomic.AtomicBoolean
+import org.json.JSONArray
 
 /** Persist only explicitly selected local-provider content in app-private SQLite. */
 class PhoneIndex(private val context: Context) : AutoCloseable {
@@ -19,15 +20,19 @@ class PhoneIndex(private val context: Context) : AutoCloseable {
     }
     private val resolver = context.contentResolver
     private val extractor = PhoneTextExtractor(context)
-    private val helper = object : SQLiteOpenHelper(context, "phone-index.sqlite", null, 2) {
+    private val helper = object : SQLiteOpenHelper(context, "phone-index.sqlite", null, 3) {
         override fun onCreate(db: SQLiteDatabase) {
             db.execSQL("CREATE TABLE roots(uri TEXT PRIMARY KEY,name TEXT NOT NULL)")
             db.execSQL("CREATE TABLE files(uri TEXT PRIMARY KEY,root TEXT NOT NULL,name TEXT NOT NULL,sha TEXT NOT NULL,issue TEXT)")
-            db.execSQL("CREATE TABLE chunks(uri TEXT NOT NULL,line INTEGER NOT NULL,text TEXT NOT NULL,vector BLOB NOT NULL,page INTEGER)")
+            db.execSQL("CREATE TABLE chunks(uri TEXT NOT NULL,line INTEGER NOT NULL,text TEXT NOT NULL,vector BLOB NOT NULL,page INTEGER,kind TEXT NOT NULL DEFAULT 'text',region TEXT)")
             db.execSQL("CREATE INDEX chunks_uri ON chunks(uri)")
         }
         override fun onUpgrade(db: SQLiteDatabase, old: Int, new: Int) {
             if (old < 2) db.execSQL("ALTER TABLE chunks ADD COLUMN page INTEGER")
+            if (old < 3) {
+                db.execSQL("ALTER TABLE chunks ADD COLUMN kind TEXT NOT NULL DEFAULT 'text'")
+                db.execSQL("ALTER TABLE chunks ADD COLUMN region TEXT")
+            }
         }
     }
     private val db = helper.writableDatabase.apply { rawQuery("PRAGMA secure_delete=ON", null).use { it.moveToFirst() } }
@@ -100,7 +105,7 @@ class PhoneIndex(private val context: Context) : AutoCloseable {
                     var issue: String? = null
                     val passages = mutableListOf<Pair<SourceLine, FloatArray>>()
                     try {
-                        require(name.substringAfterLast('.').lowercase() in setOf("txt", "md", "pdf")) { "unsupported-type" }
+                        require(name.substringAfterLast('.').lowercase() in setOf("txt", "md", "pdf", "png", "jpg", "jpeg")) { "unsupported-type" }
                         val bytes = read(uri)
                         require(totalBytes + bytes.size <= 20 * 1_048_576) { "folder-size-limit" }
                         totalBytes += bytes.size
@@ -120,7 +125,7 @@ class PhoneIndex(private val context: Context) : AutoCloseable {
                         require(digest(read(uri)) == sha) { "source-changed" }
                     } catch (error: Exception) {
                         checkpoint()
-                        issue = if (error.message in setOf("unsupported-type", "file-too-large", "folder-size-limit", "source-changed", "passage-count-limit", "pdf-needs-android-15", "pdf-page-limit", "pdf-text-limit", "pdf-no-text", "pdf-unreadable", "no-searchable-text")) error.message else "file-could-not-be-indexed"
+                        issue = if (error.message in setOf("unsupported-type", "file-too-large", "folder-size-limit", "source-changed", "passage-count-limit", "pdf-needs-android-15", "pdf-page-limit", "pdf-text-limit", "pdf-no-text", "pdf-unreadable", "no-searchable-text", "image-unreadable", "image-pixel-limit", "image-needs-rotation", "image-no-text", "ocr-text-limit", "ocr-model-invalid")) error.message else "file-could-not-be-indexed"
                         passages.clear()
                     }
                     checkpoint()
@@ -131,7 +136,7 @@ class PhoneIndex(private val context: Context) : AutoCloseable {
                         for ((source, vector) in passages) {
                             val blob = ByteBuffer.allocate(384 * 4).order(ByteOrder.LITTLE_ENDIAN)
                             vector.forEach { blob.putFloat(it) }
-                            db.insertOrThrow("chunks", null, values("uri" to uri.toString(), "line" to source.line, "page" to source.page, "text" to source.text, "vector" to blob.array()))
+                            db.insertOrThrow("chunks", null, values("uri" to uri.toString(), "line" to source.line, "page" to source.page, "kind" to source.kind, "region" to source.region?.let { JSONArray(it).toString() }, "text" to source.text, "vector" to blob.array()))
                         }
                         db.setTransactionSuccessful()
                     } finally { db.endTransaction() }
@@ -156,7 +161,7 @@ class PhoneIndex(private val context: Context) : AutoCloseable {
         check(!cancelled.get()) { "indexing-cancelled" }
         val matches = mutableMapOf<String, Map<String, Any?>>()
         val fresh = mutableMapOf<String, Boolean>()
-        db.rawQuery("SELECT f.uri,f.root,f.name,f.sha,c.line,c.text,c.vector,c.page FROM chunks c JOIN files f ON f.uri=c.uri WHERE f.issue IS NULL", null).use { cursor ->
+        db.rawQuery("SELECT f.uri,f.root,f.name,f.sha,c.line,c.text,c.vector,c.page,c.kind,c.region FROM chunks c JOIN files f ON f.uri=c.uri WHERE f.issue IS NULL", null).use { cursor ->
             while (cursor.moveToNext()) {
                 check(!cancelled.get()) { "indexing-cancelled" }
                 val uri = cursor.getString(0); val root = cursor.getString(1)
@@ -170,7 +175,7 @@ class PhoneIndex(private val context: Context) : AutoCloseable {
                 }
                 if (score < if (q == null) .0001 else .25) continue
                 val prior = matches[uri]?.get("score") as? Double ?: Double.NEGATIVE_INFINITY
-                if (score > prior) matches[uri] = mapOf("uri" to uri, "root" to root, "name" to cursor.getString(2), "sha" to cursor.getString(3), "line" to cursor.getInt(4), "page" to if (cursor.isNull(7)) null else cursor.getInt(7), "text" to text, "score" to score)
+                if (score > prior) matches[uri] = mapOf("uri" to uri, "root" to root, "name" to cursor.getString(2), "sha" to cursor.getString(3), "line" to cursor.getInt(4), "page" to if (cursor.isNull(7)) null else cursor.getInt(7), "kind" to cursor.getString(8), "region" to if (cursor.isNull(9)) null else JSONArray(cursor.getString(9)).let { json -> List(json.length()) { json.getInt(it) } }, "text" to text, "score" to score)
             }
         }
         return matches.values.sortedByDescending { it["score"] as Double }.take(20)
@@ -191,5 +196,5 @@ class PhoneIndex(private val context: Context) : AutoCloseable {
         } finally { db.endTransaction() }
         try { resolver.releasePersistableUriPermission(Uri.parse(root), android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION) } catch (_: SecurityException) { }
     }
-    override fun close() { model?.close(); helper.close() }
+    override fun close() { model?.close(); extractor.close(); helper.close() }
 }

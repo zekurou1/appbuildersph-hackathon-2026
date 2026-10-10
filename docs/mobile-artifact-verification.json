@@ -1,6 +1,6 @@
 {
-  "apk_bytes": 231577081,
-  "apk_sha256": "acb3dd745ecb00940a53e911a7c3a3280c0d2035e124e9ab689c7fb703c772c2",
+  "apk_bytes": 254681402,
+  "apk_sha256": "59a387c24059f6ec2b6c473d232b073edcf37a5644bb2726245b6711325c9871",
   "signing": "debug-signed pilot release build",
   "no_internet_permission": true,
   "automatic_telemetry_provider_removed": true,
@@ -21,8 +21,20 @@
       }
     }
   },
+  "ocr": {
+    "engine": "Tesseract4Android 4.9.0 standard / Tesseract 5.5.1",
+    "dependency": "cz.adaptech.tesseract4android:tesseract4android:4.9.0",
+    "aar_sha256": "bce5d6413a1a5ae3d7240033fbbc851ba3217d0a08d9769400e17a077f42cb2a",
+    "repository": "https://github.com/tesseract-ocr/tessdata_fast",
+    "revision": "87416418657359cb625c412a48b6e1d6d41c29bd",
+    "language": "eng",
+    "file": "eng.traineddata",
+    "sha256": "7d4322bd2a7749724879683fc3912cb542f19906c83bcc1a52132556427170b2",
+    "bytes": 4113088,
+    "download_location": "build machine only; no app download path"
+  },
   "native_instrumented_tests": {
-    "passed": 8,
+    "passed": 14,
     "emulator": "Android 17 API 37 x86_64",
     "checks": [
       "Four English tokenizer fixtures and normalized ONNX embedding cosine > .999 against desktop",
@@ -32,7 +44,12 @@
       "PDF page-count rejection",
       "Cancellation removes temporary PDF bytes",
       "TXT/MD source-line compatibility",
-      "Version 1 SQLite migration preserves original text passages"
+      "SQLite migrations preserve original text passages and PDF pages",
+      "PNG OCR words, exact code, pixel regions and semantic passage preference",
+      "Upright JPEG OCR",
+      "Blank/malformed image issue codes",
+      "Pre-OCR pixel bound",
+      "Canceled OCR returns no partial evidence"
     ]
   },
   "limits": [

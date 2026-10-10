@@ -25,7 +25,7 @@
   "limits": [
     "Synthetic corpus is not a retrieval quality benchmark or independent user acceptance",
     "PDF extraction requires Android 15+; older OS rejection and physical devices were not exercised",
-    "No scanned-PDF or screenshot OCR support",
+    "This historical APK predates screenshot OCR; scanned-PDF OCR remains unsupported",
     "Native parser calls are not interruptible or isolated in a killable process",
     "PDF password protection, PDF text-character limit and hostile parser timing were not runtime-tested",
     "Manifest inspection is not a complete OS or external-viewer egress audit"

@@ -72,13 +72,7 @@ class PhonePdfTest {
     @Test fun existingTextIndexMigratesWithoutDeletingPassages() {
         // Dedicated test file; never the production phone-index.sqlite database.
         val testFile = File.createTempFile("migration-test-", ".sqlite", context.cacheDir)
-        val testContext = object : ContextWrapper(context) {
-            override fun getDatabasePath(name: String) = testFile
-            override fun openOrCreateDatabase(name: String, mode: Int, factory: SQLiteDatabase.CursorFactory?): SQLiteDatabase =
-                SQLiteDatabase.openOrCreateDatabase(testFile.path, factory)
-            override fun openOrCreateDatabase(name: String, mode: Int, factory: SQLiteDatabase.CursorFactory?, errorHandler: DatabaseErrorHandler?): SQLiteDatabase =
-                SQLiteDatabase.openOrCreateDatabase(testFile.path, factory, errorHandler)
-        }
+        val testContext = migrationContext(testFile)
         try {
             testContext.openOrCreateDatabase("phone-index.sqlite", 0, null).use { db ->
                 db.execSQL("CREATE TABLE roots(uri TEXT PRIMARY KEY,name TEXT NOT NULL)")
@@ -89,12 +83,46 @@ class PhonePdfTest {
             }
             PhoneIndex(testContext).use { assertNotNull(it.roots()) }
             testContext.openOrCreateDatabase("phone-index.sqlite", 0, null).use { db ->
-                assertEquals(2, db.version)
-                db.rawQuery("SELECT line,text,page FROM chunks", null).use { row ->
+                assertEquals(3, db.version)
+                db.rawQuery("SELECT line,text,page,kind,region FROM chunks", null).use { row ->
                     assertTrue(row.moveToFirst())
                     assertEquals(3, row.getInt(0))
                     assertEquals("Receipt PKG-483", row.getString(1))
                     assertTrue(row.isNull(2))
+                    assertEquals("text", row.getString(3))
+                    assertTrue(row.isNull(4))
+                }
+            }
+        } finally { testFile.delete() }
+    }
+    private fun migrationContext(testFile: File) = object : ContextWrapper(context) {
+            override fun getDatabasePath(name: String) = testFile
+            override fun openOrCreateDatabase(name: String, mode: Int, factory: SQLiteDatabase.CursorFactory?): SQLiteDatabase =
+                SQLiteDatabase.openOrCreateDatabase(testFile.path, factory)
+            override fun openOrCreateDatabase(name: String, mode: Int, factory: SQLiteDatabase.CursorFactory?, errorHandler: DatabaseErrorHandler?): SQLiteDatabase =
+                SQLiteDatabase.openOrCreateDatabase(testFile.path, factory, errorHandler)
+    }
+    @Test fun existingPdfIndexKeepsPagesWhenAddingOcrProvenance() {
+        val testFile = File.createTempFile("pdf-migration-test-", ".sqlite", context.cacheDir)
+        val testContext = migrationContext(testFile)
+        try {
+            testContext.openOrCreateDatabase("phone-index.sqlite", 0, null).use { db ->
+                db.execSQL("CREATE TABLE roots(uri TEXT PRIMARY KEY,name TEXT NOT NULL)")
+                db.execSQL("CREATE TABLE files(uri TEXT PRIMARY KEY,root TEXT NOT NULL,name TEXT NOT NULL,sha TEXT NOT NULL,issue TEXT)")
+                db.execSQL("CREATE TABLE chunks(uri TEXT NOT NULL,line INTEGER NOT NULL,text TEXT NOT NULL,vector BLOB NOT NULL,page INTEGER)")
+                db.execSQL("INSERT INTO chunks VALUES ('synthetic',1,'Rental deposit PDF-739',X'00',2)")
+                db.version = 2
+            }
+            PhoneIndex(testContext).use { assertNotNull(it.roots()) }
+            testContext.openOrCreateDatabase("phone-index.sqlite", 0, null).use { db ->
+                assertEquals(3, db.version)
+                db.rawQuery("SELECT line,text,page,kind,region FROM chunks", null).use { row ->
+                    assertTrue(row.moveToFirst())
+                    assertEquals(1, row.getInt(0))
+                    assertEquals("Rental deposit PDF-739", row.getString(1))
+                    assertEquals(2, row.getInt(2))
+                    assertEquals("text", row.getString(3))
+                    assertTrue(row.isNull(4))
                 }
             }
         } finally { testFile.delete() }
