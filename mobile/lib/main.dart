@@ -75,6 +75,20 @@ class _PhoneSearchState extends State<PhoneSearch> with WidgetsBindingObserver {
     on PlatformException catch (e) { if (mounted) setState(() => status = problem(e)); }
     finally { if (mounted) setState(() => busy = false); }
   }
+  String sourceLocation(Map<String, dynamic> result) => result['page'] == null
+      ? 'Line ${result['line']}' : 'Page ${result['page']} · extracted line ${result['line']}';
+  String issueLabel(String code) => switch (code) {
+    'pdf-needs-android-15' => 'PDF text search needs Android 15 or newer',
+    'pdf-no-text' => 'PDF has no extractable text; scanned PDFs need OCR',
+    'pdf-unreadable' => 'PDF is unreadable or password protected',
+    'pdf-page-limit' => 'PDF exceeds the 20-page limit',
+    'pdf-text-limit' => 'PDF exceeds the 100,000-character limit',
+    'file-too-large' => 'File exceeds 1 MiB',
+    'unsupported-type' => 'Unsupported file format',
+    'no-searchable-text' => 'File has no searchable text',
+    'source-changed' => 'File changed during indexing; refresh again',
+    _ => 'File could not be indexed ($code)',
+  };
   Future<void> pick() => work(() async {
     final selected = await bridge.invokeMethod<String>('pick');
     await loadRoots();
@@ -115,7 +129,7 @@ class _PhoneSearchState extends State<PhoneSearch> with WidgetsBindingObserver {
     await Navigator.push<void>(context, MaterialPageRoute(builder: (context) => Scaffold(
       appBar: AppBar(title: Text(result['name'] as String)),
       body: ListView(padding: const EdgeInsets.all(24), children: [
-        Text('Original source · line ${result['line']}', style: Theme.of(context).textTheme.labelLarge),
+        Text('Original source · ${sourceLocation(result)}', style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: 16), SelectableText(result['text'] as String, style: Theme.of(context).textTheme.bodyLarge),
         const SizedBox(height: 24), const Text('An excerpt from your file. Search does not generate an answer.'),
       ]),
@@ -144,7 +158,7 @@ class _PhoneSearchState extends State<PhoneSearch> with WidgetsBindingObserver {
         0 => ListView(padding: const EdgeInsets.all(20), children: [
           Text('Find a phone file', style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 8), const Text('Describe what you remember. Only selected phone folders are searched.'),
-          const SizedBox(height: 20), TextField(controller: query, maxLength: 1000, minLines: 1, maxLines: 4,
+          const SizedBox(height: 20), TextField(controller: query, enabled: !busy, maxLength: 1000, minLines: 1, maxLines: 4,
             onChanged: (_) => setState(() { results = []; status = 'Submit Search to find current files.'; }),
             decoration: InputDecoration(labelText: 'Find a file', hintText: 'When is my rental deposit returned?', border: const OutlineInputBorder(),
               suffixIcon: IconButton(tooltip: 'Clear query', icon: const Icon(Icons.close), onPressed: busy ? null : () {
@@ -153,21 +167,23 @@ class _PhoneSearchState extends State<PhoneSearch> with WidgetsBindingObserver {
             textInputAction: TextInputAction.search, onSubmitted: (_) { if (!busy) search(); }),
           SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('Words only'),
             subtitle: Text(wordsOnly ? 'Literal source words and codes' : 'Meaning + words · on this phone'),
-            value: wordsOnly, onChanged: busy ? null : (value) => setState(() => wordsOnly = value)),
+            value: wordsOnly, onChanged: busy ? null : (value) => setState(() { wordsOnly = value; results = []; status = 'Submit Search to use this search mode.'; })),
           FilledButton.icon(onPressed: busy ? null : search, icon: const Icon(Icons.search), label: const Text('Search')),
           const SizedBox(height: 16), Text(status),
           if (roots.isEmpty) Padding(padding: const EdgeInsets.only(top: 16), child: OutlinedButton(onPressed: busy ? null : pick, child: const Text('Choose phone folder'))),
           for (final result in results) Card(child: ListTile(title: Text(result['name'] as String),
-            subtitle: Text('Line ${result['line']} · ${result['text']}'), trailing: const Icon(Icons.chevron_right), onTap: busy ? null : () => detail(result))),
+            subtitle: Text('${sourceLocation(result)} · ${result['text']}'), trailing: const Icon(Icons.chevron_right), onTap: busy ? null : () => detail(result))),
         ]),
         1 => ListView(padding: const EdgeInsets.all(20), children: [
           Text('Selected folders', style: Theme.of(context).textTheme.headlineMedium),
-          const SizedBox(height: 12), const Text('Choose a subfolder on this phone. Text and Markdown are supported. PDF and screenshot OCR are unavailable in this mobile tier.'),
+          const SizedBox(height: 12), const Text('Choose a subfolder on this phone. Text and Markdown are supported. Digital PDF text search requires Android 15 or newer. Scanned PDFs and screenshot OCR are unavailable.'),
           const SizedBox(height: 12), FilledButton.icon(onPressed: busy ? null : pick, icon: const Icon(Icons.create_new_folder_outlined), label: const Text('Choose folder')),
           const SizedBox(height: 12), Text(status),
           for (final root in roots) Card(child: Padding(padding: const EdgeInsets.all(16), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(root['name'] as String, style: Theme.of(context).textTheme.titleMedium),
             Text(root['available'] == true ? '${root['files']} files · ${root['issues']} issues' : 'Folder access unavailable. Choose it again.'),
+            for (final issue in (root['issueReasons'] as Map? ?? {}).entries)
+              Text('${issue.value} · ${issueLabel(issue.key as String)}'),
             Wrap(spacing: 12, children: [TextButton.icon(onPressed: busy ? null : () => refresh(root), icon: const Icon(Icons.refresh), label: const Text('Refresh')),
               TextButton.icon(onPressed: busy ? null : () => remove(root), icon: const Icon(Icons.remove_circle_outline), label: const Text('Remove'))]),
           ]))),
@@ -176,7 +192,7 @@ class _PhoneSearchState extends State<PhoneSearch> with WidgetsBindingObserver {
           Text('On this phone', style: Theme.of(context).textTheme.headlineMedium),
           const SizedBox(height: 16), const Text('Meaning search uses bundled MiniLM on the phone CPU. No cloud fallback, desktop connection or account.'),
           const SizedBox(height: 16), const Text('The local index contains readable source excerpts and vectors in app-private storage. Android backup is disabled. Query history is not saved. Originals stay in their folders.'),
-          const SizedBox(height: 16), const Text('Pilot limits: English text and Markdown; 200 files per folder; 1 MiB per file; 20 MiB per refresh. Manual refresh is required after changes. Providers and external viewers have their own behavior.'),
+          const SizedBox(height: 16), const Text('Pilot limits: English text, Markdown and digital PDFs (Android 15+); 200 files per folder; 1 MiB per file; 20 MiB per refresh; 20 pages and 100,000 extracted characters per PDF. PDF lines describe extracted text, not visual rows. Manual refresh is required after changes. Providers and external viewers have their own behavior.'),
           const SizedBox(height: 16), const Text('Experimental match threshold. Quality and performance need independent phone testing.'),
         ]),
       }),

@@ -22,17 +22,20 @@ with zipfile.ZipFile(apk) as archive:
     for name in ['MINILM-LICENSE.txt', 'ONNX-RUNTIME-LICENSE.txt']:
         assert archive.getinfo('assets/' + name).file_size > 0
 tests = list(Path('mobile/build/app/outputs/androidTest-results/connected').rglob('TEST-*.xml'))
-assert len(tests) == 1
-native = ET.parse(tests[0]).getroot().attrib
-assert int(native['tests']) == 2 and int(native['failures']) == 0 and int(native['errors']) == 0
+assert tests, 'Native test results are missing'
+native = [ET.parse(test).getroot().attrib for test in tests]
+passed = sum(int(suite['tests']) for suite in native)
+assert passed == 8 and all(int(suite['failures']) == 0 and int(suite['errors']) == 0 and int(suite.get('skipped', 0)) == 0 for suite in native)
 with apk.open('rb') as stream:
     sha = hashlib.file_digest(stream, 'sha256').hexdigest()
 report = {'apk_bytes': apk.stat().st_size, 'apk_sha256': sha, 'signing': 'debug-signed pilot release build',
     'no_internet_permission': True, 'automatic_telemetry_provider_removed': True,
     'backup_disabled': True, 'bundled_assets_hashes_verified': True, 'model': provenance,
-    'native_instrumented_tests': {'passed': 2, 'emulator': 'Android 17 API 37 x86_64',
-        'checks': ['Four English tokenizer fixtures and normalized ONNX embedding cosine > .999 against desktop', 'SQLite index opening and selected-root listing']},
-    'limits': ['APK manifest inspection is not a complete OS egress audit', 'Native test suite predates final UI-only refinements; builder-observed release flows are recorded separately',
+    'native_instrumented_tests': {'passed': passed, 'emulator': 'Android 17 API 37 x86_64',
+        'checks': ['Four English tokenizer fixtures and normalized ONNX embedding cosine > .999 against desktop', 'SQLite index opening and selected-root listing',
+            'Native two-page PDF extraction and semantic preference for the relevant page', 'Blank and malformed PDF issue codes',
+            'PDF page-count rejection', 'Cancellation removes temporary PDF bytes', 'TXT/MD source-line compatibility', 'Version 1 SQLite migration preserves original text passages']},
+    'limits': ['APK manifest inspection is not a complete OS egress audit', 'PDF text search requires Android 15+; older OS guard and physical devices remain unexercised',
         'No physical-phone, independent user, TalkBack, battery or mobile holdout validation']}
 Path('docs/mobile-artifact-verification.json').write_text(json.dumps(report, indent=2))
 print(json.dumps({key: report[key] for key in ['apk_bytes', 'apk_sha256', 'no_internet_permission', 'backup_disabled']}))

@@ -17,7 +17,7 @@
   "limits": [
     "Two-file synthetic workflow is not a relevance benchmark or user acceptance test",
     "The stale-preview clearing refinement is additionally verified by widget test",
-    "No Android PDF or screenshot OCR implementation in this tier",
+    "This TXT/MD observation record predates the Android 15+ digital-PDF phase; screenshot OCR remains unavailable",
     "Provider behavior, physical devices and TalkBack remain unverified"
   ]
 }

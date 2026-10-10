@@ -8,7 +8,6 @@ import android.net.Uri
 import android.provider.DocumentsContract as DC
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.nio.charset.CodingErrorAction
 import java.security.MessageDigest
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -19,14 +18,17 @@ class PhoneIndex(private val context: Context) : AutoCloseable {
             .joinToString("") { "%02x".format(it.toInt() and 255) }
     }
     private val resolver = context.contentResolver
-    private val helper = object : SQLiteOpenHelper(context, "phone-index.sqlite", null, 1) {
+    private val extractor = PhoneTextExtractor(context)
+    private val helper = object : SQLiteOpenHelper(context, "phone-index.sqlite", null, 2) {
         override fun onCreate(db: SQLiteDatabase) {
             db.execSQL("CREATE TABLE roots(uri TEXT PRIMARY KEY,name TEXT NOT NULL)")
             db.execSQL("CREATE TABLE files(uri TEXT PRIMARY KEY,root TEXT NOT NULL,name TEXT NOT NULL,sha TEXT NOT NULL,issue TEXT)")
-            db.execSQL("CREATE TABLE chunks(uri TEXT NOT NULL,line INTEGER NOT NULL,text TEXT NOT NULL,vector BLOB NOT NULL)")
+            db.execSQL("CREATE TABLE chunks(uri TEXT NOT NULL,line INTEGER NOT NULL,text TEXT NOT NULL,vector BLOB NOT NULL,page INTEGER)")
             db.execSQL("CREATE INDEX chunks_uri ON chunks(uri)")
         }
-        override fun onUpgrade(db: SQLiteDatabase, old: Int, new: Int) = error("new-index-required")
+        override fun onUpgrade(db: SQLiteDatabase, old: Int, new: Int) {
+            if (old < 2) db.execSQL("ALTER TABLE chunks ADD COLUMN page INTEGER")
+        }
     }
     private val db = helper.writableDatabase.apply { rawQuery("PRAGMA secure_delete=ON", null).use { it.moveToFirst() } }
     private var model: PhoneEmbedder? = null
@@ -54,7 +56,10 @@ class PhoneIndex(private val context: Context) : AutoCloseable {
                 val count = db.rawQuery("SELECT COUNT(*),SUM(CASE WHEN issue IS NOT NULL THEN 1 ELSE 0 END) FROM files WHERE root=?", arrayOf(uri)).use {
                     it.moveToFirst(); listOf(it.getInt(0), it.getInt(1))
                 }
-                add(mapOf("uri" to uri, "name" to cursor.getString(1), "available" to allowed(uri), "files" to count[0], "issues" to count[1]))
+                val reasons = db.rawQuery("SELECT issue,COUNT(*) FROM files WHERE root=? AND issue IS NOT NULL GROUP BY issue", arrayOf(uri)).use {
+                    buildMap<String, Int> { while (it.moveToNext()) put(it.getString(0), it.getInt(1)) }
+                }
+                add(mapOf("uri" to uri, "name" to cursor.getString(1), "available" to allowed(uri), "files" to count[0], "issues" to count[1], "issueReasons" to reasons))
             }
         }
     }
@@ -93,29 +98,29 @@ class PhoneIndex(private val context: Context) : AutoCloseable {
                     seen.add(uri.toString())
                     var sha = ""
                     var issue: String? = null
-                    val passages = mutableListOf<Triple<Int, String, FloatArray>>()
+                    val passages = mutableListOf<Pair<SourceLine, FloatArray>>()
                     try {
-                        require(name.lowercase().endsWith(".txt") || name.lowercase().endsWith(".md")) { "unsupported-type" }
+                        require(name.substringAfterLast('.').lowercase() in setOf("txt", "md", "pdf")) { "unsupported-type" }
                         val bytes = read(uri)
                         require(totalBytes + bytes.size <= 20 * 1_048_576) { "folder-size-limit" }
                         totalBytes += bytes.size
                         sha = digest(bytes)
-                        val decoder = Charsets.UTF_8.newDecoder().onMalformedInput(CodingErrorAction.REPORT).onUnmappableCharacter(CodingErrorAction.REPORT)
-                        val text = decoder.decode(ByteBuffer.wrap(bytes)).toString()
-                        for ((number, line) in text.lines().withIndex()) {
+                        for (source in extractor.extract(name, bytes, ::checkpoint)) {
+                            val line = source.text
                             var offset = 0
                             while (offset < line.length) {
                                 checkpoint()
                                 require(passages.size < 2000) { "passage-count-limit" }
                                 val slice = line.substring(offset, minOf(offset + 300, line.length))
-                                if (slice.isNotBlank()) passages.add(Triple(number + 1, slice, embedder().embed(slice)))
+                                if (slice.isNotBlank()) passages.add(source.copy(text = slice) to embedder().embed(slice))
                                 offset += 240
                             }
                         }
+                        require(passages.isNotEmpty()) { "no-searchable-text" }
                         require(digest(read(uri)) == sha) { "source-changed" }
                     } catch (error: Exception) {
                         checkpoint()
-                        issue = if (error.message in setOf("unsupported-type", "file-too-large", "folder-size-limit", "source-changed", "passage-count-limit")) error.message else "file-could-not-be-indexed"
+                        issue = if (error.message in setOf("unsupported-type", "file-too-large", "folder-size-limit", "source-changed", "passage-count-limit", "pdf-needs-android-15", "pdf-page-limit", "pdf-text-limit", "pdf-no-text", "pdf-unreadable", "no-searchable-text")) error.message else "file-could-not-be-indexed"
                         passages.clear()
                     }
                     checkpoint()
@@ -123,10 +128,10 @@ class PhoneIndex(private val context: Context) : AutoCloseable {
                     try {
                         db.delete("chunks", "uri=?", arrayOf(uri.toString()))
                         db.insertWithOnConflict("files", null, values("uri" to uri.toString(), "root" to root, "name" to name, "sha" to sha, "issue" to issue), SQLiteDatabase.CONFLICT_REPLACE)
-                        for ((number, text, vector) in passages) {
+                        for ((source, vector) in passages) {
                             val blob = ByteBuffer.allocate(384 * 4).order(ByteOrder.LITTLE_ENDIAN)
                             vector.forEach { blob.putFloat(it) }
-                            db.insertOrThrow("chunks", null, values("uri" to uri.toString(), "line" to number, "text" to text, "vector" to blob.array()))
+                            db.insertOrThrow("chunks", null, values("uri" to uri.toString(), "line" to source.line, "page" to source.page, "text" to source.text, "vector" to blob.array()))
                         }
                         db.setTransactionSuccessful()
                     } finally { db.endTransaction() }
@@ -151,7 +156,7 @@ class PhoneIndex(private val context: Context) : AutoCloseable {
         check(!cancelled.get()) { "indexing-cancelled" }
         val matches = mutableMapOf<String, Map<String, Any?>>()
         val fresh = mutableMapOf<String, Boolean>()
-        db.rawQuery("SELECT f.uri,f.root,f.name,f.sha,c.line,c.text,c.vector FROM chunks c JOIN files f ON f.uri=c.uri WHERE f.issue IS NULL", null).use { cursor ->
+        db.rawQuery("SELECT f.uri,f.root,f.name,f.sha,c.line,c.text,c.vector,c.page FROM chunks c JOIN files f ON f.uri=c.uri WHERE f.issue IS NULL", null).use { cursor ->
             while (cursor.moveToNext()) {
                 check(!cancelled.get()) { "indexing-cancelled" }
                 val uri = cursor.getString(0); val root = cursor.getString(1)
@@ -165,7 +170,7 @@ class PhoneIndex(private val context: Context) : AutoCloseable {
                 }
                 if (score < if (q == null) .0001 else .25) continue
                 val prior = matches[uri]?.get("score") as? Double ?: Double.NEGATIVE_INFINITY
-                if (score > prior) matches[uri] = mapOf("uri" to uri, "root" to root, "name" to cursor.getString(2), "sha" to cursor.getString(3), "line" to cursor.getInt(4), "text" to text, "score" to score)
+                if (score > prior) matches[uri] = mapOf("uri" to uri, "root" to root, "name" to cursor.getString(2), "sha" to cursor.getString(3), "line" to cursor.getInt(4), "page" to if (cursor.isNull(7)) null else cursor.getInt(7), "text" to text, "score" to score)
             }
         }
         return matches.values.sortedByDescending { it["score"] as Double }.take(20)

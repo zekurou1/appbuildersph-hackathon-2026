@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-10",
+  "evidence_kind": "Builder observations in the release APK using synthetic originals, plus native and Flutter tests",
+  "device": "Android 17 API 37 x86_64 emulator-5554",
+  "package": "ph.appbuilders.omnifind_mobile",
+  "corpus": "Documents/OmniFindPdfProbe20261010: two-page digital PDF, blank PDF, malformed PDF and Markdown receipt",
+  "release_apk_sha256": "acb3dd745ecb00940a53e911a7c3a3280c0d2035e124e9ab689c7fb703c772c2",
+  "native_picker_selected_only_probe_subfolder": true,
+  "refresh": {"searchable": 2, "issues": 2, "visible_reasons": ["PDF has no extractable text; scanned PDFs need OCR", "PDF is unreadable or password protected"]},
+  "query": "How soon do I get my rental deposit after leaving",
+  "result": {"name": "unrelated.pdf", "page": 2, "extracted_line": 1, "text": "Rental deposit returned thirty days after moving out. Reference PDF-739."},
+  "actual_detail_text_and_page_verified": true,
+  "open_original_pdf_viewer_page_two_visually_verified": true,
+  "resume_cleared_prior_results_and_preserved_query": true,
+  "exact_pdf_code_found_after_process_restart_without_refresh": true,
+  "root_removed_and_exact_code_no_longer_returned": true,
+  "all_four_original_sha256_values_preserved": true,
+  "original_hashes": {
+    "unrelated.pdf": "dc3f88fff6b2c3bc4b65dd348e95a60c7db2cf5565721ff27fd31b129dd38ed2",
+    "no-text.pdf": "4e34093a9da65dc86c03334f90b8d6838ced5eaf648487480147e44fcf482b0e",
+    "broken.pdf": "6d689ba9522127c0c759535f5adb7f2c8f182ac280d94eab93cb54e5ec598fa0",
+    "receipt.md": "d723aaa224aef11b611f43957f0342d0592896c9deb81034be603ee2bec444a5"
+  },
+  "checks": {"flutter_analyze": "No issues found", "flutter_widget_tests_passed": 4, "native_instrumented_tests_passed": 8},
+  "limits": [
+    "Synthetic corpus is not a retrieval quality benchmark or independent user acceptance",
+    "PDF extraction requires Android 15+; older OS rejection and physical devices were not exercised",
+    "No scanned-PDF or screenshot OCR support",
+    "Native parser calls are not interruptible or isolated in a killable process",
+    "PDF password protection, PDF text-character limit and hostile parser timing were not runtime-tested",
+    "Manifest inspection is not a complete OS or external-viewer egress audit"
+  ]
+}

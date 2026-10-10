@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -5,6 +6,31 @@ import 'package:omnifind_mobile/main.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  testWidgets('In-flight search locks the query; changing mode clears old evidence', (tester) async {
+    final pending = Completer<List<Map<String, dynamic>>>();
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(const MethodChannel('omnifind/phone'), (call) async {
+      if (call.method == 'search') return pending.future;
+      return [];
+    });
+    await tester.pumpWidget(const OmniFindApp());
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'rental deposit');
+    await tester.tap(find.widgetWithText(FilledButton, 'Search'));
+    await tester.pump();
+    expect(tester.widget<TextField>(find.byType(TextField)).enabled, isFalse);
+    pending.complete([{'uri': 'synthetic-file', 'name': 'agreement.pdf', 'sha': 'fixture', 'page': 2, 'line': 1, 'text': 'Rental deposit returned', 'score': 1.0}]);
+    await tester.pumpAndSettle();
+    expect(tester.widget<TextField>(find.byType(TextField)).enabled, isTrue);
+    await tester.tap(find.text('agreement.pdf'));
+    await tester.pumpAndSettle();
+    expect(find.text('Original source · Page 2 · extracted line 1'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(SwitchListTile));
+    await tester.pumpAndSettle();
+    expect(find.text('agreement.pdf'), findsNothing);
+    expect(find.text('rental deposit'), findsOneWidget);
+  });
   testWidgets('Folder removal clears evidence and preserves the query', (tester) async {
     const channel = MethodChannel('omnifind/phone');
     var removed = false;

@@ -6,7 +6,7 @@ Main repository: [zekurou1/appbuildersph-hackathon-2026](https://github.com/zeku
 
 Windows packaging and external-runner checks are now available. See [release evidence and remaining gates](docs/RELEASE_CHECKS.md) and the [independent pilot protocol](docs/PILOT_VALIDATION.md). The unsigned pilot executable is blocked by Application Control on the builder's host; that policy remains unchanged.
 
-The [Android phone-local tier](docs/MOBILE_PHASE.md) is under `mobile/`: native selected-folder access, an app-private index and bundled CPU MiniLM inference. Its first tier supports text and Markdown; desktop PDF/OCR capability is not yet ported to Android.
+The [Android phone-local tier](docs/MOBILE_PHASE.md) is under `mobile/`: native selected-folder access, an app-private index and bundled CPU MiniLM inference. It supports text, Markdown and digital PDF text on Android 15+. Screenshot OCR and scanned PDFs remain pending on Android.
 
 **Current artifact: a native desktop prototype plus command-line retrieval core.** Digital PDF/TXT/MD, English PNG/JPEG OCR, local CPU embeddings, lexical/semantic/hybrid search, source evidence, SQLite persistence, manual refresh and folder removal are implemented. Scanned PDFs, DOCX and a packaged installer are pending. See [OCR verification and setup limits](docs/OCR_PHASE.md).
 

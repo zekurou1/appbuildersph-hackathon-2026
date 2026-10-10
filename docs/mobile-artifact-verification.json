@@ -1,6 +1,6 @@
 {
   "apk_bytes": 231577081,
-  "apk_sha256": "6a26f0e8cbcd3126ba846e6aef0c6b46bb797101fdf346178e0f2d8f157e6bda",
+  "apk_sha256": "acb3dd745ecb00940a53e911a7c3a3280c0d2035e124e9ab689c7fb703c772c2",
   "signing": "debug-signed pilot release build",
   "no_internet_permission": true,
   "automatic_telemetry_provider_removed": true,
@@ -22,16 +22,22 @@
     }
   },
   "native_instrumented_tests": {
-    "passed": 2,
+    "passed": 8,
     "emulator": "Android 17 API 37 x86_64",
     "checks": [
       "Four English tokenizer fixtures and normalized ONNX embedding cosine > .999 against desktop",
-      "SQLite index opening and selected-root listing"
+      "SQLite index opening and selected-root listing",
+      "Native two-page PDF extraction and semantic preference for the relevant page",
+      "Blank and malformed PDF issue codes",
+      "PDF page-count rejection",
+      "Cancellation removes temporary PDF bytes",
+      "TXT/MD source-line compatibility",
+      "Version 1 SQLite migration preserves original text passages"
     ]
   },
   "limits": [
     "APK manifest inspection is not a complete OS egress audit",
-    "Native test suite predates final UI-only refinements; builder-observed release flows are recorded separately",
+    "PDF text search requires Android 15+; older OS guard and physical devices remain unexercised",
     "No physical-phone, independent user, TalkBack, battery or mobile holdout validation"
   ]
 }
