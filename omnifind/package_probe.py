@@ -18,7 +18,7 @@ def run(report_path):
     stage('application')
     app = QApplication.instance() or QApplication([])
     with tempfile.TemporaryDirectory() as temporary:
-        root = Path(temporary) / "corpus"
+        root = Path(temporary).resolve() / "corpus"
         root.mkdir()
         source = root / "schedule.png"
         image = Image.new("RGB", (1000, 350), "white")
@@ -48,7 +48,8 @@ def run(report_path):
             window.submit_search()
             stage('search')
             settle()
-            assert window.results and Path(window.results[0]["path"]) == source
+            assert window.results, window.last_response
+            assert Path(window.results[0]["path"]).resolve() == source.resolve(), 'source-path-mismatch'
             assert "Wednesday" in window.preview.toPlainText() and window.image_preview.isVisible()
             interface = QAccessible.queryAccessibleInterface(window.preview)
             assert interface.textInterface().characterCount() > 0
