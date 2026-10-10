@@ -1,0 +1,23 @@
+{
+  "evidence_kind": "Builder observations using actual Android emulator UI and synthetic originals",
+  "android": "17 API 37 x86_64 emulator",
+  "release_manifest_without_internet_permission": true,
+  "native_phone_subfolder_picker_and_persisted_grant": true,
+  "indexed_two_text_markdown_files": true,
+  "paraphrased_rental_query_found_original_agreement": true,
+  "original_line_evidence_displayed": true,
+  "exact_receipt_code_found_after_restart_and_apk_relocation_update": true,
+  "changed_original_rejected_by_open": true,
+  "changed_original_excluded_from_search": true,
+  "folder_removal_rejected_old_code_after_process_restart": true,
+  "synthetic_original_hashes_preserved_after_restoring_test_edit_and_removal": true,
+  "independent_human_validation": false,
+  "native_external_viewer_contents_verified": false,
+  "complete_android_egress_audit": false,
+  "limits": [
+    "Two-file synthetic workflow is not a relevance benchmark or user acceptance test",
+    "The stale-preview clearing refinement is additionally verified by widget test",
+    "No Android PDF or screenshot OCR implementation in this tier",
+    "Provider behavior, physical devices and TalkBack remain unverified"
+  ]
+}

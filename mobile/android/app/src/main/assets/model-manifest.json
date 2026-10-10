@@ -1,0 +1,15 @@
+{
+  "model": "sentence-transformers/all-MiniLM-L6-v2",
+  "revision": "10dbd2f06a8baf40ad285b037edda610c1b9a57c",
+  "license": "Apache-2.0",
+  "files": {
+    "model.onnx": {
+      "sha256": "6fd5d72fe4589f189f8ebc006442dbb529bb7ce38f8082112682524616046452",
+      "bytes": 90405214
+    },
+    "vocab.txt": {
+      "sha256": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3",
+      "bytes": 231508
+    }
+  }
+}

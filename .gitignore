@@ -8,3 +8,5 @@ models/
 dist/
 build/
 *.sqlite*
+mobile/android/app/src/main/assets/model.onnx
+mobile/android/app/src/main/assets/vocab.txt

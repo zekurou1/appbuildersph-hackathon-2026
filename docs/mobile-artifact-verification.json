@@ -1,0 +1,37 @@
+{
+  "apk_bytes": 231580669,
+  "apk_sha256": "81b5851a4d825db1c2de03785bb266e11c845da041f63a8441408ba07a371c62",
+  "signing": "debug-signed pilot release build",
+  "no_internet_permission": true,
+  "automatic_telemetry_provider_removed": true,
+  "backup_disabled": true,
+  "bundled_assets_hashes_verified": true,
+  "model": {
+    "model": "sentence-transformers/all-MiniLM-L6-v2",
+    "revision": "10dbd2f06a8baf40ad285b037edda610c1b9a57c",
+    "license": "Apache-2.0",
+    "files": {
+      "model.onnx": {
+        "sha256": "6fd5d72fe4589f189f8ebc006442dbb529bb7ce38f8082112682524616046452",
+        "bytes": 90405214
+      },
+      "vocab.txt": {
+        "sha256": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3",
+        "bytes": 231508
+      }
+    }
+  },
+  "native_instrumented_tests": {
+    "passed": 2,
+    "emulator": "Android 17 API 37 x86_64",
+    "checks": [
+      "Four English tokenizer fixtures and normalized ONNX embedding cosine > .999 against desktop",
+      "SQLite index opening and selected-root listing"
+    ]
+  },
+  "limits": [
+    "APK manifest inspection is not a complete OS egress audit",
+    "Native test suite predates final UI-only refinements; builder-observed release flows are recorded separately",
+    "No physical-phone, independent user, TalkBack, battery or mobile holdout validation"
+  ]
+}

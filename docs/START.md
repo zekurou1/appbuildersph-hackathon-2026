@@ -6,12 +6,12 @@ Main repository: [zekurou1/appbuildersph-hackathon-2026](https://github.com/zeku
 
 | Package | Completion gate | Current state |
 | --- | --- | --- |
-| WP1 | Real CPU embeddings and digital PDF extraction; asset manifest | Text tier and installed Windows English PNG/JPEG OCR verified; packaged OCR deployment remains |
+| WP1 | Real CPU embeddings and digital PDF extraction; asset manifest | Text tier and Windows English PNG/JPEG OCR verified in source and frozen CLI on a separate Server 2025 runner; supported package-identity deployment remains |
 | WP2 | Labeled development queries, four retrieval baselines, grouped source evidence | Original holdout found identifier rejection; narrow exact-code route recovers all eight in regression; fresh validation remains |
 | WP3 | Atomic state, restart, refresh, root revocation | Cross-process guard, killed embedding/commit/clear recovery, junction boundaries and parser Job Object lifecycle/resource tests passed; low-resource device recovery remains |
-| WP4 | Select folder → index → search → inspect → open/reveal through UI | Working PySide6 desktop prototype; real inference and offscreen controls verified, native viewer/picker behavior still unverified |
-| WP5 | Fresh offline file/query, egress, boundaries, cleanup and recovery | Python socket-guarded inference, synthetic cleanup, bounded extraction and cross-window preview revocation passed; full OS egress/privacy audit pending |
-| WP6 | Holdout evaluation, clean setup and demo evidence | Original holdout and regressions recorded separately; isolated locked environment verified on same host; fresh independent holdout, another-machine setup/demo gates pending |
+| WP4 | Select folder → index → search → inspect → open/reveal through UI | Working desktop prototype; real inference, native picker/open/reveal dispatch and Qt accessibility interfaces verified automatically; independent usability and screen-reader checks remain |
+| WP5 | Fresh offline file/query, egress, boundaries, cleanup and recovery | Guarded inference, cleanup, bounded extraction and preview revocation passed; descendant socket sampling observed no nonloopback endpoints; WPR policy blocked the complete OS audit |
+| WP6 | Holdout evaluation, clean setup and demo evidence | Original holdout and regressions recorded separately; frozen CLI/GUI and relocated install/uninstall passed on a separate Windows Server runner; independent Windows 11 pilot and fresh independent holdout remain |
 
 ## Verified runtime
 
@@ -43,13 +43,13 @@ The original [frozen synthetic holdout](HOLDOUT_EVALUATION.md) used 20 new docum
 
 That historical failure is now addressed by a narrow [exact-identifier route](IDENTIFIER_RECOVERY.md) in Meaning + words. It finds only literal standalone codes, preserves scope/freshness, returns no invented substitute for absent codes and works on committed content without a model. The reused regression set reaches 50/50 relevant successes with the same 18/20 absent rejections. Original frozen results/hashes are preserved; the improved result is not new held-out validation.
 
-The desktop prototype connects folder selection, background indexing, search/evidence and deliberate file actions. Cancellation preserves committed content, removal revokes scope while work runs, and queued responses are suppressed when their scope changes. Preview/open also validate the expected indexed fingerprint. Native OS launches were intercepted during tests; offscreen verification is not manual usability or screen-reader validation. See [GUI report](gui-verification.json).
+The desktop prototype connects folder selection, background indexing, search/evidence and deliberate file actions. Cancellation preserves committed content, removal revokes scope while work runs, and queued responses are suppressed when their scope changes. Preview/open also validate the expected indexed fingerprint. Earlier offscreen tests intercepted OS launches. New native checks observed the actual Windows folder picker and uniquely named viewer/Explorer windows, and verified Qt accessibility interfaces. Those checks are automated evidence, not independent manual usability or screen-reader validation. See [GUI report](gui-verification.json) and [release checks](RELEASE_CHECKS.md).
 
 The reliability phase added a process-owned refresh lease, transactional clear-index, secure FTS deletion and synthetic canary checks. Killed workers recover, competing refreshes fail with a retry message, and a real Windows junction is rejected. The later containment phase adds parser memory/process/output limits and persistent cross-window privacy invalidation. Forty tests now pass, including evaluator/identifier/OCR/file-issues checks; one symbolic-link test remains skipped. See [reliability evidence](RELIABILITY_PHASE.md) and [containment evidence](CONTAINMENT_PHASE.md). Consented larger-corpus performance, low-resource device recovery and complete OS privacy audits remain.
 
 ## UI contract
 
-Desktop Search/Folders/Settings. Explicit submit, visible folder/type filters, distinct results and source evidence; deliberate Open/Show in folder actions. Preserve the query on errors, label lexical-only mode, and cover empty, indexing, partial coverage, no strong match, model failure, stale/missing source and removed-folder states. Keyboard focus and accessible names are required. Mobile remains deferred under master section 33.
+Desktop Search/Folders/Settings. Explicit submit, visible folder/type filters, distinct results and source evidence; deliberate Open/Show in folder actions. Preserve the query on errors, label lexical-only mode, and cover empty, indexing, partial coverage, no strong match, model failure, stale/missing source and removed-folder states. Keyboard focus and accessible names are required. The user subsequently authorized a [phone-local Android tier](MOBILE_PHASE.md); its formats and verification are separate from desktop gates.
 
 ## Data boundary
 

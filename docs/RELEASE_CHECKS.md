@@ -12,6 +12,8 @@ The project is still a pilot, not a certified public release. Windows source-run
 
 ## Native Windows checks
 
+The [separate Windows Server 2025 run](https://github.com/zekurou1/appbuildersph-hackathon-2026/actions/runs/38012498915) passed frozen CLI and windowed GUI checks, including real screenshot inference, thumbnail/accessibility evidence and scope revocation. Manifest-verified per-user installation ran the relocated executables successfully; uninstall removed the owned version and preserved an external synthetic original. See [package report](runner-package-verification.json) and [installation report](runner-install-verification.json). This does not certify a signed Windows 11 deployment or an independent human pilot.
+
 The actual Windows common folder dialog was observed and programmatically accepted for a synthetic directory. Native Open and Explorer dispatch were exercised through source authorization; uniquely named original/folder windows appeared and source bytes were preserved. Those observations do not establish manual usability or independently confirm displayed contents/Explorer selection. Test-created viewer/Explorer windows were left open to avoid closing a reused window containing user work.
 
 Qt's Windows accessibility interfaces expose named controls, roles, disabled empty-state actions, populated source text and enabled valid-result actions. Keyboard/large-text checks remain in the desktop automation. Narrator/JAWS use by a human has not been conducted.
@@ -28,4 +30,4 @@ An authorized elevated Windows trace with process/service attribution and an off
 
 [Independent pilot validation](PILOT_VALIDATION.md) provides tasks, counterbalanced baselines, consent boundaries and a result template. No independent participant has been tested by the builder. Another Windows 11 machine, an independent tester/screen-reader user and an approved execution/signing path remain needed. Microsoft-documented Windows OCR package-identity support also needs a supported packaged deployment test.
 
-Mobile architecture is awaiting the user's choice between phone-local indexing and a paired desktop LAN companion. Neither can be truthfully marked implemented or device-tested by the desktop release work.
+The user chose phone-local Android indexing. The separate [Android tier](MOBILE_PHASE.md) now has a built APK, local ONNX inference and native instrumented parity/index checks; desktop results do not count as Android validation. Physical-phone, format expansion and mobile release gates remain separate.

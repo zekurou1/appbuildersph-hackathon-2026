@@ -13,9 +13,16 @@
   "exact_code_and_restart": true,
   "screenshot_ocr": true,
   "issue_codes": [],
+  "windowed_gui_probe": {
+    "frozen_gui": true,
+    "qt_platform": "windows",
+    "real_model_screenshot_query": true,
+    "thumbnail_and_accessible_evidence": true,
+    "privacy_revocation": true
+  },
   "root_removal_preserves_originals": true,
   "limits": [
     "Automated executable checks, not independent user validation or package-identity certification",
-    "GUI launch and native controls require separate checks"
+    "Independent manual GUI/native-control usability requires separate checks"
   ]
 }
