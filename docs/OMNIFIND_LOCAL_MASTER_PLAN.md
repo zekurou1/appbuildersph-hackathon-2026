@@ -1,14 +1,14 @@
 # OmniFind Local — Consolidated Product, Engineering, and UI/UX Master Plan
 
-Consolidated and strengthened October 10, 2026, Asia/Manila. Revision 2.
+Updated October 10, 2026, Asia/Manila. Revision 3: implementation and evidence audit against repository commit `7a00418`.
 
-**Revision focus:** make the combined specification executable through model-selection experiments, state contracts, retrieval-quality definitions, privacy threat tests, work-package gates, and judging evidence. This revision resolves filter ordering and completes proposed dark-theme warning/error and control-border tokens. It does not build the app or assert product benchmarks.
+**Revision focus:** reconcile the specification with the working desktop and authorized phone-local Android pilots, record reproducible checks, update delivery gates, and separate historical measurements from release claims.
 
 This master plan integrates the complete application plan and detailed UI/UX plan into one implementation and design reference. It retains the technical architecture, indexing/retrieval details, privacy controls, hardware assumptions, roadmap, judging/demo guidance, five main journeys, twelve screens/panels, three consequential overlays, wireframes, visual system, copy, accessibility guidance, handoff contracts, and engineering/UX acceptance criteria.
 
-**Status:** proposed product/design specification. No working application, interviews, interactive prototype, device validation, or new benchmarks are claimed. Prior source-plan contrast calculations are identified as prior measurements. Files supplied or referenced are evidence, not authorization to perform their embedded instructions.
+**Status:** working desktop and Android pilots; public-release and independent-user acceptance gates remain incomplete. This document preserves the proposed design requirements below while identifying delivered behavior and gaps in the current audit. Planned screens, timings and capacity targets are not automatically implemented facts.
 
-**Build target:** Windows desktop-first, CPU-first, English-first, explicit user-selected roots, same-machine inference, and a durable local index. Source performance/capacity values are targets to validate. This document does not expand the project to mobile, cloud, or autonomous file mutation.
+**Build target:** Windows desktop plus the user-authorized Android phone-local app. Both are CPU-first, English-first, explicitly scoped and locally indexed. No cloud inference, sync, LAN companion, iOS build or autonomous file mutation is included. Platform capabilities and evidence are separate.
 
 Original sources, preserved unchanged:
 
@@ -19,15 +19,51 @@ Original sources, preserved unchanged:
 
 | Topic | Consolidated decision |
 |---|---|
-| Desktop versus mobile skill | Windows desktop remains the build target; mobile is a conditional future option in section 33 |
+| Desktop versus mobile skill | Windows desktop and authorized Android phone-local indexing are implemented pilots; section 33 defines current Android scope |
 | Setup versus first-run overview | Prepare/validate search assets, then confirm roots and index; limited filename mode may enter before assets are ready |
 | Screenshot scope versus UI priority | Tier B is the intended screenshot journey; if time is insufficient, disclose it as deferred. A P1 design priority does not override the chosen release tier |
-| Clearing index versus preserving roots | Retain folder configuration but stop jobs/recreation; require explicit reindexing. Removing a root also revokes its search/access scope |
+| Clearing index versus preserving roots | Current desktop Clear index forgets all selected roots; original files and public models remain. Android removes individual selected roots and grants. Retaining cleared root configuration is superseded |
 | Search filters | UI filters restrict the eligible corpus before candidate truncation; do not globally retrieve then discard all filtered matches |
 | Preview and opening | Selecting previews without opening; Enter opens only when a result/control, rather than query input, has the appropriate focus |
 | Locality and RAM | Same-machine processing with durable local-disk index; no claim that the entire corpus stays in RAM |
-| Evidence and measurements | Preserve prior contrast calculations as prior evidence; all performance/coverage targets remain unmeasured until tested |
+| Evidence and measurements | Preserve historical contrast/retrieval records; current audit distinguishes fresh checks, earlier builder observations and unverified release targets |
 | Unsupported/unknown details | Retain explicit limitations and unresolved decisions; never fill them with invented facts |
+
+### Current implementation audit — October 10, 2026
+
+Main repository: [zekurou1/appbuildersph-hackathon-2026](https://github.com/zekurou1/appbuildersph-hackathon-2026). Local checkout and recorded `origin/main` were at `7a00418` when this review began. Repository visibility and current organizer announcements could not be independently fetched by the web tool; successful authenticated pushes are not proof of public visibility.
+
+The audit inspected current source, manifests, model provenance, packaging workflow, evidence reports and Git history. Fresh checks ran on the builder's Windows host: the desktop suite ran 41 tests, with **40 passed and one symlink test skipped**; actual directory-junction coverage passed. `scripts/verify_gui.py` passed the real-MiniLM offscreen desktop journey including screenshot OCR, keyboard/large-text states, freshness, clear/rebuild and cross-window revocation. Mobile `flutter analyze` found no issues and **all five widget tests passed**. `scripts/verify_mobile_artifact.py` reverified the actual APK, model hashes, native OCR libraries/notices, backup setting and absent Internet/network-state permissions; it checked the existing **14 passing native test results**, rather than rerunning instrumentation in this audit.
+
+Earlier Android release observations are recorded in `docs/mobile-flow-verification.json`, `docs/mobile-pdf-verification.json` and `docs/mobile-ocr-verification.json`: actual system subfolder selection, indexing/search/evidence/open, process restart, removal and unchanged synthetic originals. First-use image OCR/search/original viewing ran in airplane mode with Wi-Fi disabled; settings were restored. These observations were inspected, not repeated during this revision. The APK is **254,681,402 bytes (about 243 MiB)**, SHA-256 `59a387c24059f6ec2b6c473d232b073edcf37a5644bb2726245b6711325c9871`, debug-signed for pilot use.
+
+| Capability | Windows desktop pilot | Android phone-local pilot |
+|---|---|---|
+| Shell and inference | Python/PySide6, CPU PyTorch/Transformers MiniLM | Flutter UI, Kotlin worker, CPU ONNX Runtime MiniLM |
+| Text formats | Digital PDF, UTF-8 TXT/Markdown | TXT/Markdown; digital PDF requires Android 15/API 35+ |
+| Readable-image OCR | English PNG/JPEG through Windows.Media.Ocr; source and frozen runner evidence | English upright PNG/JPEG through bundled Tesseract4Android 4.9.0 / Tesseract 5.5.1 |
+| Retrieval/evidence | Filename/lexical/semantic/hybrid, folder/type filters, page/line/OCR evidence, bounded thumbnail, Open/Reveal | Words only / Meaning + words, source line/page/OCR evidence, native Open; no type/folder search filters or image highlighting |
+| Durable scope | SQLite/FTS/vectors, manual reconciliation, transactional clear/removal, root boundary checks | App-private SQLite/vectors, selected local-provider tree grants, manual refresh, freshness/open checks, per-root removal; schema v3 preserves text/PDF passages |
+| Parser containment | Windows Job Object: memory/process/time/output limits and parser termination | In-process PDF/OCR with byte/pixel/page/text limits; hard timeout and killable parser isolation are missing |
+| Distribution | Unsigned pilot package; separate Server 2025 install/uninstall checks; builder executable blocked by Application Control | Built universal release APK, debug signing; emulator installed; physical phone/store release not validated |
+
+Desktop MiniLM revision is `1110a243fdf4706b3f48f1d95db1a4f5529b4d41` (asset manifest `docs/model-assets.json`); a BGE development comparison exists, but MiniLM remains the default. Android uses MiniLM ONNX revision `10dbd2f06a8baf40ad285b037edda610c1b9a57c` with four tested tokenizer/vector fixtures; this is not a general tokenizer-quality guarantee. OCR English data is pinned at `87416418657359cb625c412a48b6e1d6d41c29bd`, 4,113,088 bytes, with SHA verification and bundled notices. Public dependencies/models are downloaded on the build machine; runtime has no cloud inference fallback. Plaintext local derivatives are not encryption. External viewers and OS services remain outside the verified egress boundary.
+
+**Retrieval evidence:** the original frozen synthetic holdout reported gated Recall@5 **84%**, below the proposed 85% target, with 18/20 absent targets rejected. The exact-code fix recovered all 50 relevant queries on the reused regression set; **100% regression reuse is not new holdout validation**. Two semantic absent-query false accepts remain. Historical gated warm p95 was 174 ms on only 20 short documents/20 chunks; this is not an Android measurement, current-policy latency claim, 50 GB capacity proof or user-task benchmark. See `docs/HOLDOUT_EVALUATION.md` and `docs/IDENTIFIER_RECOVERY.md`.
+
+**Readiness:** the core build exists; the entire master specification and public release are unfinished. An overall completion percentage is omitted because the work packages have different effort and include gates not satisfied by source/tests alone.
+
+Priority work, with acceptance gates:
+
+1. **Android safety and hardware:** add interruptible/isolated native extraction and a hard timeout, then run first-use offline, cancellation, background/resume, revoked grants and memory/thermal/latency tests on a physical phone. Cancellation currently waits for the native recognition call to return.
+2. **Fresh retrieval validation:** freeze a new corpus/query set before testing the changed policy; include PNG/JPEG OCR, near-codes, long passages, absent targets and mobile cases. Report both relevant-file recall and false accepts; keep development/regression/holdout separate.
+3. **Usability/accessibility:** conduct independent correct-original tasks and keyboard/Narrator/TalkBack checks with consent. Doubled-text widget/offscreen checks and accessibility-tree inspection do not establish screen-reader usability.
+4. **Distribution/privacy:** test an approved Windows 11 signing/execution route without weakening Application Control; profile Android ABI-specific packaging; measure OS/process/service egress with scoped synthetic traces and audit notices/disclosures.
+5. **Product expansion after reliability:** consider mobile filters and image highlighting; defer DOCX, scanned-PDF OCR, automatic watchers, broader languages and visual scene understanding until separately built/tested.
+
+Audit findings to keep visible: current mobile code tokenizes periods separately, unlike the desktop exact-code route; punctuation-rich identifiers such as `QXZ.471` need dedicated parity/recovery tests before promising the desktop contract on Android. Android also re-reads source bytes for freshness during search; larger-corpus query latency must be measured. Neither finding was demonstrated as a runtime failure during this audit.
+
+The detailed sections below are the design and engineering contract. Where they differ from delivered behavior, this audit and the dated platform evidence take precedence for **current status**, while unfinished requirements remain acceptance work.
 
 ### Reading paths
 
@@ -35,7 +71,7 @@ Original sources, preserved unchanged:
 - Complete UI/UX specification: sections 4-18.
 - Architecture and engineering: sections 19-26.
 - Delivery, verification, demo, and release: sections 27-32.
-- Future mobile, unresolved decisions, and provenance: sections 33-35.
+- Current Android scope, unresolved decisions, and provenance: sections 33-35.
 
 ### Contents
 
@@ -71,7 +107,7 @@ Original sources, preserved unchanged:
 30. Demo corpus, video, and live presentation
 31. Release, costs, distribution, and maintenance
 32. Risks and readiness gates
-33. Conditional future mobile adaptation
+33. Authorized phone-local Android implementation
 34. Requirement traceability and unresolved decisions
 35. Sources, provenance, and consolidation coverage
 
@@ -481,7 +517,7 @@ Query-history preference is off by default. Enabling it explains what is saved a
 | Remove model assets | Free asset space; meaning search unavailable until setup | Keep original files and existing index; allow limited mode |
 | Clear history | Remove saved queries if enabled | No effect on source files/index |
 
-For clear index, retained folder configurations must be marked **Not indexed**. Cancel pending root jobs, pause automatic recreation, and require explicit **Reindex folders** to repopulate; do not silently rebuild the data the user just cleared.
+Current desktop Clear index forgets selected folder configuration and derived index records after confirmation; originals and public models remain. Users must select folders again to repopulate. The earlier retain-roots/reindex-only design is superseded. Android currently has per-folder removal rather than a separate clear-all control.
 
 Confirmations use a specific primary label such as **Remove from index**, never ambiguous **Delete** or **OK**. Put cancel first in keyboard-safe focus for a consequential action, and do not make Enter unexpectedly destructive.
 
@@ -1108,6 +1144,19 @@ Roles are assignments to make when the team is known, not an invented roster. A 
 
 Completion requires runtime evidence, not merely screens/source files. After WP1, narrow unsupported extraction/model choices before UI expansion. After WP4, freeze optional work until WP5/WP6 pass. If Tier B fails, declare text-only scope consistently in UI, README, and pitch. Lexical recovery cannot substitute for real local semantic inference.
 
+### Audited work-package state
+
+| Package | Current state | Remaining completion boundary |
+|---|---|---|
+| WP1 Feasibility | Demonstrated on Windows host/runner and Android emulator | Physical Android and supported Windows OCR packaged-deployment matrix |
+| WP2 Retrieval | Core and development comparison implemented; historical holdout plus reused fix regression recorded | Fresh changed-policy/OCR/mobile holdout; absent-target calibration and broader corpus |
+| WP3 Durable state | Desktop lifecycle/fault tests and Android persistence/schema migration/removal evidence | Android destructive interruption/provider/low-storage cases and broader Windows deployment |
+| WP4 UI journey | Working Qt desktop and Flutter Android Search/Folders/Settings | Independent usability, native screen-reader/physical-device validation; full S01-S12 specification not complete |
+| WP5 Privacy/recovery | Root checks, fresh-source checks, cleanup and desktop containment verified in scoped tests | Complete OS egress attribution, Android parser isolation/timeouts and hostile-input recovery |
+| WP6 Release evidence | README/assets/notices, unsigned package/runner checks, APK and synthetic flow records | Approved signing, independent Windows 11 setup, physical Android, fresh holdout, final disclosures/video/submission proof |
+
+Desktop screenshots/thumbnails exist; Android stores OCR regions but does not highlight them. Packaging work is implemented, while approved Windows 11 execution and public release remain pending. Manual refresh remains the declared behavior; no watcher is promised. No participant study or complete-device privacy certification has been conducted.
+
 ## 28. Engineering, usability, and acceptance verification
 
 ### Engineering evaluation
@@ -1233,68 +1282,40 @@ The eventual repository should contain synthetic corpus/hash manifest, labels, a
 
 ## 29. Hackathon evidence, judging, and rule review
 
-This is a concept review by a mock judging assistant, not an official organizer decision. The supplied image establishes a proposed problem and proposed behavior. It does not demonstrate runtime quality, privacy, or implementation.
+Revision 3 is a repository/product-evidence **mock review**, not an official organizer ruling. Source and fresh regression/GUI/artifact checks support a working pilot. Earlier native/emulator/runner observations are recorded evidence; this revision did not repeat the Android device journey or observe a live pitch. Independent usefulness, competitive advantage, submission and attendance remain unverified.
 
-The requested skill’s organizer-slide reference records these weights. The official [AppBuildersPH page](https://appbuildersph.com/hackathon/) was inaccessible through the research tool during preparation, so current changes could not be independently checked.
+The exact organizer weights are preserved from the installed judging playbook/manual. The 0–5 ratings below are a mock-review convention; ratings are provisional and do not predict awards. The official [AppBuildersPH page](https://appbuildersph.com/hackathon/) was attempted again in this audit and remained inaccessible, so newer announcements and deadline changes could not be verified.
 
-| Official criterion | Weight | Current evidence status | Build evidence to prepare |
-|---|---:|---|---|
-| Problem & Usefulness | 25% | Clear concept; user benefit unvalidated | Observed user tasks and correct-file opening |
-| Local AI Implementation | 25% | Claimed in concept; insufficient implementation evidence | Actual local embedding/OCR path, reproducible offline use |
-| Technical Execution | 20% | Insufficient evidence | Working UI, failure handling, persistence and refresh |
-| Innovation | 15% | Differentiation is provisional | Meaning-based document and screenshot retrieval with source evidence |
-| Product & Demo Quality | 15% | Insufficient evidence | Coherent workflow and repeatable live demonstration |
+| Criterion | Official weight | Rating/status | Weighted points | Evidence and limitation |
+|---|---:|---|---:|---|
+| Problem & Usefulness | 25% | Provisional 3/5 | 15 | Concrete remembered-content search and source/open journey; independent task improvement untested |
+| Local AI Implementation | 25% | Provisional 4/5 | 20 | Real CPU embedding/OCR paths, asset hashes, Android offline observations, release permission checks; OS egress audit incomplete |
+| Technical Execution | 20% | Provisional 3/5 | 12 | Fresh desktop tests/GUI and mobile analysis/widget/APK checks; prior 14 native passes and separate Windows runner; physical-phone and release safety gaps |
+| Innovation | 15% | Insufficient evidence | — | Combination and synthetic baseline comparison are useful, but differentiated advantage against actual competing workflows has not been validated |
+| Product & Demo Quality | 15% | Insufficient evidence | — | Working UI and test evidence exist; no independent usability session, demo recording or live pitch was reviewed |
 
-**Mock score:** not assigned. A numerical product score would imply evidence unavailable at the planning stage.
-
-### Differentiation to validate
-
-Desktop search and semantic retrieval already exist as product categories. Do not claim to invent them. The proposed distinction is a focused combination: selected private folders, content-based file finding, screenshot OCR, visible match evidence, lightweight CPU operation, and an open/reveal workflow.
-
-Validate competitive differences with hands-on comparisons later. The strongest immediate proof is a file found by its remembered meaning when its filename and a literal query fail.
+**Provisional assessable subtotal: 47/70 points.** This is not a score out of 100; unknown categories are neither zero nor redistributed. The score is unrelated to project completion percentage.
 
 ### Rule and submission review
 
-| Area | Status at planning time | Required evidence/action |
+| Area | Status | Evidence / required action |
 |---|---|---|
-| Participant eligibility/team roster | Unknown from evidence | Confirm official roster, 1–4 team members, one team per person |
-| Project/build window | Unknown from evidence | Preserve commits and disclose any prior assets/code |
-| Outside help/AI tools | Unknown from evidence | Follow organizer policy; disclose AI development tools and reused work |
-| Meaningful local inference | Unknown from evidence | Build and demonstrate actual local inference |
-| Public repository/submission | Unknown from evidence | Provide reproducible setup and required submission fields |
-| Finalist in-person pitch | Unknown from evidence | Confirm a team member can attend if applicable |
+| Participant eligibility/team | Unknown from evidence | Confirm official roster, team membership and one-project entry |
+| Meaningful local inference | No concern observed within reviewed scope | Embedding and OCR are part of the core search journey; setup downloads are separate |
+| Build window/code freeze | Potential rule concern | Manual states October 10, 2026, 10:00 AM Asia/Manila cutoff; PDF commit `3f57797` is 10:47:12 +08:00 and OCR `7a00418` is 11:16:15 +08:00. Later development must not be represented as pre-freeze work; actual submission commit and newer organizer policy are unknown |
+| Reuse and AI development tools | Unknown completeness | Model/native notices exist; preserve exact assets, prior-code history and Codex/AI-tool disclosure; verify required final disclosure |
+| Public repository and submission | Unknown from evidence | Git remote exists and main was pushed; unauthenticated public visibility and actual submitted form/video/social link were not confirmed |
+| Finalist attendance/pitch | Unknown from evidence | No attendance or live-pitch evidence reviewed |
 
-The local manual records submission/code freeze at **10:00 AM on October 10, 2026, Asia/Manila**, a public repository, a demo video ideally around one minute, and a required X/LinkedIn video-post link tagging Devin/Cognition with #AppBuildersPH. It also records five-minute finalist pitches and in-person attendance. These are reference-manual facts, not freshly verified organizer announcements. Since this plan is dated October 10, do not assume that deadline remains ahead; check the actual time and newer organizer instructions before scheduling any submission work.
+These are evidence statuses, not a disqualification decision. Ask organizers about any relevant deadline interpretation; do not retroactively change commit dates or erase provenance. The manual also records a demo video ideally around one minute, an X/LinkedIn video-post link tagging Devin/Cognition with #AppBuildersPH, and five-minute finalist pitch/in-person attendance. Those remain manual-derived facts, not freshly verified requirements.
 
-Planning is useful even if the event cutoff has passed, but later development cannot be represented as completed before a code freeze. Disclosed reused assets are distinct from presenting an already finished project as an event build.
+### Evidence to strengthen next
 
-### Likely judge questions
+Tie the usefulness claim to independent correct-original tasks, Local AI claims to scoped process/service attribution, technical execution to physical-phone and approved Windows 11 installation, innovation to hands-on baseline/competitor comparisons, and demo quality to a rehearsed live search → evidence → original flow. Use synthetic/consented files, fresh queries and honest preindexing disclosures.
 
-- Which exact model runs locally, and what user-visible result does it produce?
-- Why do embeddings improve this over ordinary keyword search?
-- What fails when internet is disconnected?
-- How long does indexing take, and what does “instant” actually refer to?
-- Does screenshot support mean OCR or visual understanding?
-- What private data is stored in the index, and how can users remove it?
-- Can a file tell the model to execute commands or access other folders?
-- What hardware and corpus were used for your performance claims?
-- What was built during the hackathon, and what was reused?
+Questions to answer without guessing: which exact models run on each device; what is stored and how removal works; what needs network during setup; why meaning retrieval improves the task; what OCR cannot read; what performance was measured; what was built before the submitted cutoff; and how a new evaluator runs the project.
 
-### Judging evidence matrix
-
-Review type: concept/document. Observed: a concrete retrieval journey and proposed architecture are documented. Inferred: a focused small-model file finder may be feasible/useful. Unknown: runtime, user benefit, performance, privacy behavior, eligibility, and submission. A numerical product score or official ruling is still unjustified.
-
-| Criterion | Weight | Evidence to collect | Supported claim after collection |
-|---|---:|---|---|
-| Problem & Usefulness | 25% | Paired tasks, correct-file opening, user observations | Tested task improvement with sample limits |
-| Local AI Implementation | 25% | Asset/runtime manifest, real embeddings/OCR, fresh offline file/query, process/network evidence | Meaningful AI ran on this device with stated setup |
-| Technical Execution | 20% | Clean setup, restart/crash/revocation tests, measured runtime | Selected tier works in tested environment |
-| Innovation | 15% | Misleading-name/OCR examples, baseline ablation, honest distinction | Demonstrated combination improves this task |
-| Product & Demo Quality | 15% | Rehearsed flow, accessible controls, truthful fallback | UX supports finding/verifying/opening originals |
-
-Maintain a claim ledger: statement, evidence artifact, environment, limitation, state (proposed/measured/unsupported). No universal speed/security, encryption, all-language, or 50 GB claims without evidence.
-
-Offline proof is a product-specific advantage, not an extra universal event rule. Organizers decide compliance. Official-page access was attempted again for revision 2 and remained unavailable; manual-derived rules/dates stay qualified.
+Maintain a claim ledger of statement, artifact, environment, limitation and state (proposed/measured/unsupported). Offline behavior is useful evidence, not an extra universal event rule. Do not claim encryption, all-language quality, universal zero egress, instantaneous indexing or 50 GB capacity.
 
 ## 30. Demo corpus, video, and live presentation
 
@@ -1379,26 +1400,25 @@ The product is demo-ready when the user can select a folder, wait for real index
 
 Expand to real personal folders only after folder boundaries, privacy disclosure, index removal, clean installation, resource limits, and error recovery are tested. Unsupported capabilities must remain visible rather than silently failing.
 
-## 33. Conditional future mobile adaptation
+## 33. Authorized phone-local Android implementation
 
-This section is an exploratory future direction, not a change to the source product or authorization to build a companion service.
+The user chose **an Android app that indexes and searches files stored on the phone**. This scope is implemented under `mobile/`; it is not a LAN client or a Windows-file transfer service. iOS, cloud sync and a LAN companion remain outside the accepted scope.
 
-### Architecture decision before mobile screens
+### Current architecture and limits
 
-| Option | Search location | UX consequence | Open questions |
-|---|---|---|---|
-| Phone-local app | Files explicitly available through that OS's access model | Search phone-accessible files and open via native document controls | Persistent access, background indexing, sandbox/provider behavior, local runtime |
-| Private LAN companion | Index/model on a desktop; phone sends requests | Search desktop content through a network boundary | Pairing, auth, transport, revocation, desktop availability, opening desktop-only originals |
+Flutter provides Search/Folders/Settings and full-screen source detail. Kotlin uses `ACTION_OPEN_DOCUMENT_TREE`, persisted read-only grants for the local external-storage document provider, an app-private SQLite index, a serial background worker, local ONNX MiniLM and bundled English Tesseract OCR. Open rechecks the source hash and deliberately dispatches its provider URI to a native viewer. Cloud providers are rejected; selection is limited to phone-accessible folders permitted by Android's access model.
 
-Do not promise that a phone app can freely scan Downloads/Desktop/Documents from the Windows plan. Do not call desktop-hosted inference on-device for the phone. Do not add cloud synchronization as an implicit answer to file access.
+The app minimum is API 26; only the Android 17/API 37 x86_64 emulator is validated so far. TXT/Markdown and upright PNG/JPEG OCR are implemented. Digital PDF text extraction uses Android 15/API 35+ `PdfRenderer` text content; older OS PDFs receive a requiring-Android-15 issue. This guard is code-inspected, not exercised on an older device. Scanned PDFs, DOCX, image rotation handling, handwriting/multilingual guarantees and image scene understanding are unsupported.
 
-### Mobile screen adaptation if later authorized
+Pilot bounds: 200 files per folder; 1 MiB per file; 20 MiB per refresh; recursion depth 12; 4 million image pixels; 20 PDF pages; 100,000 extracted image/PDF characters; 2,000 stored passages per file. JPEG EXIF rotation/mirroring is rejected; PNG orientation metadata is not interpreted. Refresh is manual. Search groups files and shows actual page/line/OCR passages; OCR may misread codes. Type/folder filters, image highlighting, filename-only search and desktop clear-all parity are not delivered mobile features.
 
-Use a single-column Search list with full-screen detail preview. Keep stable destinations Search/Folders/Settings, represented by platform-appropriate navigation after validation. Query entry must remain above the keyboard; type/folder filters can use accessible sheets with visible apply/reset behavior. A primary Open action can remain at the bottom only if safe areas, scrolling, and text scaling remain usable.
+### Evidence and release boundary
 
-Phone-local Open uses native supported document actions. A desktop-only result in a companion cannot claim **Open on this phone** without a defined transfer/access path; label location and available actions honestly. Offline in a LAN companion means LAN connectivity and host availability may still be required, even if internet is unnecessary.
+See repository `docs/MOBILE_PHASE.md`, `docs/MOBILE_OCR_PHASE.md` and the four `mobile-*-verification.json` records. Fourteen native tests covered tokenizer/vector fixtures, SQLite startup and v1/v2→v3 migration, TXT/MD and PDF extraction, PNG/JPEG OCR, pixel regions, bounds, failure codes and cancellation checkpoints. Five widget tests cover OCR labels/warnings, stale evidence, query/search state, removal and doubled-text layout. Native tests were passed in the preceding build; widget tests and artifact checks were freshly repeated in revision 3.
 
-Specify iOS/Android picker permissions, permission denial, restored grants, system back/dismissal, rotation, and app interruption from current primary documentation before implementation. Android touch dimensions are dp, iOS points are different, and desktop logical pixels are different again. Native accessibility and screen-reader tests would be separate from the Windows tests.
+Earlier release UI observations verified selected subfolders, source evidence, PDF page/original image viewing, restart without refresh, removal and unchanged originals. Screenshot first-use indexing/search/viewing was exercised with airplane mode and Wi-Fi disabled, then restored. The release APK lacks Internet/network-state permissions, automatic ONNX telemetry initialization is removed, and Android backup is disabled. Debug builds retain Flutter development connectivity. These checks do not certify all OS/external-viewer traffic.
+
+Physical-device startup/warm latency, peak memory, battery/thermal behavior, revoked/provider access, low-storage recovery, TalkBack, keyboard/rotation/background interruptions and native call timeouts remain release gates. OCR/PDF recognition is blocking native work; cancellation checks around it cannot interrupt the call. The APK is debug-signed and about 243 MiB before ABI optimization; no store publication is claimed.
 
 ## 34. Requirement traceability and unresolved decisions
 
@@ -1416,7 +1436,7 @@ Specify iOS/Android picker permissions, permission denial, restored grants, syst
 | Honest capacity/performance | No instant/50 GB promise in ordinary UI without measurements |
 | English-first MVP | English copy with localization readiness; no unverified Taglish support claim |
 
-Unresolved before high-fidelity implementation: actual UI code/native controls, current supported formats, exact model download sizes, backend pause/cleanup semantics, minimum tested window, rendered dark-theme/error/border contrast beyond the calculated token pairs, real hardware behavior, language coverage, and user-task validation results. Resolve these through implementation evidence rather than decorative design assumptions.
+Resolved implementation choices and platform coverage are recorded in the current audit and section 33. Remaining decisions include physical-device budgets, approved signing, native accessibility, fresh relevance/OCR validation, complete egress auditing, broader language/corpus limits and independent task results. Detailed unimplemented screen contracts remain requirements, not finished UI.
 
 ### Product and engineering decisions
 
@@ -1434,7 +1454,7 @@ Unresolved before high-fidelity implementation: actual UI code/native controls, 
 
 | ID | Default | Validate before | Evidence / change trigger |
 |---|---|---|---|
-| ADR01 | Windows, same-machine inference | Architecture freeze | Working laptop; mobile only after scope decision |
+| ADR01 | Accepted: Windows same-machine plus Android phone-local inference | Release/device validation | Working Windows pilot and authorized Android emulator build; no LAN/cloud companion |
 | ADR02 | MiniLM baseline, one BGE comparison | Final model/index | Development relevance/resources; asset/license manifest |
 | ADR03 | SQLite vectors, small active matrix | Scale-up | Memory/concurrency profile; migrate if budget fails |
 | ADR04 | Manual refresh in core tier | Demo messaging | Reconciliation tests; watcher only after reliability |
@@ -1443,7 +1463,7 @@ Unresolved before high-fidelity implementation: actual UI code/native controls, 
 | ADR07 | Explicit submit, evidence preview | UI handoff | Focus/keyboard/task observation |
 | ADR08 | No LLM/cloud fallback | Feature expansion | Concrete user value and authorized data path |
 
-Assign actual owners when known. Record proposed/accepted/superseded decisions with dated evidence. Exact library/asset revisions, download sizes, minimum tested hardware/OS, and achieved performance remain Unknown until the spike records them.
+Assign actual owners when known. Record proposed/accepted/superseded decisions with dated evidence. Exact model revisions and artifact sizes are now in the asset manifests/current audit; observed environments are recorded separately from unvalidated minimum hardware and broader performance targets.
 
 ## 35. Sources, provenance, and consolidation coverage
 
@@ -1475,6 +1495,14 @@ The UI/UX source plan recorded calculated contrast ratios for selected proposed 
 [MiniLM](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2), [BGE](https://huggingface.co/BAAI/bge-small-en-v1.5), and [SQLite WAL](https://sqlite.org/wal.html) were checked during strengthening. The event page remained inaccessible; no newer organizer rules/deadlines are asserted. Other references retain original dates/limits.
 
 Six additional token contrast pairs were calculated. Structural checks verify sections, screens/overlays, and acceptance IDs. No inference, application benchmark, study, runtime security audit, install test, or prototype execution was performed.
+
+### Revision 3 audit provenance and verification limits
+
+Reviewed checkout `7a00418`, source/runtime configuration, desktop and Android asset manifests, release workflow, historical holdout/identifier regression, native/UI/installation observations and current APK. Fresh commands: `.venv/Scripts/python.exe -m unittest discover -s tests -v` (40 pass, one skip), `.venv/Scripts/python.exe scripts/verify_gui.py` (real inference/offscreen GUI pass), `flutter analyze` (no issues), `flutter test` (five pass), and `.venv/Scripts/python.exe scripts/verify_mobile_artifact.py` (APK and existing 14 native results verified). Native instrumentation, physical-phone use, Windows installer execution, holdout evaluation and live presentation were not rerun in this audit.
+
+Earlier phase reports preserve their dates and limitations; later containment/OCR/package work supersedes some historical pending statements. Do not combine those snapshots into an unqualified release pass. The original revision-2 plan had SHA-256 `50f4d48128945921d52dc7fb8219628042f490d38c547bb2627ce7166473334a`; the original comprehensive and UI/UX source plans remain unchanged. Revision 3 updates both this named project-plan file and the repository `docs/OMNIFIND_LOCAL_MASTER_PLAN.md` copy.
+
+Official organizer page and unauthenticated GitHub page fetches failed in the web tool during this review. No current deadline amendment, public visibility, submission acceptance or official eligibility decision is asserted. The review did not change application source, security policy or emulator network settings.
 
 ### Source coverage and consolidation map
 

@@ -1,6 +1,6 @@
 # OmniFind Local implementation status
 
-Updated October 10, 2026 (Asia/Manila), from master plan revision 2.
+Updated October 10, 2026 (Asia/Manila), reconciled with master plan revision 3.
 
 Main repository: [zekurou1/appbuildersph-hackathon-2026](https://github.com/zekurou1/appbuildersph-hackathon-2026).
 
@@ -57,4 +57,4 @@ Setup explicitly downloads public dependencies/model assets. Inference uses loca
 
 The default CLI index is plaintext in `%LOCALAPPDATA%\OmniFindLocal`, outside this OneDrive workspace. Explicit `--db` overrides are for synthetic verification or a user-chosen storage location. Model assets remain under ignored `models/`; external folder sync/backup is outside the application's control. No personal folders were scanned during these tests.
 
-Source master plan is unchanged: [OMNIFIND_LOCAL_MASTER_PLAN.md](OMNIFIND_LOCAL_MASTER_PLAN.md), SHA-256 `50F4D48128945921D52DC7FB8219628042F490D38C547BB2627CE7166473334A`.
+The [master plan](OMNIFIND_LOCAL_MASTER_PLAN.md) is now revision 3: verified desktop/Android scope, fresh audit checks, work-package state and remaining release gates. SHA-256 `aa79926887d3917a45b533d5b098e0fa81064186dc175c0fe9632dea7d93d7de`. Original source plans remain unchanged.
