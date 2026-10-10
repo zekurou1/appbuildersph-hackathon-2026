@@ -1,6 +1,6 @@
 {
-  "apk_bytes": 231580669,
-  "apk_sha256": "81b5851a4d825db1c2de03785bb266e11c845da041f63a8441408ba07a371c62",
+  "apk_bytes": 231577081,
+  "apk_sha256": "6a26f0e8cbcd3126ba846e6aef0c6b46bb797101fdf346178e0f2d8f157e6bda",
   "signing": "debug-signed pilot release build",
   "no_internet_permission": true,
   "automatic_telemetry_provider_removed": true,

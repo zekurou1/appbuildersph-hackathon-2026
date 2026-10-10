@@ -3,7 +3,8 @@
         android:label="OmniFind Local"
         android:allowBackup="false"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/omnifind_launcher"
+        android:roundIcon="@mipmap/omnifind_launcher">
         <provider android:name="ai.onnxruntime.TelemetryInitializer" tools:node="remove" />
         <activity
             android:name=".MainActivity"
