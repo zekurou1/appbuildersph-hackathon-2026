@@ -1,0 +1,21 @@
+{
+  "os": "Windows-2025Server-10.0.26100-SP0",
+  "frozen_cli": true,
+  "unrelated_working_directory": true,
+  "coverage": {
+    "searchable": 3,
+    "failed": 0,
+    "unsupported": 0,
+    "pending": 0,
+    "discovered": 3
+  },
+  "pdf_semantic_search": true,
+  "exact_code_and_restart": true,
+  "screenshot_ocr": true,
+  "issue_codes": [],
+  "root_removal_preserves_originals": true,
+  "limits": [
+    "Automated executable checks, not independent user validation or package-identity certification",
+    "GUI launch and native controls require separate checks"
+  ]
+}

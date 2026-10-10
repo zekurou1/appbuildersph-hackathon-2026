@@ -1,0 +1,34 @@
+{
+  "python": "3.12.10",
+  "os": "Windows-2025Server-10.0.26100-SP0",
+  "sqlite": "3.49.1",
+  "checks": {
+    "sqlite_secure_fts_available": true,
+    "sqlite_fts_probe": true,
+    "verified_local_model_inference": true,
+    "contained_windows_ocr": true
+  },
+  "qt": "6.12.0",
+  "packages": {
+    "torch": "2.14.1",
+    "transformers": "5.19.0",
+    "Pillow": "12.3.0",
+    "PySide6": "6.12.0"
+  },
+  "model": "sentence-transformers/all-MiniLM-L6-v2@1110a243fdf4706b3f48f1d95db1a4f5529b4d41:mean-normalized-v1",
+  "ocr": {
+    "engine": "Windows.Media.Ocr",
+    "language": "en-US",
+    "os": "Windows-2025Server-10.0.26100-SP0",
+    "binding_version": "3.2.1",
+    "english_available": true,
+    "model_assets": "Installed Windows OCR language components; OS-managed, not a separately pinned weight file",
+    "max_image_pixels": 4000000,
+    "max_image_edge": 6000
+  },
+  "ready_on_this_host": true,
+  "limits": [
+    "Same-host readiness only; not a clean-machine or packaged deployment certification",
+    "No OS-level process-tree network audit"
+  ]
+}

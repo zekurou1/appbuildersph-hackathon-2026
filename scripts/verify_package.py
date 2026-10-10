@@ -55,12 +55,20 @@ def main():
         invoke("remove-folder", rid)
         assert not invoke("search", "PKG-483")["results"]
         assert text.exists()
+        gui_report = run / "gui-probe.json"
+        gui_ok = False
+        if ocr_ok:
+            subprocess.run([str(package / "OmniFind.exe"), "--probe-report", str(gui_report)], cwd=run,
+                check=True, timeout=180, creationflags=subprocess.CREATE_NO_WINDOW)
+            gui_ok = json.loads(gui_report.read_text())["frozen_gui"]
+            assert gui_ok
         report = {"os": platform.platform(), "frozen_cli": True, "unrelated_working_directory": True,
                   "coverage": coverage, "pdf_semantic_search": True, "exact_code_and_restart": True,
                   "screenshot_ocr": ocr_ok, "issue_codes": [r["error"] for r in issues["items"]],
+                  "windowed_gui_probe": json.loads(gui_report.read_text()) if gui_ok else {"verified": False},
                   "root_removal_preserves_originals": True,
                   "limits": ["Automated executable checks, not independent user validation or package-identity certification",
-                             "GUI launch and native controls require separate checks"]}
+                             "Independent manual GUI/native-control usability requires separate checks"]}
         output = Path("reports/runtime/package-verification.json")
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(report, indent=2))

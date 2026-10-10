@@ -37,6 +37,18 @@ jobs:
         run: .venv/Scripts/python.exe -m PyInstaller --noconfirm --distpath dist --workpath build packaging/omnifind.spec
       - name: Verify frozen package on separate Windows runner
         run: .venv/Scripts/python.exe scripts/verify_package.py --allow-unavailable-ocr
+      - name: Assemble pilot with manifest and notices
+        run: .venv/Scripts/python.exe scripts/assemble_release.py
+      - name: Install and verify relocated package
+        run: |
+          $installed = & ./packaging/install.ps1 -Package ./dist/OmniFindLocal -SkipShortcut
+          .venv/Scripts/python.exe scripts/verify_package.py --package $installed --allow-unavailable-ocr
+          if ($LASTEXITCODE -ne 0) { throw 'Installed package verification failed.' }
+          $canary = Join-Path $env:RUNNER_TEMP 'omnifind-original-preserved.txt'
+          Set-Content -LiteralPath $canary -Value 'Synthetic original preservation canary'
+          & ./packaging/uninstall.ps1 -VersionId (Split-Path -Leaf $installed) -Confirm:$false
+          if ((Test-Path -LiteralPath $installed) -or -not (Test-Path -LiteralPath $canary)) { throw 'Uninstall preservation check failed.' }
+          @{ installed_package_verified = $true; uninstall_preserved_external_original = $true } | ConvertTo-Json | Set-Content reports/runtime/install-verification.json
       - name: Record OCR readiness separately
         continue-on-error: true
         run: .venv/Scripts/python.exe scripts/check_setup.py --output reports/runtime/runner-readiness.json
@@ -48,5 +60,6 @@ jobs:
           path: |
             reports/runtime/package-verification.json
             reports/runtime/runner-readiness.json
+            reports/runtime/install-verification.json
           if-no-files-found: warn
           retention-days: 7
