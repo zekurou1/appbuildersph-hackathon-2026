@@ -1,0 +1,11 @@
+{
+  "platform": "windows",
+  "open_dispatch_without_error": true,
+  "original_filename_observed_in_native_window": true,
+  "folder_name_observed_in_native_window": true,
+  "original_bytes_preserved": true,
+  "limits": [
+    "Native dispatch and uniquely named window titles, not independent human confirmation of viewer content or Explorer selection",
+    "Synthetic viewer/Explorer windows left open to avoid closing reused user windows"
+  ]
+}

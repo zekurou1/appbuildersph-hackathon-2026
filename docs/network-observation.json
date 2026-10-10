@@ -1,0 +1,140 @@
+{
+  "synthetic_run_exit_code": 0,
+  "sample_count": 550,
+  "processes_observed": [
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "conhost.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "conhost.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 12,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "conhost.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 8,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "conhost.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 10,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "conhost.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 8,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "conhost.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 8,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "conhost.exe",
+      "loopback_entry_observations": 0,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    },
+    {
+      "process": "python.exe",
+      "loopback_entry_observations": 8,
+      "nonloopback_remote_entry_observations": 0,
+      "nonloopback_bound_entry_observations": 0
+    }
+  ],
+  "inaccessible_process_count": 0,
+  "complete_egress_audit": false,
+  "limits": [
+    "Socket-table sampling can miss short-lived connections and attempts",
+    "Entry counts can count the same socket repeatedly; they are not connection-attempt counts",
+    "Native OCR system services outside the descendant tree are not attributed",
+    "No OS-level network blocking or security policy change was performed"
+  ]
+}

@@ -22,6 +22,8 @@ WPR reported `0xc5585011`, “Failed to enable the policy to profile system perf
 
 An authorized elevated Windows trace with process/service attribution and an offline fresh-file test remains necessary. Do not disable security controls to make a test pass, and do not upload raw traces that may contain unrelated private endpoints.
 
+`scripts/capture_network_trace.ps1` prepares that check for an authorized elevated session. It uses a unique WPR instance, records a synthetic package verification and stops only its own trace in `finally`. It refuses a non-elevated session and makes no policy changes. The private ETL still needs process/service attribution, network-attempt review and lost-event checks; producing a file alone does not pass the audit.
+
 ## External gates
 
 [Independent pilot validation](PILOT_VALIDATION.md) provides tasks, counterbalanced baselines, consent boundaries and a result template. No independent participant has been tested by the builder. Another Windows 11 machine, an independent tester/screen-reader user and an approved execution/signing path remain needed. Microsoft-documented Windows OCR package-identity support also needs a supported packaged deployment test.

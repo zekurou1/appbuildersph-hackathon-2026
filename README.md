@@ -4,6 +4,8 @@ Describe a file you remember, search selected folders locally, and inspect match
 
 Main repository: [zekurou1/appbuildersph-hackathon-2026](https://github.com/zekurou1/appbuildersph-hackathon-2026).
 
+Windows packaging and external-runner checks are now available. See [release evidence and remaining gates](docs/RELEASE_CHECKS.md) and the [independent pilot protocol](docs/PILOT_VALIDATION.md). The unsigned pilot executable is blocked by Application Control on the builder's host; that policy remains unchanged.
+
 **Current artifact: a native desktop prototype plus command-line retrieval core.** Digital PDF/TXT/MD, English PNG/JPEG OCR, local CPU embeddings, lexical/semantic/hybrid search, source evidence, SQLite persistence, manual refresh and folder removal are implemented. Scanned PDFs, DOCX and a packaged installer are pending. See [OCR verification and setup limits](docs/OCR_PHASE.md).
 
 ## Setup

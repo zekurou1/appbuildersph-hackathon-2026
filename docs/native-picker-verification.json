@@ -1,0 +1,8 @@
+{
+  "platform": "windows",
+  "native_dialog_observed": true,
+  "synthetic_folder_selected": true,
+  "limits": [
+    "Programmatic Windows IDOK acceptance of preset synthetic folder, not manual usability validation"
+  ]
+}

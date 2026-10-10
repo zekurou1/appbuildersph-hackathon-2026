@@ -1,0 +1,77 @@
+{
+  "platform": "windows",
+  "controls": [
+    {
+      "control": "query",
+      "name": "Describe the file",
+      "role": "Role.EditableText",
+      "disabled": 0
+    },
+    {
+      "control": "search",
+      "name": "Search",
+      "role": "Role.Button",
+      "disabled": 0
+    },
+    {
+      "control": "type",
+      "name": "File type filter",
+      "role": "Role.ComboBox",
+      "disabled": 0
+    },
+    {
+      "control": "folders",
+      "name": "Selected folders",
+      "role": "Role.List",
+      "disabled": 0
+    },
+    {
+      "control": "issues",
+      "name": "Review file issues",
+      "role": "Role.Button",
+      "disabled": 0
+    },
+    {
+      "control": "results",
+      "name": "Matching files",
+      "role": "Role.List",
+      "disabled": 0
+    },
+    {
+      "control": "source_path",
+      "name": "Original file path",
+      "role": "Role.EditableText",
+      "disabled": 0
+    },
+    {
+      "control": "evidence",
+      "name": "Original matching passage",
+      "role": "Role.StaticText",
+      "disabled": 0
+    },
+    {
+      "control": "open",
+      "name": "Open original",
+      "role": "Role.Button",
+      "disabled": 1
+    },
+    {
+      "control": "reveal",
+      "name": "Show in folder",
+      "role": "Role.Button",
+      "disabled": 1
+    },
+    {
+      "control": "clear",
+      "name": "Clear index\u2026",
+      "role": "Role.Button",
+      "disabled": 0
+    }
+  ],
+  "populated_evidence_text_interface": true,
+  "source_actions_enable_on_valid_result": true,
+  "limits": [
+    "Native Qt accessibility tree inspection, not Narrator/JAWS user validation",
+    "End-to-end keyboard checks are in verify_gui.py"
+  ]
+}

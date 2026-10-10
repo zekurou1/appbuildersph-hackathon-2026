@@ -6,12 +6,16 @@ from pathlib import Path
 
 
 def run(report_path):
+    def stage(name):
+        Path(report_path).write_text(json.dumps({'stage': name}))
+    stage('imports')
     import sys
     from PIL import Image, ImageDraw, ImageFont
     from PySide6.QtWidgets import QApplication
     from PySide6.QtGui import QAccessible
     from .core import Index
     from .gui import Window
+    stage('application')
     app = QApplication.instance() or QApplication([])
     with tempfile.TemporaryDirectory() as temporary:
         root = Path(temporary) / "corpus"
@@ -23,6 +27,7 @@ def run(report_path):
         image.save(source)
         model = Path(sys.executable).parent / "models/minilm" if getattr(sys, "frozen", False) else Path("models/minilm")
         window = Window(Path(temporary) / "data/index.sqlite", model)
+        stage('window')
         window.show()
         def settle():
             deadline = time.monotonic() + 120
@@ -37,9 +42,11 @@ def run(report_path):
         try:
             rid = window.add_folder(root)
             window.start_task("refresh", {"root_id": rid})
+            stage('refresh')
             settle()
             window.query.setText("what day is the physics laboratory")
             window.submit_search()
+            stage('search')
             settle()
             assert window.results and Path(window.results[0]["path"]) == source
             assert "Wednesday" in window.preview.toPlainText() and window.image_preview.isVisible()

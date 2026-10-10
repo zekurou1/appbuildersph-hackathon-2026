@@ -58,8 +58,13 @@ def main():
         gui_report = run / "gui-probe.json"
         gui_ok = False
         if ocr_ok:
-            subprocess.run([str(package / "OmniFind.exe"), "--probe-report", str(gui_report)], cwd=run,
-                check=True, timeout=180, creationflags=subprocess.CREATE_NO_WINDOW)
+            try:
+                subprocess.run([str(package / "OmniFind.exe"), "--probe-report", str(gui_report)], cwd=run,
+                    check=True, timeout=180, creationflags=subprocess.CREATE_NO_WINDOW)
+            except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
+                if gui_report.exists():
+                    print(gui_report.read_text(), flush=True)
+                raise
             gui_ok = json.loads(gui_report.read_text())["frozen_gui"]
             assert gui_ok
         report = {"os": platform.platform(), "frozen_cli": True, "unrelated_working_directory": True,
